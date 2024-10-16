@@ -1,35 +1,64 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useCallback, useState } from 'react';
+import { ReactFlow, useNodesState, useEdgesState, addEdge, MiniMap, Controls, Background, SimpleBezierEdge, useReactFlow, ReactFlowProvider, ReactFlowInstance } from '@xyflow/react';
 
-function App() {
-  const [count, setCount] = useState(0)
+import '@xyflow/react/dist/style.css';
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+const initialNodes = [
+	{ id: '1', position: { x: 0, y: 0 }, data: { label: 'node 1' } },
+	{ id: '2', position: { x: 0, y: 100 }, data: { label: 'node 2' } },
+];
+const initialEdges: any = [];
+
+export default function App() {
+	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+	const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
+
+	const onLoad = (instance: ReactFlowInstance) => {
+		console.log("lkoaded")
+		setReactFlowInstance(instance);
+	};
+
+	const onConnect = useCallback((params: any) => setEdges((eds) => addEdge(params, eds)),
+		[setEdges],
+	);
+
+	const onDoubleClick = (event: any) => {
+		const position = reactFlowInstance?.screenToFlowPosition({
+			x: event.clientX,
+			y: event.clientY
+		});
+
+		const newNode = {
+			id: Math.round(Math.random() * 1000).toString(),
+			position: { x: position?.x, y: position?.y},
+			data: { label: "new node" }
+		};
+
+
+		setNodes((nds) => nds.concat(newNode));
+	}
+
+	return (
+		<ReactFlowProvider>
+			<div style={{ width: '100vw', height: '100vh' }}>
+				<ReactFlow
+					nodes={nodes}
+					edges={edges}
+					onNodesChange={onNodesChange}
+					onEdgesChange={onEdgesChange}
+					onConnect={onConnect}
+					zoomOnDoubleClick={false}
+					onDoubleClick={onDoubleClick}
+					edgeTypes={SimpleBezierEdge}
+					onInit={onLoad}
+				>
+
+					<MiniMap />
+					<Controls />
+					<Background variant="dots" gap={12} size={1} />
+				</ReactFlow>
+			</div>
+		</ReactFlowProvider>
+	);
 }
-
-export default App
