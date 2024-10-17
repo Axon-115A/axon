@@ -15,7 +15,7 @@ export default function App() {
 	const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
 
 	const onLoad = (instance: ReactFlowInstance) => {
-		console.log("lkoaded")
+		console.log("loaded")
 		setReactFlowInstance(instance);
 	};
 
