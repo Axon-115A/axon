@@ -7,7 +7,7 @@ interface Props {
   }
   
 const InstructionsBox: React.FC<Props> = ({ onConfirm }) => (
-    <Panel position="top-center" style={{ padding: '10px', background: 'white', borderRadius: '8px', border: '1px solid gray' }}>
+    <Panel position="top-center" style={{ padding: '10px', background: 'black', borderRadius: '8px', border: '1px solid gray', color: 'white' }}>
         <h3 style={{ textAlign: 'center', display: 'block', margin: 'auto'}}>Instructions</h3>
         <p>1. Double-left click to create a node.</p>
         <p>2. Highlight nodes by left clicking them once.</p>
