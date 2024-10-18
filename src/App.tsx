@@ -77,6 +77,7 @@ export default function App() {
 					<Controls />
 					<Background variant="dots" gap={12} size={1} />
 				</ReactFlow>
+					// help button 
 					<button 
 						onClick={() => setShowInstructions(true)}
 						style={{ 
