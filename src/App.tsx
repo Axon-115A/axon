@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { ReactFlow, useNodesState, useEdgesState, addEdge, MiniMap, Controls, Background, SimpleBezierEdge, useReactFlow, ReactFlowProvider, ReactFlowInstance, Panel } from '@xyflow/react';
 
+import CircleNode from './components/CircleNode';
+
 import '@xyflow/react/dist/style.css';
 
 const initialNodes = [
@@ -31,8 +33,10 @@ export default function App() {
 
 		const newNode = {
 			id: Math.round(Math.random() * 1000).toString(),
-			position: { x: position?.x, y: position?.y },
-			data: { label: "new node" }
+			position: { x: position?.x, y: position?.y},
+			data: { label: "new node" },
+			type: 'circle'
+			
 		};
 
 
@@ -43,6 +47,8 @@ export default function App() {
 	const handleCheckboxChange = (event) => {
 		setColorMode(event.target.checked ? 'light' : 'dark');
 	};
+
+	const proOptions = { hideAttribution: true };
 
 	return (
 		<ReactFlowProvider>
@@ -59,6 +65,7 @@ export default function App() {
 					onInit={onLoad}
 					colorMode='dark'
 					deleteKeyCode='Delete'
+					proOptions={proOptions}
 				>
 
 					<MiniMap />
@@ -69,3 +76,4 @@ export default function App() {
 		</ReactFlowProvider>
 	);
 }
+
