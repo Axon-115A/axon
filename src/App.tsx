@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { ReactFlow, useNodesState, useEdgesState, addEdge, MiniMap, Controls, Background, SimpleBezierEdge, useReactFlow, ReactFlowProvider, ReactFlowInstance } from '@xyflow/react';
+import { ReactFlow, useNodesState, useEdgesState, addEdge, MiniMap, Controls, Background, SimpleBezierEdge, useReactFlow, ReactFlowProvider, ReactFlowInstance, Panel } from '@xyflow/react';
 
 import '@xyflow/react/dist/style.css';
 
@@ -31,13 +31,18 @@ export default function App() {
 
 		const newNode = {
 			id: Math.round(Math.random() * 1000).toString(),
-			position: { x: position?.x, y: position?.y},
+			position: { x: position?.x, y: position?.y },
 			data: { label: "new node" }
 		};
 
 
 		setNodes((nds) => nds.concat(newNode));
 	}
+
+	const [colorMode, setColorMode] = useState('dark');
+	const handleCheckboxChange = (event) => {
+		setColorMode(event.target.checked ? 'light' : 'dark');
+	};
 
 	return (
 		<ReactFlowProvider>
@@ -52,6 +57,7 @@ export default function App() {
 					onDoubleClick={onDoubleClick}
 					edgeTypes={SimpleBezierEdge}
 					onInit={onLoad}
+					colorMode='dark'
 				>
 
 					<MiniMap />
