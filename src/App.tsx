@@ -73,11 +73,24 @@ export default function App() {
 					deleteKeyCode='Delete'
 					proOptions={proOptions}
 				>
-
 					<MiniMap />
 					<Controls />
 					<Background variant="dots" gap={12} size={1} />
 				</ReactFlow>
+					<button 
+						onClick={() => setShowInstructions(true)}
+						style={{ 
+							position: 'absolute', 
+							bottom: '20px', 
+							left: 'calc(50% + 12px)',
+							transform: 'translateX(-50%)',
+							padding: '10px 20px', 
+							fontSize: '16px',
+							borderRadius: '5px' 
+						}}
+					>
+						Help
+					</button>
 			</div>
 		</ReactFlowProvider>
 	);
