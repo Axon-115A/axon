@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { ReactFlow, useNodesState, useEdgesState, addEdge, MiniMap, Controls, Background, SimpleBezierEdge, useReactFlow, ReactFlowProvider, ReactFlowInstance, Panel } from '@xyflow/react';
+import { ReactFlow, useNodesState, useEdgesState, addEdge, MiniMap, Controls, Background, SimpleBezierEdge, useReactFlow, ReactFlowProvider, ReactFlowInstance, Panel, BackgroundVariant } from '@xyflow/react';
 
 import '@xyflow/react/dist/style.css';
 import InstructionsBox from './components/instructions';
@@ -10,6 +10,11 @@ const initialNodes = [
 	{ id: '2', position: { x: 0, y: 100 }, data: { label: 'node 2' } },
 ];
 const initialEdges: any = [];
+let nodeID = 3;
+
+const nodeTypes = { 'circle': CircleNode };
+const proOptions = { hideAttribution: true };
+
 
 export default function App() {
 	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -17,43 +22,34 @@ export default function App() {
 	const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
 
 	const onLoad = (instance: ReactFlowInstance) => {
-		console.log("loaded")
 		setReactFlowInstance(instance);
 	};
-
-	const onConnect = useCallback((params: any) => setEdges((eds) => addEdge(params, eds)),
+	
+	const onConnect = useCallback((params: any) => 
+		setEdges((eds) => addEdge(params, eds)),
 		[setEdges],
 	);
-
-	const onDoubleClick = (event: any) => {
-		const position = reactFlowInstance?.screenToFlowPosition({
-			x: event.clientX,
-			y: event.clientY
-		});
-
-		const newNode = {
-			id: Math.round(Math.random() * 1000).toString(),
-			position: { x: position?.x, y: position?.y},
-			data: { label: "new node" },
-			type: 'circle'
-			
-		};
-
-
-		setNodes((nds) => nds.concat(newNode));
-	}
-
-	const [colorMode, setColorMode] = useState('dark');
-	const handleCheckboxChange = (event) => {
-		setColorMode(event.target.checked ? 'light' : 'dark');
-	};
-
-	const proOptions = { hideAttribution: true };
 
 	const [showInstructions, setShowInstructions] = useState(true);
 	const handleConfirm = () => {
 		setShowInstructions(false);
 	};
+
+	const onDoubleClick = (event: any) => {
+		const position = reactFlowInstance?.screenToFlowPosition({
+			x: event.clientX - 30,
+			y: event.clientY - 30
+		});
+
+		const newNode = {
+			id: (nodeID++).toString(),
+			position: { x: position?.x, y: position?.y},
+			data: { label: "new node" },
+			type: 'circle'			
+		};
+
+		setNodes((nds) => nds.concat(newNode));
+	}
 
 	return (
 		<ReactFlowProvider>
@@ -72,10 +68,11 @@ export default function App() {
 					colorMode='dark'
 					deleteKeyCode='Delete'
 					proOptions={proOptions}
+					nodeTypes={nodeTypes}
 				>
 					<MiniMap />
 					<Controls />
-					<Background variant="dots" gap={12} size={1} />
+					<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
 				</ReactFlow>
 					// help button 
 					<button 
