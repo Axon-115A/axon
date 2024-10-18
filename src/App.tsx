@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react';
 import { ReactFlow, useNodesState, useEdgesState, addEdge, MiniMap, Controls, Background, SimpleBezierEdge, useReactFlow, ReactFlowProvider, ReactFlowInstance, Panel } from '@xyflow/react';
 
-import CircleNode from './components/CircleNode';
-
 import '@xyflow/react/dist/style.css';
+import InstructionsBox from './components/instructions';
+import CircleNode from './components/CircleNode';
 
 const initialNodes = [
 	{ id: '1', position: { x: 0, y: 0 }, data: { label: 'node 1' } },
@@ -50,9 +50,15 @@ export default function App() {
 
 	const proOptions = { hideAttribution: true };
 
+	const [showInstructions, setShowInstructions] = useState(true);
+	const handleConfirm = () => {
+		setShowInstructions(false);
+	};
+
 	return (
 		<ReactFlowProvider>
 			<div style={{ width: '100vw', height: '100vh' }}>
+			{showInstructions && <InstructionsBox onConfirm={handleConfirm} />}
 				<ReactFlow
 					nodes={nodes}
 					edges={edges}
