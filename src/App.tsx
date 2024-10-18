@@ -5,12 +5,9 @@ import '@xyflow/react/dist/style.css';
 import InstructionsBox from './components/instructions';
 import CircleNode from './components/CircleNode';
 
-const initialNodes = [
-	{ id: '1', position: { x: 0, y: 0 }, data: { label: 'node 1' } },
-	{ id: '2', position: { x: 0, y: 100 }, data: { label: 'node 2' } },
-];
+const initialNodes: any = [];
 const initialEdges: any = [];
-let nodeID = 3;
+let nodeID = 1;
 
 const nodeTypes = { 'circle': CircleNode };
 const proOptions = { hideAttribution: true };
