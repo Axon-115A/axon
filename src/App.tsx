@@ -3,8 +3,6 @@ import { ReactFlow, useNodesState, useEdgesState, addEdge, MiniMap, Controls, Ba
 
 import CircleNode from './components/CircleNode';
 
-import CircleNode from './components/CircleNode';
-
 import '@xyflow/react/dist/style.css';
 
 const initialNodes = [
