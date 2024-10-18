@@ -58,6 +58,7 @@ export default function App() {
 					edgeTypes={SimpleBezierEdge}
 					onInit={onLoad}
 					colorMode='dark'
+					deleteKeyCode='Delete'
 				>
 
 					<MiniMap />
