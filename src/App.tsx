@@ -43,9 +43,9 @@ export default function App() {
 
 		const newNode = {
 			id: (nodeID++).toString(),
-			position: { x: position?.x, y: position?.y},
+			position: { x: position?.x ?? 0, y: position?.y ?? 0}, //added "?? 0" to silence weird error in nds.concat(newNode)
 			data: { label: "new node" },
-			type: 'circle'			
+			type: 'circle'
 		};
 
 		setNodes((nds) => nds.concat(newNode));
@@ -63,7 +63,7 @@ export default function App() {
 					onConnect={onConnect}
 					zoomOnDoubleClick={false}
 					onDoubleClick={onDoubleClick}
-					edgeTypes={SimpleBezierEdge}
+					edgeTypes={{simpleBezier: SimpleBezierEdge}}
 					onInit={onLoad}
 					colorMode='dark'
 					deleteKeyCode='Delete'
