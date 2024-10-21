@@ -5,14 +5,14 @@ import { Handle, Position } from '@xyflow/react';
 const RectNode = ({ data }: any) => {
 	return (
 		<div style={{
-			width: '60px',
+			width: '180px',
 			height: '60px',
 			// borderRadius: '50%',
-			backgroundColor: '#6c5ce7',
 			color: 'white',
 			display: 'flex',
 			justifyContent: 'center',
 			alignItems: 'center',
+			backgroundColor: '#6c5ce7',
 			border: '2px solid #81ecec',
 		}}>
 			{data.label}
