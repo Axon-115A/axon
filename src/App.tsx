@@ -4,12 +4,13 @@ import { ReactFlow, useNodesState, useEdgesState, addEdge, MiniMap, Controls, Ba
 import '@xyflow/react/dist/style.css';
 import InstructionsBox from './components/instructions';
 import CircleNode from './components/CircleNode';
+import RectNode from './components/RectNode';
 
 const initialNodes: any = [];
 const initialEdges: any = [];
 let nodeID = 1;
 
-const nodeTypes = { 'circle': CircleNode };
+const nodeTypes = { 'circle': CircleNode, 'rect': RectNode };
 const proOptions = { hideAttribution: true };
 
 
@@ -17,6 +18,12 @@ export default function App() {
 	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
 	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 	const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
+
+	const [showHelp, setShowHelp] = useState(() => {
+		// Get value from localStorage if it exists
+		const savedVal = localStorage.getItem("showHelp");
+		return savedVal || "true";
+	  })
 
 	const onLoad = (instance: ReactFlowInstance) => {
 		setReactFlowInstance(instance);
@@ -27,9 +34,11 @@ export default function App() {
 		[setEdges],
 	);
 
-	const [showInstructions, setShowInstructions] = useState(true);
+	const [showInstructions, setShowInstructions] = useState((showHelp != "false"));
 	const handleConfirm = () => {
 		setShowInstructions(false);
+		// make sure it won't show up in future
+		localStorage.setItem('showHelp', "false")
 	};
 
 	const onDoubleClick = (event: any) => {
@@ -47,7 +56,7 @@ export default function App() {
 
 		setNodes((nds) => nds.concat(newNode));
 	}
-
+	
 	return (
 		<ReactFlowProvider>
 			<div style={{ width: '100vw', height: '100vh' }}>
@@ -71,7 +80,7 @@ export default function App() {
 					<Controls />
 					<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
 				</ReactFlow>
-					// help button 
+					{/* help button  */}
 					<button 
 						onClick={() => setShowInstructions(true)}
 						style={{ 
