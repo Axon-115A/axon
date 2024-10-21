@@ -16,6 +16,7 @@ import {
 	getIncomers,
 	getOutgoers,
 	getConnectedEdges,
+	ConnectionMode
 } from '@xyflow/react';
 
 import '@xyflow/react/dist/style.css';
@@ -100,8 +101,6 @@ export default function App() {
 		setNodes((nds) => nds.concat(newNode));
 	}
 
-	
-
 	return (
 		<ReactFlowProvider>
 			<div style={{ width: '100vw', height: '100vh' }}>
@@ -110,7 +109,8 @@ export default function App() {
 					nodes={nodes}
 					edges={edges}
 					onNodesChange={onNodesChange}
-					onNodesDelete={onNodesDelete}
+					// todo pls fix	
+					// onNodesDelete={onNodesDelete}
 					onEdgesChange={onEdgesChange}
 					onConnect={onConnect}
 					zoomOnDoubleClick={false}
@@ -121,6 +121,7 @@ export default function App() {
 					deleteKeyCode='Delete'
 					proOptions={proOptions}
 					nodeTypes={nodeTypes}
+					connectionMode={ConnectionMode.Loose}
 				>
 					<MiniMap />
 					<Controls />
@@ -136,7 +137,7 @@ export default function App() {
 							transform: 'translateX(-50%)',
 							padding: '10px 20px', 
 							fontSize: '16px',
-							borderRadius: '5px' 
+							border: '2px solid #2c2c2c',
 						}}
 					>
 						Help

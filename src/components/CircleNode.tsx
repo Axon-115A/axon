@@ -16,8 +16,10 @@ const CircleNode = ({ data }: any) => {
 			border: '2px solid #81ecec',
 		}}>
 			{data.label}
-			<Handle type="target" position={Position.Top} style={{ borderRadius: '50%' }} />
-			<Handle type="source" position={Position.Bottom} style={{ borderRadius: '50%' }} />
+			<Handle type="source" position={Position.Top} style={{ borderRadius: '50%' }} id="top" />
+			<Handle type="source" position={Position.Left} style={{ borderRadius: '50%' }} id="left" />
+			<Handle type="source" position={Position.Right} style={{ borderRadius: '50%' }} id="right" />
+			<Handle type="source" position={Position.Bottom} style={{ borderRadius: '50%' }} id="bottom" />
 		</div>
 	);
 };
