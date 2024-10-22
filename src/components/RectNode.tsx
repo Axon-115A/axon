@@ -19,7 +19,8 @@ const RectNode = ({ data }: any) => {
 			justifyContent: 'center',
 			alignItems: 'center',
 			backgroundColor: '#6c5ce7',
-			border: '2px solid #81ecec',
+			borderRadius: '2px'
+			// border: '2px solid #81ecec',
 		}}>
 			{data.label}
 			<Handle type="source" position={Position.Top} style={{ borderRadius: '50%' }} id="top" />

@@ -13,7 +13,7 @@ const CircleNode = ({ data }: any) => {
 			display: 'flex',
 			justifyContent: 'center',
 			alignItems: 'center',
-			border: '2px solid #81ecec',
+			// border: '2px solid #81ecec',
 		}}>
 			<div style={{
 				textAlign: 'center',

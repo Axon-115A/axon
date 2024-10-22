@@ -66,3 +66,27 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.react-flow__node-rect {
+  font-size: 12px;
+  background: #eee;
+  border: 2px solid #555;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.react-flow__node-rect.selected {
+  border: 2px solid #81ecec !important;
+}
+
+.react-flow__node-circle {
+  font-size: 12px;
+  /* background: #eee; */
+  border: 2px solid #555;
+  border-radius: 50000px;
+  text-align: center;
+}
+
+.react-flow__node-circle.selected {
+  border: 2px solid #81ecec !important;
+}
