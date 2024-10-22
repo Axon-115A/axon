@@ -95,18 +95,27 @@ export default function App() {
 		localStorage.setItem('showHelp', "false")
 	};
 
+	/* Emma continues here to detect mouse on item. Editing is prompted open if clicked on the node. */
 	const handleContextMenu = (event: React.MouseEvent, node: any) => {
         event.preventDefault();
 		console.log(node)
-        setContextMenu({
+		/* If clicled over the node, setContextMenu occurs. */
+        setContextMenu({ 
             isOpen: true,
             anchorX: event.clientX,
             anchorY: event.clientY,
             selectedNodeId: node.id
         });
     };
+
 	const handlePaneClick = () => {
         setContextMenu(prev => ({ ...prev, isOpen: false }));
+
+		// Remove the bottom-left window if it exists
+		if (bottomLeftWindow) {
+			bottomLeftWindow.remove();
+			bottomLeftWindow = null;
+		}
     };
 
     const handleShapeChange = () => {
@@ -160,22 +169,94 @@ export default function App() {
 	}
 
 
+	//Emma modified this
+	let bottomLeftWindow: HTMLElement | null = null; // Track the bottom left window
 
-	const onDoubleClick = (event: any) => {
+
+	//Emma modified this
+	const onDoubleClick = (event: React.MouseEvent) => {
+		// Get the mouse position relative to the flow
 		const position = reactFlowInstance?.screenToFlowPosition({
-			x: event.clientX - 30,
-			y: event.clientY - 30
+		x: event.clientX - 30,
+		y: event.clientY - 30,
 		});
 
-		const newNode = {
-			id: (nodeID++).toString(),
-			position: { x: position?.x ?? 0, y: position?.y ?? 0}, //added "?? 0" to silence weird error in nds.concat(newNode)
-			data: { label: "new node" },
-			type: 'rect'
-		};
+		// Check if the click was on a node or edge using event.target
+		const clickedElement = event.target as HTMLElement;
+		const isClickOnNode = clickedElement.closest('.react-flow__node');
 
-		setNodes((nds) => nds.concat(newNode));
-	}
+		// Remove any existing window before creating a new one
+		if (bottomLeftWindow) {
+			bottomLeftWindow.remove();
+			bottomLeftWindow = null;
+		}
+
+		if (!isClickOnNode) {
+			// No item clicked, add a new node
+			const newNode = {
+				id: (nodeID++).toString(),
+				position: { x: position?.x ?? 0, y: position?.y ?? 0 },
+				data: { label: "new node" },
+				type: 'rect',
+			};
+
+			setNodes((nds) => nds.concat(newNode));
+
+
+		} else {
+		// Item clicked, show window at the bottom left
+		showBottomLeftWindow();
+		}
+	};
+
+	//Emma modified this
+	const showBottomLeftWindow = () => {
+		// Display a window at the bottom left corner
+		bottomLeftWindow = document.createElement('div');
+		bottomLeftWindow.style.position = 'absolute';
+		bottomLeftWindow.style.bottom = '125px';
+		bottomLeftWindow.style.left = '10px';
+		bottomLeftWindow.style.width = '200px';
+		bottomLeftWindow.style.height = '120px';
+		bottomLeftWindow.style.backgroundColor = 'rgba(255, 0, 0, 0.5)'; // Transparent red background
+		bottomLeftWindow.style.border = '1px solid #ccc';
+		bottomLeftWindow.style.padding = '10px';
+		bottomLeftWindow.style.boxShadow = '0px 4px 8px rgba(0, 0, 0, 0.1)'; // Adds some shadow for a better look
+	
+		// Create and add a title element
+		const title = document.createElement('h3');
+		title.innerText = "new node"; // code has to retrieve the name from the clicked node
+		title.style.margin = '0';
+		title.style.paddingBottom = '10px';
+		title.style.fontSize = '16px';
+		title.style.borderBottom = '1px solid #ccc';
+	
+		// Add editable content text
+		const content = document.createElement('p');
+		
+		// Load the saved text from localStorage if available
+		const savedText = localStorage.getItem('savedText') || 'You clicked on an item!';
+		content.innerText = savedText;
+		
+		content.style.margin = '0';
+		content.contentEditable = 'true'; // Make the text editable
+	
+		// Save the text to localStorage when the content is changed
+		content.addEventListener('input', () => {
+			localStorage.setItem('savedText', content.innerText);
+		});
+	
+		// Append title and content to the window
+		bottomLeftWindow.appendChild(title);
+		bottomLeftWindow.appendChild(content);
+	
+		document.body.appendChild(bottomLeftWindow);
+	};
+	
+	
+	
+	
+
 
 	return (
 		<ReactFlowProvider>
@@ -194,7 +275,7 @@ export default function App() {
 					zoomOnDoubleClick={false}
 					onDoubleClick={onDoubleClick}
 					// this still triggers regular doube click for some reason
-					// onNodeDoubleClick={handleDoubleClickEdit}
+					//onNodeDoubleClick={handleDoubleClickEdit}
 					onNodeContextMenu={handleContextMenu}
                     onClick={handlePaneClick}
 					edgeTypes={{simpleBezier: SimpleBezierEdge}}
@@ -209,7 +290,7 @@ export default function App() {
 					<Controls />
 					<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
 				</ReactFlow>
-				<ContextMenu 
+				<ContextMenu
                     isOpen={contextMenu.isOpen}
                     setOpen={(open) => setContextMenu(prev => ({ ...prev, isOpen: open }))}
                     anchorX={contextMenu.anchorX}
