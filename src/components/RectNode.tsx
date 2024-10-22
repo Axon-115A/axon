@@ -1,7 +1,7 @@
 import React from 'react';
 import { Handle, Position } from '@xyflow/react';
 
-// Custom node component to render as a circle
+// Custom node component to render as a rectangle
 
 const initialEdges = [
 	{ id: 'edge-1', source: 'node-1', sourceHandle: 'a', target: 'node-2' },
@@ -23,10 +23,19 @@ const RectNode = ({ data }: any) => {
 			// border: '2px solid #81ecec',
 		}}>
 			{data.label}
-			<Handle type="source" position={Position.Top} style={{ borderRadius: '50%' }} id="top" />
-			<Handle type="source" position={Position.Left} style={{ borderRadius: '50%' }} id="left" />
-			<Handle type="source" position={Position.Right} style={{ borderRadius: '50%' }} id="right" />
-			<Handle type="source" position={Position.Bottom} style={{ borderRadius: '50%' }} id="bottom" />
+			{/* superimposing a big transparent handle on top of the existing one to create our desired effect */}
+			<Handle type="source" position={Position.Top} style={{borderRadius: '50%' , pointerEvents: 'none' }} id="topFake" />   
+			<Handle type="source" position={Position.Top} style={{borderRadius: '50%', border: '10px solid transparent', background: 'transparent', pointerEvents: 'auto' }} id="top" /> 
+			
+			<Handle type="source" position={Position.Left} style={{borderRadius: '50%', pointerEvents: 'none' }} id="leftFake" />
+			<Handle type="source" position={Position.Left} style={{borderRadius: '50%', border: '10px solid transparent', background: 'transparent', pointerEvents: 'auto' }} id="left" /> 
+
+
+			<Handle type="source" position={Position.Right} style={{borderRadius: '50%', pointerEvents: 'none' }} id="rightFake" />
+			<Handle type="source" position={Position.Right} style={{borderRadius: '50%', border: '10px solid transparent', background: 'transparent', pointerEvents: 'auto' }} id="right" /> 
+
+			<Handle type="source" position={Position.Bottom} style={{borderRadius: '50%', pointerEvents: 'none' }} id="bottomFake" />
+			<Handle type="source" position={Position.Bottom} style={{borderRadius: '50%', border: '10px solid transparent', background: 'transparent', pointerEvents: 'auto' }} id="bottom" /> 
 		</div>
 	);
 };

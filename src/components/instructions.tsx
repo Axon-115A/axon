@@ -11,9 +11,10 @@ const InstructionsBox: React.FC<Props> = ({ onConfirm }) => (
         <h3 style={{ textAlign: 'center', display: 'block', margin: 'auto'}}>Instructions</h3>
         <p>1. Double-left click to create a node.</p>
         <p>2. Highlight nodes by left clicking them once.</p>
-        <p>3. Delete nodes by highlighting them, and then using the delete key.</p>
+        <p>3. Delete nodes and edges by highlighting them, and then using the delete key.</p>
         <p>4. Connect nodes by clicking on an open edge, and dragging it to another node.</p>
-        <p>5. Use the controls on the bottom left for zooming, recentering, and locking.</p>
+        <p>5. Change the shape of the node by right clicking it.</p>
+        <p>6. Use the controls on the bottom left for zooming, recentering, and locking.</p>
         <button onClick={onConfirm} style={{ textAlign: 'center', display: 'block', margin: 'auto', padding: '10px 20px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
             Confirm
         </button>
