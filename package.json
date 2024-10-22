@@ -10,7 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@szhsin/react-menu": "^4.2.2",
     "@xyflow/react": "^12.3.2",
+    "install": "^0.13.0",
+    "npm": "^10.9.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
