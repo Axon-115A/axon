@@ -38,7 +38,7 @@ export default function App() {
 	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
 	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 	const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
-	const [showNotesWindow, setNotesWindowVisibility] = useState(true);
+	const [showNotesWindow, setNotesWindowVisibility] = useState(false);
 
 
 	// Context menu state
@@ -49,7 +49,7 @@ export default function App() {
 		selectedNodeId: null as string | null
 	});
 
-	const [showHelp, setShowHelp] = useState(() => {
+	const [showHelp] = useState(() => {
 		// Get value from localStorage if it exists
 		const savedVal = localStorage.getItem("showHelp");
 		return savedVal || "true";
@@ -57,7 +57,7 @@ export default function App() {
 
 	const onLoad = (instance: ReactFlowInstance) => {
 		setReactFlowInstance(instance);
-		console.log(supabase)
+		// console.log(supabase)
 	};
 
 	const onConnect = useCallback((params: any) =>
