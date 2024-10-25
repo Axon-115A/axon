@@ -25,8 +25,6 @@ import CircleNode from './components/CircleNode';
 import RectNode from './components/RectNode';
 import ContextMenu from './components/ContextMenu';
 import NotesWindow from './components/NotesWindow';
-import supabase from './config/supabaseClient'
-
 
 const initialNodes: any = [];
 const initialEdges: any = [];
