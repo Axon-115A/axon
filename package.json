@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.45.6",
     "@szhsin/react-menu": "^4.2.2",
     "@xyflow/react": "^12.3.2",
     "install": "^0.13.0",
