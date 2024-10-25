@@ -18,13 +18,19 @@ import {
 	getConnectedEdges,
 	ConnectionMode
 } from '@xyflow/react';
-
 import '@xyflow/react/dist/style.css';
+
+import { useDisclosure } from '@mantine/hooks';
+import { Button, MantineProvider } from '@mantine/core';
+import '@mantine/core/styles.css';
+
 import InstructionsBox from './components/instructions';
 import CircleNode from './components/CircleNode';
 import RectNode from './components/RectNode';
 import ContextMenu from './components/ContextMenu';
 import NotesWindow from './components/NotesWindow';
+import HelpModal from './components/modals/HelpModal';
+
 
 const initialNodes: any = [];
 const initialEdges: any = [];
@@ -54,6 +60,8 @@ export default function App() {
 		const savedVal = localStorage.getItem("showHelp");
 		return savedVal || "true";
 	})
+
+
 
 	const onLoad = (instance: ReactFlowInstance) => {
 		setReactFlowInstance(instance);
@@ -92,6 +100,8 @@ export default function App() {
 	);
 
 	const [showInstructions, setShowInstructions] = useState((showHelp != "false"));
+	const [helpOpened, helpHandler] = useDisclosure((showHelp != "false"));
+
 	const handleConfirm = () => {
 		setShowInstructions(false);
 		// make sure it won't show up in future
@@ -258,64 +268,73 @@ export default function App() {
 
 
 	return (
-		<ReactFlowProvider>
-			<div style={{ width: '100vw', height: '100vh' }}>
-				{showInstructions && <InstructionsBox onConfirm={handleConfirm} />}
-				<ReactFlow
-					nodes={nodes}
-					edges={edges}
-					onNodesChange={onNodesChange}
-					// todo pls fix	
-					// after adding more handles and making them all connectable to each other, this does not properly update connections to the right handle
-					// once that is fixed, uncomment this - prasiddh
-					// onNodesDelete={onNodesDelete}
-					onEdgesChange={onEdgesChange}
-					onConnect={onConnect}
-					zoomOnDoubleClick={false}
-					onDoubleClick={onDoubleClick}
-					// this still triggers regular doube click for some reason
-					//onNodeDoubleClick={handleDoubleClickEdit}
-					onNodeContextMenu={handleContextMenu}
-					onClick={handlePaneClick}
-					edgeTypes={{ simpleBezier: SimpleBezierEdge }}
-					onInit={onLoad}
-					colorMode='dark'
-					deleteKeyCode='Delete'
-					proOptions={proOptions}
-					nodeTypes={nodeTypes}
-					connectionMode={ConnectionMode.Loose}
-				>
-					<MiniMap />
-					<Controls />
-					<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
-				</ReactFlow>
-				<ContextMenu
-					isOpen={contextMenu.isOpen}
-					setOpen={(open) => setContextMenu(prev => ({ ...prev, isOpen: open }))}
-					anchorX={contextMenu.anchorX}
-					anchorY={contextMenu.anchorY}
-					onShapeChange={handleShapeChange}
-					onEdit={handleEdit}
-					onDelete={handleDelete}
-				/>
-				{/* help button  */}
-				<button
-					onClick={() => setShowInstructions(true)}
-					style={{
-						position: 'absolute',
-						bottom: '20px',
-						left: 'calc(50% + 12px)',
-						transform: 'translateX(-50%)',
-						padding: '10px 20px',
-						fontSize: '16px',
-						border: '2px solid #2c2c2c',
-					}}
-				>
-					Help
-				</button>
-			</div>
-		{showNotesWindow && <NotesWindow nodeName='Node 1 Notes' notes='stuff goes here' onCloseWindow={() => {setNotesWindowVisibility(false); console.log("clicked")}}/>}
-		</ReactFlowProvider>
+		// why is mantine set to light mode by default?
+		<MantineProvider defaultColorScheme="auto">
+			<ReactFlowProvider>
+				<div style={{ width: '100vw', height: '100vh' }}>
+					{showInstructions && <InstructionsBox onConfirm={handleConfirm} />}
+					<ReactFlow
+						nodes={nodes}
+						edges={edges}
+						onNodesChange={onNodesChange}
+						// todo pls fix	
+						// after adding more handles and making them all connectable to each other, this does not properly update connections to the right handle
+						// once that is fixed, uncomment this - prasiddh
+						// onNodesDelete={onNodesDelete}
+						onEdgesChange={onEdgesChange}
+						onConnect={onConnect}
+						zoomOnDoubleClick={false}
+						onDoubleClick={onDoubleClick}
+						// this still triggers regular doube click for some reason
+						//onNodeDoubleClick={handleDoubleClickEdit}
+						onNodeContextMenu={handleContextMenu}
+						onClick={handlePaneClick}
+						edgeTypes={{ simpleBezier: SimpleBezierEdge }}
+						onInit={onLoad}
+						colorMode='dark'
+						deleteKeyCode='Delete'
+						proOptions={proOptions}
+						nodeTypes={nodeTypes}
+						connectionMode={ConnectionMode.Loose}
+					>
+						<MiniMap />
+						<Controls />
+						<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+					</ReactFlow>
+					<ContextMenu
+						isOpen={contextMenu.isOpen}
+						setOpen={(open) => setContextMenu(prev => ({ ...prev, isOpen: open }))}
+						anchorX={contextMenu.anchorX}
+						anchorY={contextMenu.anchorY}
+						onShapeChange={handleShapeChange}
+						onEdit={handleEdit}
+						onDelete={handleDelete}
+					/>
+					{/* help dialog and button */}
+					<HelpModal 
+						opened={helpOpened} 
+						onClose={helpHandler.close} 
+					/>
+					<Button 
+						variant="filled" 
+						color="teal" 
+						onClick={helpHandler.open}
+						style={{
+							position: 'absolute',
+							bottom: '20px',
+							left: '50%',  // Center the button horizontally
+							transform: 'translateX(-50%)',  // Offset by half of its width to align in center
+							// padding: '10px 20px',
+							fontSize: '16px',
+							// border: '2px solid #2c2c2c',
+						}}
+					>
+						Help
+					</Button>
+				</div>
+			{showNotesWindow && <NotesWindow nodeName='Node 1 Notes' notes='stuff goes here' onCloseWindow={() => {setNotesWindowVisibility(false); console.log("clicked")}}/>}
+			</ReactFlowProvider>
+			</MantineProvider>
 	);
 }
 

@@ -24,7 +24,8 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
+  /* if this isn't commented out modals don't show */
+  /* display: flex; */
   place-items: center;
   min-width: 320px;
   min-height: 100vh;

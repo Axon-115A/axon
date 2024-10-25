@@ -25,3 +25,6 @@ dist-ssr
 
 # using pnpm so this isn't necessary
 bun.lockb
+
+# for supabase?
+.env
