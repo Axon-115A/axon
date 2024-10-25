@@ -20,6 +20,8 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
+import { v4 as uuidv4 } from 'uuid';
+
 import { useDisclosure } from '@mantine/hooks';
 import { Button, MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
@@ -37,6 +39,11 @@ const initialEdges: any = [];
 let nodeID = 1;
 
 const nodeTypes = { 'circle': CircleNode, 'rect': RectNode };
+const nodeStyles = {
+	background: "#6c5ce7",
+	justifyContent: 'center',
+	alignItems: 'center'
+}
 const proOptions = { hideAttribution: true };
 
 
@@ -207,7 +214,9 @@ export default function App() {
 		if (!isClickOnNode) {
 			// No item clicked, add a new node
 			const newNode = {
-				id: (nodeID++).toString(),
+				// not unique enough
+				// id: (nodeID++).toString(),
+				id: uuidv4(),
 				position: { x: position?.x ?? 0, y: position?.y ?? 0 },
 				data: { label: "new node" },
 				type: 'rect',
