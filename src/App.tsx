@@ -39,7 +39,7 @@ export default function App() {
 	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
 	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 	const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
-	const [showNotesWindow, setNotesWindowVisibility] = useState(false);
+	const [showNotesWindow, setNotesWindowVisibility] = useState(true);
 
 
 	// Context menu state
