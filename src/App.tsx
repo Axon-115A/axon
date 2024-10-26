@@ -52,6 +52,7 @@ export default function App() {
 	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 	const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
 	const [showNotesWindow, setNotesWindowVisibility] = useState(false);
+	const [notesWindowNode, setNotesWindowNode] = useState(null);
 
 
 	// Context menu state
@@ -130,13 +131,14 @@ export default function App() {
 
 	const handlePaneClick = () => {
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
-
-		// Remove the bottom-left window if it exists
-		if (bottomLeftWindow) {
-			bottomLeftWindow.remove();
-			bottomLeftWindow = null;
-		}
 	};
+
+	const onNodeClick = (event: any, node: any) => {
+		setNotesWindowNode(node);
+		setNotesWindowVisibility(true);
+	}
+
+	
 
 	const handleShapeChange = () => {
 		if (contextMenu.selectedNodeId) {
@@ -188,93 +190,29 @@ export default function App() {
 		handleEdit()
 	}
 
-
-	//Emma modified this
-	let bottomLeftWindow: HTMLElement | null = null; // Track the bottom left window
-
-
-	//Emma modified this
 	const onDoubleClick = (event: React.MouseEvent) => {
-		// Get the mouse position relative to the flow
+		//convert mouse coordinates to canvas coordinates
 		const position = reactFlowInstance?.screenToFlowPosition({
 			x: event.clientX - 30,
 			y: event.clientY - 30,
 		});
 
-		// Check if the click was on a node or edge using event.target
-		const clickedElement = event.target as HTMLElement;
-		const isClickOnNode = clickedElement.closest('.react-flow__node');
+		const newNode = {
+			// not unique enough
+			// id: (nodeID++).toString(),
+			id: uuidv4(),
+			position: { x: position?.x ?? 0, y: position?.y ?? 0 },
+			data: { 
+				label: "New Node",
+				data: {
+					notes: ""
+				} 
+			},
+			type: 'rect',
+		};
 
-		// Remove any existing window before creating a new one
-		if (bottomLeftWindow) {
-			bottomLeftWindow.remove();
-			bottomLeftWindow = null;
-		}
-
-		if (!isClickOnNode) {
-			// No item clicked, add a new node
-			const newNode = {
-				// not unique enough
-				// id: (nodeID++).toString(),
-				id: uuidv4(),
-				position: { x: position?.x ?? 0, y: position?.y ?? 0 },
-				data: { label: "new node" },
-				type: 'rect',
-			};
-
-			setNodes((nds) => nds.concat(newNode));
-
-
-		} else {
-			// Item clicked, show window at the bottom left
-			showBottomLeftWindow();
-		}
+		setNodes((nds) => nds.concat(newNode));
 	};
-
-	//Emma modified this
-	const showBottomLeftWindow = () => {
-		// Display a window at the bottom left corner
-		bottomLeftWindow = document.createElement('div');
-		bottomLeftWindow.style.position = 'absolute';
-		bottomLeftWindow.style.bottom = '125px';
-		bottomLeftWindow.style.left = '10px';
-		bottomLeftWindow.style.width = '200px';
-		bottomLeftWindow.style.height = '120px';
-		bottomLeftWindow.style.backgroundColor = 'rgba(255, 0, 0, 0.5)'; // Transparent red background
-		bottomLeftWindow.style.border = '1px solid #ccc';
-		bottomLeftWindow.style.padding = '10px';
-		bottomLeftWindow.style.boxShadow = '0px 4px 8px rgba(0, 0, 0, 0.1)'; // Adds some shadow for a better look
-
-		// Create and add a title element
-		const title = document.createElement('h3');
-		title.innerText = "new node"; // code has to retrieve the name from the clicked node
-		title.style.margin = '0';
-		title.style.paddingBottom = '10px';
-		title.style.fontSize = '16px';
-		title.style.borderBottom = '1px solid #ccc';
-
-		// Add editable content text
-		const content = document.createElement('p');
-
-		// Load the saved text from localStorage if available
-		const savedText = localStorage.getItem('savedText') || 'You clicked on an item!';
-		content.innerText = savedText;
-
-		content.style.margin = '0';
-		content.contentEditable = 'true'; // Make the text editable
-
-		// Save the text to localStorage when the content is changed
-		content.addEventListener('input', () => {
-			localStorage.setItem('savedText', content.innerText);
-		});
-
-		// Append title and content to the window
-		bottomLeftWindow.appendChild(title);
-		bottomLeftWindow.appendChild(content);
-
-		document.body.appendChild(bottomLeftWindow);
-	};
-
 
 	return (
 		// why is mantine set to light mode by default?
@@ -298,6 +236,7 @@ export default function App() {
 						//onNodeDoubleClick={handleDoubleClickEdit}
 						onNodeContextMenu={handleContextMenu}
 						onClick={handlePaneClick}
+						onNodeClick={onNodeClick}
 						edgeTypes={{ simpleBezier: SimpleBezierEdge }}
 						onInit={onLoad}
 						colorMode='dark'
@@ -320,30 +259,33 @@ export default function App() {
 						onDelete={handleDelete}
 					/>
 					{/* help dialog and button */}
-					<HelpModal 
-						opened={helpOpened} 
-						onClose={helpHandler.close} 
+					<HelpModal
+						opened={helpOpened}
+						onClose={helpHandler.close}
 					/>
-					<Button 
-						variant="filled" 
-						color="teal" 
+					<Button
+						variant="filled"
+						color="teal"
 						onClick={helpHandler.open}
 						style={{
 							position: 'absolute',
 							bottom: '20px',
 							left: '50%',  // Center the button horizontally
 							transform: 'translateX(-50%)',  // Offset by half of its width to align in center
-							// padding: '10px 20px',
 							fontSize: '16px',
-							// border: '2px solid #2c2c2c',
 						}}
 					>
 						Help
 					</Button>
 				</div>
-			{showNotesWindow && <NotesWindow nodeName='Node 1 Notes' notes='stuff goes here' onCloseWindow={() => {setNotesWindowVisibility(false); console.log("clicked")}}/>}
+				{showNotesWindow && 
+					<NotesWindow 
+						node={notesWindowNode}
+						onCloseWindow={() => { setNotesWindowVisibility(false) }} 
+					/>
+				}
 			</ReactFlowProvider>
-			</MantineProvider>
+		</MantineProvider>
 	);
 }
 
