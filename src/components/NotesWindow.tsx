@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { Panel } from '@xyflow/react';
-import './NotesWindow.css';
+import './styles/NotesWindow.css';
 
 
 interface Props {

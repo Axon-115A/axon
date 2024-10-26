@@ -210,7 +210,8 @@ export default function App() {
 			// id: (nodeID++).toString(),
 			id: uuidv4(),
 			position: { x: position?.x ?? 0, y: position?.y ?? 0 },
-			data: { 
+			data: {
+				
 				label: "New Node",
 				data: {
 					notes: ""

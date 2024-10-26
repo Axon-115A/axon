@@ -1,0 +1,23 @@
+/* styles for the look of all custom shapes */
+
+.rect {
+    width: 180px;
+    height: 60px;
+    color: white;
+    display: flex;
+    justify-Content: center;
+    align-items: center;
+    background-color: #6c5ce7;
+    border-radius: 2px;
+}
+
+.circle {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    background-color: #6c5ce7;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,13 @@
+/* handle style is common to all node shapes */
+
+.invisibleHandle {
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.handle {
+    border-radius: 50%;
+    border: 10px solid transparent;
+    background: transparent;
+    pointer-events: auto
+}
