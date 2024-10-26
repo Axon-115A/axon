@@ -8,15 +8,14 @@ import {
 	Controls,
 	Background,
 	SimpleBezierEdge,
-	useReactFlow,
 	ReactFlowProvider,
 	ReactFlowInstance,
-	Panel,
 	BackgroundVariant,
 	getIncomers,
 	getOutgoers,
 	getConnectedEdges,
-	ConnectionMode
+	ConnectionMode,
+	Node
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -63,6 +62,7 @@ export default function App() {
 	const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
 	const [showNotesWindow, setNotesWindowVisibility] = useState(false);
 	const [notesWindowNode, setNotesWindowNode] = useState(null);
+	const [isMouseOverNode, setMouseOverNode] = useState(false);
 
 
 	// Context menu state
@@ -90,6 +90,7 @@ export default function App() {
 		setEdges((eds) => addEdge(params, eds)),
 		[setEdges],
 	);
+
 	const onNodesDelete = useCallback(
 		(deleted) => {
 			setEdges(
@@ -141,12 +142,10 @@ export default function App() {
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
 
-	const onNodeClick = (event: any, node: any) => {
+	const onNodeClick = (event: React.MouseEvent, node: any) => {
 		setNotesWindowNode(node);
 		setNotesWindowVisibility(true);
 	}
-
-	
 
 	const handleShapeChange = () => {
 		if (contextMenu.selectedNodeId) {
@@ -188,17 +187,21 @@ export default function App() {
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
 
-	const handleDoubleClickEdit = (event: React.MouseEvent, node: any) => {
-		event.preventDefault();
-		console.log(node)
-		setContextMenu(
-			prev => ({ ...prev, selectedNodeId: node.id })
-		)
-		console.log(contextMenu)
-		handleEdit()
-	}
+	// const handleDoubleClickEdit = (event: React.MouseEvent, node: any) => {
+	// 	// event.preventDefault();
+	// 	// console.log(node)
+	// 	// setContextMenu(
+	// 	// 	prev => ({ ...prev, selectedNodeId: node.id })
+	// 	// )
+	// 	// console.log(contextMenu)
+	// 	// handleEdit()
+	// 	console.log(`${node.label} was doubleclicked`);
+	// }
+
 
 	const onDoubleClick = (event: React.MouseEvent) => {
+		if (isMouseOverNode) return;
+
 		//convert mouse coordinates to canvas coordinates
 		const position = reactFlowInstance?.screenToFlowPosition({
 			x: event.clientX - 30,
@@ -211,7 +214,9 @@ export default function App() {
 			id: uuidv4(),
 			position: { x: position?.x ?? 0, y: position?.y ?? 0 },
 			data: {
-				
+				//to add custom data to a node, you need a data dictionary inside data
+				//so to access the notes, you need to do `node.data.data.notes`
+				//thank you react flow, very cool
 				label: "New Node",
 				data: {
 					notes: ""
@@ -241,7 +246,7 @@ export default function App() {
 						zoomOnDoubleClick={false}
 						onDoubleClick={onDoubleClick}
 						// this still triggers regular doube click for some reason
-						//onNodeDoubleClick={handleDoubleClickEdit}
+						// onNodeDoubleClick={handleDoubleClickEdit}
 						onNodeContextMenu={handleContextMenu}
 						onClick={handlePaneClick}
 						onNodeClick={onNodeClick}
@@ -252,6 +257,8 @@ export default function App() {
 						proOptions={proOptions}
 						nodeTypes={nodeTypes}
 						connectionMode={ConnectionMode.Loose}
+						onNodeMouseEnter={() => {setMouseOverNode(true)}}   //this way, if the mouse is over a node, isMouseOverNode = true
+						onNodeMouseLeave={() => {setMouseOverNode(false)}}  //this can be checked in onDoubleClick to prevent placing a new node when double clicking on an existing node
 					>
 						<MiniMap />
 						<Controls />
