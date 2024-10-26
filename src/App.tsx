@@ -26,17 +26,25 @@ import { useDisclosure } from '@mantine/hooks';
 import { Button, MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
 
-import InstructionsBox from './components/instructions';
 import CircleNode from './components/CircleNode';
 import RectNode from './components/RectNode';
 import ContextMenu from './components/ContextMenu';
 import NotesWindow from './components/NotesWindow';
 import HelpModal from './components/modals/HelpModal';
 
+// todo move this elsewhere
+import { createClient } from '@supabase/supabase-js'
+import { Auth } from '@supabase/auth-ui-react'
+import { ThemeSupa } from '@supabase/auth-ui-shared'
+
+// todo maybe move these to .env?
+const SUPABASE_URL = "https://tugoremjbojyqanvwglz.supabase.co"
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1Z29yZW1qYm9qeXFhbnZ3Z2x6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg0MTk2ODgsImV4cCI6MjA0Mzk5NTY4OH0.RvmWr4VrQ0ioRR34vpGYeBEz8qFOPh68ZURNf41yhts"
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
+
 
 const initialNodes: any = [];
 const initialEdges: any = [];
-let nodeID = 1;
 
 const nodeTypes = { 'circle': CircleNode, 'rect': RectNode };
 const nodeStyles = {
@@ -48,6 +56,8 @@ const proOptions = { hideAttribution: true };
 
 
 export default function App() {
+	const [session, setSession] = useState(null)
+
 	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
 	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 	const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
@@ -107,11 +117,9 @@ export default function App() {
 		[nodes, edges],
 	);
 
-	const [showInstructions, setShowInstructions] = useState((showHelp != "false"));
 	const [helpOpened, helpHandler] = useDisclosure((showHelp != "false"));
 
 	const handleConfirm = () => {
-		setShowInstructions(false);
 		// make sure it won't show up in future
 		localStorage.setItem('showHelp', "false")
 	};
@@ -219,7 +227,6 @@ export default function App() {
 		<MantineProvider defaultColorScheme="auto">
 			<ReactFlowProvider>
 				<div style={{ width: '100vw', height: '100vh' }}>
-					{showInstructions && <InstructionsBox onConfirm={handleConfirm} />}
 					<ReactFlow
 						nodes={nodes}
 						edges={edges}
