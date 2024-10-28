@@ -1,3 +1,4 @@
+/* Styling for the window */
 .panel {
     padding: 10px;
     background: black;
@@ -38,10 +39,6 @@
 .closeButtonIcon {
     width: var(--button-img-size);
     height: var(--button-img-size);
-}
-
-.closeButtonText {
-    color: white;
 }
 
 .textBox {
