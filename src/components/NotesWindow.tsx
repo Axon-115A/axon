@@ -26,7 +26,8 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
         <Panel position='bottom-left' className='panel'>
             <h3 className='notesTitle'>{node.data.label}</h3>
             <button onClick={onCloseWindow} className='closeButton'>
-                <span className='closeButtonText'>╳</span>
+                {/* <span className='closeButtonText'>╳</span> */}
+                <img src="src/assets/white_x.svg" className='closeButtonIcon'/>
             </button>
             <textarea
                 value={notesData}

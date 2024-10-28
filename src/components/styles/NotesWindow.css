@@ -15,18 +15,29 @@
     margin: auto;
 }
 
+/* defines a global variable so that closeButton's width and height and closeButtonIcon's width and height all change together */
+:root {
+    --button-img-size: 20px;
+}
+
+/*The position of the button in the notes window*/
 .closeButton {
     position: absolute;
-    right: 0px;
-    top: 5px;
+    right: 5px;
+    top: 14px;
     background: transparent;
-    width: 5px;
-    height: 5px;
-    text-align: center;
+    width: var(--button-img-size);
+    height: var(--button-img-size);
     display: flex;
     align-items: center;
     justify-content: center;
     border: none;
+}
+
+/*The size of the X icon*/
+.closeButtonIcon {
+    width: var(--button-img-size);
+    height: var(--button-img-size);
 }
 
 .closeButtonText {

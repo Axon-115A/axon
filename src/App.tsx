@@ -15,7 +15,6 @@ import {
 	getOutgoers,
 	getConnectedEdges,
 	ConnectionMode,
-	Node
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -142,7 +141,7 @@ export default function App() {
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
 
-	const onNodeClick = (event: React.MouseEvent, node: any) => {
+	const onNodeClick = (_event: React.MouseEvent, node: any) => {
 		setNotesWindowNode(node);
 		setNotesWindowVisibility(true);
 	}
@@ -214,13 +213,13 @@ export default function App() {
 			id: uuidv4(),
 			position: { x: position?.x ?? 0, y: position?.y ?? 0 },
 			data: {
-				//to add custom data to a node, you need a data dictionary inside data
+				//to add custom data to a node, you need a dictionary called "data" inside data
 				//so to access the notes, you need to do `node.data.data.notes`
 				//thank you react flow, very cool
 				label: "New Node",
 				data: {
 					notes: ""
-				} 
+				}
 			},
 			type: 'rect',
 		};
@@ -257,8 +256,8 @@ export default function App() {
 						proOptions={proOptions}
 						nodeTypes={nodeTypes}
 						connectionMode={ConnectionMode.Loose}
-						onNodeMouseEnter={() => {setMouseOverNode(true)}}   //this way, if the mouse is over a node, isMouseOverNode = true
-						onNodeMouseLeave={() => {setMouseOverNode(false)}}  //this can be checked in onDoubleClick to prevent placing a new node when double clicking on an existing node
+						onNodeMouseEnter={() => { setMouseOverNode(true) }}   //this way, if the mouse is over a node, isMouseOverNode = true
+						onNodeMouseLeave={() => { setMouseOverNode(false) }}  //this can be checked in onDoubleClick to prevent placing a new node when double clicking on an existing node
 					>
 						<MiniMap />
 						<Controls />
@@ -293,10 +292,10 @@ export default function App() {
 						Help
 					</Button>
 				</div>
-				{showNotesWindow && 
-					<NotesWindow 
+				{showNotesWindow &&
+					<NotesWindow
 						node={notesWindowNode}
-						onCloseWindow={() => { setNotesWindowVisibility(false) }} 
+						onCloseWindow={() => { setNotesWindowVisibility(false) }}
 					/>
 				}
 			</ReactFlowProvider>
