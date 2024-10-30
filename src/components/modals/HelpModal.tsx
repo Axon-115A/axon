@@ -14,11 +14,16 @@ const HelpModal: React.FC<Props> = ({opened, onClose}) => (
         onClose={onClose}
         // title="Help"
         size="lg"
-        // centered
+        centered
         withCloseButton={false}
         overlayProps={{
           backgroundOpacity: 0.55,
           blur: 3,
+        }}
+        style = {{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
         }}
       >
         <h2 style={{ textAlign: 'center' }}>Help</h2>
