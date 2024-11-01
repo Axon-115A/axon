@@ -186,6 +186,15 @@ export default function App() {
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
 
+	const onNodeDelete = () => {
+		//for some reason, when a node is deleted, the onNodeMouseLeave callback is not called
+		//this leads to a bug where the program thinks the mouse is now perpetually hovering over a node, preventing the user
+		//from double clicking to make a new node. 
+		//need to manually set this to false when the node is deleted
+		setMouseOverNode(false);
+		setNotesWindowVisibility(false);
+	}
+
 	// const handleDoubleClickEdit = (event: React.MouseEvent, node: any) => {
 	// 	// event.preventDefault();
 	// 	// console.log(node)
@@ -258,6 +267,7 @@ export default function App() {
 						connectionMode={ConnectionMode.Loose}
 						onNodeMouseEnter={() => { setMouseOverNode(true) }}   //this way, if the mouse is over a node, isMouseOverNode = true
 						onNodeMouseLeave={() => { setMouseOverNode(false) }}  //this can be checked in onDoubleClick to prevent placing a new node when double clicking on an existing node
+						onNodesDelete={onNodeDelete}
 					>
 						<MiniMap />
 						<Controls />
