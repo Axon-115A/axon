@@ -80,7 +80,7 @@ export default function App() {
 
 
 
-	const onLoad = (instance: ReactFlowInstance) => {
+	const onInit = (instance: ReactFlowInstance) => {
 		setReactFlowInstance(instance);
 		// console.log(supabase)
 	};
@@ -125,7 +125,7 @@ export default function App() {
 	};
 
 	/* Emma continues here to detect mouse on item. Editing is prompted open if clicked on the node. */
-	const handleContextMenu = (event: React.MouseEvent, node: any) => {
+	const onNodeContextMenu = (event: React.MouseEvent, node: any) => {
 		event.preventDefault();
 		console.log(node)
 		/* If clicled over the node, setContextMenu occurs. */
@@ -137,7 +137,7 @@ export default function App() {
 		});
 	};
 
-	const handlePaneClick = () => {
+	const onClick = () => {
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
 
@@ -146,7 +146,7 @@ export default function App() {
 		setNotesWindowVisibility(true);
 	}
 
-	const handleShapeChange = () => {
+	const onShapeChange = () => {
 		if (contextMenu.selectedNodeId) {
 			setNodes(nodes.map(node => {
 				if (node.id === contextMenu.selectedNodeId) {
@@ -161,7 +161,7 @@ export default function App() {
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
 
-	const handleEdit = () => {
+	const onEdit = () => {
 		if (contextMenu.selectedNodeId) {
 			const newLabel = prompt('Enter new label:');
 			if (newLabel) {
@@ -179,7 +179,7 @@ export default function App() {
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
 
-	const handleDelete = () => {
+	const onDelete = () => {
 		if (contextMenu.selectedNodeId) {
 			setNodes(nodes.filter(node => node.id !== contextMenu.selectedNodeId));
 		}
@@ -255,11 +255,11 @@ export default function App() {
 						onDoubleClick={onDoubleClick}
 						// this still triggers regular doube click for some reason
 						// onNodeDoubleClick={handleDoubleClickEdit}
-						onNodeContextMenu={handleContextMenu}
-						onClick={handlePaneClick}
+						onNodeContextMenu={onNodeContextMenu}
+						onClick={onClick}
 						onNodeClick={onNodeClick}
 						edgeTypes={{ simpleBezier: SimpleBezierEdge }}
-						onInit={onLoad}
+						onInit={onInit}
 						colorMode='dark'
 						deleteKeyCode='Delete'
 						proOptions={proOptions}
@@ -278,9 +278,9 @@ export default function App() {
 						setOpen={(open) => setContextMenu(prev => ({ ...prev, isOpen: open }))}
 						anchorX={contextMenu.anchorX}
 						anchorY={contextMenu.anchorY}
-						onShapeChange={handleShapeChange}
-						onEdit={handleEdit}
-						onDelete={handleDelete}
+						onShapeChange={onShapeChange}
+						onEdit={onEdit}
+						onDelete={onDelete}
 					/>
 					{/* help dialog and button */}
 					<HelpModal
