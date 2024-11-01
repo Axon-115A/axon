@@ -269,10 +269,10 @@ export default function App() {
 						onNodeMouseLeave={() => { setMouseOverNode(false) }}  //this can be checked in onDoubleClick to prevent placing a new node when double clicking on an existing node
 						onNodesDelete={onNodeDelete}
 					>
-			                    	<div style={{ position: 'absolute', bottom: '10px', right: '50px'}}>
-			                        	<MiniMap position="bottom-right" />
-			                    	</div>
-			                        <Controls position="bottom-right"/>
+			            <div style={{ position: 'absolute', bottom: '10px', right: '50px'}}>
+			                <MiniMap position="bottom-right" />
+			            </div>
+			            <Controls position="bottom-right"/>
 						<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
 						<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
 					</ReactFlow>
@@ -315,4 +315,3 @@ export default function App() {
 		</MantineProvider>
 	);
 }
-
