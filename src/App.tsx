@@ -269,7 +269,7 @@ export default function App() {
 						onNodeMouseLeave={() => { setMouseOverNode(false) }}  //this can be checked in onDoubleClick to prevent placing a new node when double clicking on an existing node
 						onNodesDelete={onNodeDelete}
 					>
-			            <div style={{ position: 'absolute', bottom: '10px', right: '50px'}}>
+			            <div style={{ position: 'absolute', bottom: '0px', right: '30px'}}>
 			                <MiniMap position="bottom-right" />
 			            </div>
 			            <Controls position="bottom-right"/>
