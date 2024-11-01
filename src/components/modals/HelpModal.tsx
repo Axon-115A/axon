@@ -33,7 +33,7 @@ const HelpModal: React.FC<Props> = ({opened, onClose}) => (
             <li>Delete nodes and edges by selecting them and pressing the delete key.</li>
             <li>Connect nodes by clicking on an open edge and dragging it to another node.</li>
             <li>Change the title and shape of a node by right-clicking it.</li>
-            <li>Use the controls on the bottom left for zooming, recentering, and locking.</li>
+            <li>Use the controls on the bottom right for zooming, recentering, and locking.</li>
         </ul>
         <Button 
             variant="filled" 
