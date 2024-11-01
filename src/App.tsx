@@ -15,6 +15,7 @@ import {
 	getOutgoers,
 	getConnectedEdges,
 	ConnectionMode,
+	ControlButton,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -29,6 +30,8 @@ import RectNode from './components/RectNode';
 import ContextMenu from './components/ContextMenu';
 import NotesWindow from './components/NotesWindow';
 import HelpModal from './components/modals/HelpModal';
+
+import Trash from './assets/trash.svg';
 
 // todo move this elsewhere
 import { createClient } from '@supabase/supabase-js'
@@ -272,7 +275,13 @@ export default function App() {
 			            <div style={{ position: 'absolute', bottom: '0px', right: '30px'}}>
 			                <MiniMap position="bottom-right" />
 			            </div>
-			            <Controls position="bottom-right"/>
+						<Controls position="bottom-right">
+							<ControlButton onClick={() => { setNodes([]); setEdges([]); setNotesWindowVisibility(false);}}>
+							<div>
+								<img src={Trash}/>
+							</div>
+							</ControlButton>
+						</Controls>
 						<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
 						<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
 					</ReactFlow>
