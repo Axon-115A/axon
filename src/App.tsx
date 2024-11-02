@@ -86,15 +86,15 @@ export default function App() {
 	);
 
 	const onNodesDelete = useCallback(
-		(deleted) => {
+		(deleted: any) => {
 			setEdges(
-				deleted.reduce((acc, node) => {
+				deleted.reduce((acc: any, node: any) => {
 					const incomers = getIncomers(node, nodes, edges);
 					const outgoers = getOutgoers(node, nodes, edges);
 					const connectedEdges = getConnectedEdges([node], edges);
 
 					const remainingEdges = acc.filter(
-						(edge) => !connectedEdges.includes(edge),
+						(edge: any) => !connectedEdges.includes(edge),
 					);
 
 					const createdEdges = incomers.flatMap(({ id: source }) =>
@@ -117,6 +117,11 @@ export default function App() {
 	const handleConfirm = () => {
 		// make sure it won't show up in future
 		localStorage.setItem('showHelp', "false")
+	};
+
+	const handleClose = () => {
+		handleConfirm();
+		helpHandler.close();
 	};
 
 	/* Emma continues here to detect mouse on item. Editing is prompted open if clicked on the node. */
@@ -285,7 +290,7 @@ export default function App() {
 					{/* help dialog and button */}
 					<HelpModal
 						opened={helpOpened}
-						onClose={helpHandler.close}
+						onClose = {handleClose}
 					/>
 					<Button
 						variant="filled"
