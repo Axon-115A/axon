@@ -5,7 +5,6 @@ import {
 	useEdgesState,
 	addEdge,
 	MiniMap,
-	Controls,
 	Background,
 	SimpleBezierEdge,
 	ReactFlowProvider,
@@ -15,7 +14,6 @@ import {
 	getOutgoers,
 	getConnectedEdges,
 	ConnectionMode,
-	ControlButton,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -30,8 +28,7 @@ import RectNode from './components/RectNode';
 import ContextMenu from './components/ContextMenu';
 import NotesWindow from './components/NotesWindow';
 import HelpModal from './components/modals/HelpModal';
-
-import Trash from './assets/trash.svg';
+import ExtendedCanvasControls from './components/ExtendedCanvasControls';
 
 // todo move this elsewhere
 import { createClient } from '@supabase/supabase-js'
@@ -48,11 +45,6 @@ const initialNodes: any = [];
 const initialEdges: any = [];
 
 const nodeTypes = { 'circle': CircleNode, 'rect': RectNode };
-const nodeStyles = {
-	background: "#6c5ce7",
-	justifyContent: 'center',
-	alignItems: 'center'
-}
 const proOptions = { hideAttribution: true };
 
 
@@ -272,18 +264,13 @@ export default function App() {
 						onNodeMouseLeave={() => { setMouseOverNode(false) }}  //this can be checked in onDoubleClick to prevent placing a new node when double clicking on an existing node
 						onNodesDelete={onNodeDelete}
 					>
-			            <div style={{ position: 'absolute', bottom: '0px', right: '30px'}}>
-			                <MiniMap position="bottom-right" />
-			            </div>
-						<Controls position="bottom-right">
-							<ControlButton onClick={() => { setNodes([]); setEdges([]); setNotesWindowVisibility(false);}}>
-							<div>
-								<img src={Trash}/>
-							</div>
-							</ControlButton>
-						</Controls>
-						<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
-						<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+
+					<MiniMap position="bottom-right" style={{ position: 'absolute', bottom: '0px', right: '30px' }}/>
+					<ExtendedCanvasControls 
+						clearCanvas={() => { setNodes([]); setEdges([]); setNotesWindowVisibility(false); }} 
+						position="bottom-right" 
+					/>
+					<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
 					</ReactFlow>
 					<ContextMenu
 						isOpen={contextMenu.isOpen}
@@ -294,6 +281,7 @@ export default function App() {
 						onEdit={onEdit}
 						onDelete={onDelete}
 					/>
+
 					{/* help dialog and button */}
 					<HelpModal
 						opened={helpOpened}
