@@ -238,7 +238,7 @@ export default function App() {
 
 	return (
 		// why is mantine set to light mode by default?
-		<MantineProvider defaultColorScheme="auto">
+		<MantineProvider defaultColorScheme="dark">
 			<ReactFlowProvider>
 				<div style={{ width: '100vw', height: '100vh' }}>
 					<ReactFlow
