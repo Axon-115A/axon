@@ -40,7 +40,8 @@ import ExtendedCanvasControls from './components/ExtendedCanvasControls';
 import { createClient } from '@supabase/supabase-js'
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
-
+import SignInModal from "./components/auth/SignIn"
+import SignUpModal from './components/auth/SignUp';
 
 // todo maybe move these to .env?
 const SUPABASE_URL = "https://tugoremjbojyqanvwglz.supabase.co"
@@ -61,19 +62,20 @@ const proOptions = { hideAttribution: true };
 
 
 export default function App() {
-    const [session, setSession] = useState(null)
+	const [session, setSession] = useState(null)
 
 
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-    const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
-    const [showNotesWindow, setNotesWindowVisibility] = useState(false);
-    const [notesWindowNode, setNotesWindowNode] = useState(null);
-    const [isMouseOverNode, setMouseOverNode] = useState(false);
-    const [clearModalOpened, setClearModalOpened] = useState(false);
-    const [editModalOpened, setEditModalOpened] = useState(false);
-    const [currentLabel, setCurrentLabel] = useState("");
-
+	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+	const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
+	const [showNotesWindow, setNotesWindowVisibility] = useState(false);
+	const [notesWindowNode, setNotesWindowNode] = useState(null);
+	const [isMouseOverNode, setMouseOverNode] = useState(false);
+	const [clearModalOpened, setClearModalOpened] = useState(false);
+	const [editModalOpened, setEditModalOpened] = useState(false);
+	const [currentLabel, setCurrentLabel] = useState("");
+	const [signUpOpened, setSignUpOpened] = useState(false);
+	const [signInOpened, setSignInOpened] = useState(false);
 
     // Context menu state
     const [contextMenu, setContextMenu] = useState({
@@ -277,108 +279,100 @@ export default function App() {
         };
 
 
-        setNodes((nds) => nds.concat(newNode));
+    setNodes((nds) => nds.concat(newNode));
     };
 
+	// clearing the canvas and closing notes window
+	const handleClearCanvas = () => {
+	        setNodes([]);
+	        setEdges([]);
+		setNotesWindowVisibility(false);
+    	};
 
-    // clearing the canvas and closing notes window
-    const handleClearCanvas = () => {
-            setNodes([]);
-            setEdges([]);
-        setNotesWindowVisibility(false);
-        };
+	return (
+		// why is mantine set to light mode by default?
+		<MantineProvider defaultColorScheme="dark">
+			<ReactFlowProvider>
+				<div style={{ width: '100vw', height: '100vh' }}>
+					<ReactFlow
+						nodes={nodes}
+						edges={edges}
+						onNodesChange={onNodesChange}
+						// todo pls fix	
+						// after adding more handles and making them all connectable to each other, this does not properly update connections to the right handle
+						// once that is fixed, uncomment this - prasiddh
+						// onNodesDelete={onNodesDelete}
+						onEdgesChange={onEdgesChange}
+						onConnect={onConnect}
+						zoomOnDoubleClick={false}
+						onDoubleClick={onDoubleClick}
+						// this still triggers regular doube click for some reason
+						// onNodeDoubleClick={handleDoubleClickEdit}
+						onNodeContextMenu={onNodeContextMenu}
+						onClick={onClick}
+						onNodeClick={onNodeClick}
+						edgeTypes={{ simpleBezier: SimpleBezierEdge }}
+						onInit={onInit}
+						colorMode='dark'
+						deleteKeyCode='Delete'
+						proOptions={proOptions}
+						nodeTypes={nodeTypes}
+						connectionMode={ConnectionMode.Loose}
+						onNodeMouseEnter={() => { setMouseOverNode(true) }}   //this way, if the mouse is over a node, isMouseOverNode = true
+						onNodeMouseLeave={() => { setMouseOverNode(false) }}  //this can be checked in onDoubleClick to prevent placing a new node when double clicking on an existing node
+						onNodesDelete={onNodeDelete}
+					>
 
+					<MiniMap position="bottom-right" style={{ position: 'absolute', bottom: '0px', right: '30px' }}/>
+					<ExtendedCanvasControls 
+						clearCanvas={() => setClearModalOpened(true)}
+						position="bottom-right" 
+					/>
+					<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+					</ReactFlow>
+					<ContextMenu
+						isOpen={contextMenu.isOpen}
+						setOpen={(open) => setContextMenu(prev => ({ ...prev, isOpen: open }))}
+						anchorX={contextMenu.anchorX}
+						anchorY={contextMenu.anchorY}
+						onShapeChange={onShapeChange}
+						onEdit={onEdit}
+						onDelete={onDelete}
+					/>
 
-    return (
-        // why is mantine set to light mode by default?
-        <MantineProvider defaultColorScheme="dark">
-            <ReactFlowProvider>
-                <div style={{ width: '100vw', height: '100vh' }}>
-                    <ReactFlow
-                        nodes={nodes}
-                        edges={edges}
-                        onNodesChange={onNodesChange}
-                        // todo pls fix
-                        // after adding more handles and making them all connectable to each other, this does not properly update connections to the right handle
-                        // once that is fixed, uncomment this - prasiddh
-                        // onNodesDelete={onNodesDelete}
-                        onEdgesChange={onEdgesChange}
-                        onConnect={onConnect}
-                        zoomOnDoubleClick={false}
-                        onDoubleClick={onDoubleClick}
-                        // this still triggers regular doube click for some reason
-                        // onNodeDoubleClick={handleDoubleClickEdit}
-                        onNodeContextMenu={onNodeContextMenu}
-                        onClick={onClick}
-                        onNodeClick={onNodeClick}
-                        edgeTypes={{ simpleBezier: SimpleBezierEdge }}
-                        onInit={onInit}
-                        colorMode='dark'
-                        deleteKeyCode='Delete'
-                        proOptions={proOptions}
-                        nodeTypes={nodeTypes}
-                        connectionMode={ConnectionMode.Loose}
-                        onNodeMouseEnter={() => { setMouseOverNode(true) }}   //this way, if the mouse is over a node, isMouseOverNode = true
-                        onNodeMouseLeave={() => { setMouseOverNode(false) }}  //this can be checked in onDoubleClick to prevent placing a new node when double clicking on an existing node
-                        onNodesDelete={onNodeDelete}
-                    >
-
-
-                    <MiniMap position="bottom-right" style={{ position: 'absolute', bottom: '0px', right: '30px' }}/>
-                    <ExtendedCanvasControls
-                        clearCanvas={() => setClearModalOpened(true)}
-                        position="bottom-right"
-                    />
-                    <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
-                    </ReactFlow>
-                    <ContextMenu
-                        isOpen={contextMenu.isOpen}
-                        setOpen={(open) => setContextMenu(prev => ({ ...prev, isOpen: open }))}
-                        anchorX={contextMenu.anchorX}
-                        anchorY={contextMenu.anchorY}
-                        onShapeChange={onShapeChange}
-                        onEdit={onEdit}
-                        onDelete={onDelete}
-                    />
-                    <EditLabelModal
-                        opened={editModalOpened}
-                        label={currentLabel}
-                        onClose={() => setEditModalOpened(false)}
-                        onConfirm={handleLabelChange}
-                    />
-                    {/* help dialog and button */}
-                    <HelpModal
-                        opened={helpOpened}
-                        onClose = {handleClose}
-                    />
-                    <ClearModal
-                        opened={clearModalOpened}
-                        onClose={() => setClearModalOpened(false)}
-                        onConfirm={handleClearCanvas}
-                    />
-                    <Button
-                        variant="filled"
-                        color="teal"
-                        onClick={helpHandler.open}
-                        style={{
-                            position: 'absolute',
-                            bottom: '20px',
-                            left: '50%',  // Center the button horizontally
-                            transform: 'translateX(-50%)',  // Offset by half of its width to align in center
-                            fontSize: '16px',
-                        }}
-                    >
-                        Help
-                    </Button>
-                </div>
-                {showNotesWindow &&
-                    <NotesWindow
-                        node={notesWindowNode}
-                        onCloseWindow={() => { setNotesWindowVisibility(false) }}
-                    />
-                }
-            </ReactFlowProvider>
-        </MantineProvider>
-    );
+					{/* help dialog and button */}
+					<HelpModal
+						opened={helpOpened}
+						onClose = {handleClose}
+					/>
+					<ClearModal
+						opened={clearModalOpened}
+						onClose={() => setClearModalOpened(false)}
+						onConfirm={handleClearCanvas}
+					/>
+					<Button
+						variant="filled"
+						color="teal"
+						onClick={helpHandler.open}
+						style={{
+							position: 'absolute',
+							bottom: '20px',
+							left: '50%',  // Center the button horizontally
+							transform: 'translateX(-50%)',  // Offset by half of its width to align in center
+							fontSize: '16px',
+						}}
+					>
+						Help
+					</Button>
+				</div>
+				{showNotesWindow &&
+					<NotesWindow
+						node={notesWindowNode}
+						onCloseWindow={() => { setNotesWindowVisibility(false) }}
+					/>
+				}
+			</ReactFlowProvider>
+		</MantineProvider>
+	);
 }
 

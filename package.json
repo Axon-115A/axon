@@ -6,17 +6,20 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build-lite": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
     "@mantine/core": "^7.13.4",
+    "@mantine/form": "^7.13.4",
     "@mantine/hooks": "^7.13.4",
     "@mantine/modals": "^7.13.4",
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.45.6",
     "@szhsin/react-menu": "^4.2.2",
+    "@tabler/icons-react": "^3.21.0",
     "@types/uuid": "^10.0.0",
     "@xyflow/react": "^12.3.2",
     "install": "^0.13.0",
