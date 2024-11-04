@@ -237,11 +237,12 @@ export default function App() {
 		setNodes((nds) => nds.concat(newNode));
 	};
 
+	// clearing the canvas and closing notes window
 	const handleClearCanvas = () => {
-        setNodes([]);
-        setEdges([]);
+	        setNodes([]);
+	        setEdges([]);
 		setNotesWindowVisibility(false);
-    };
+    	};
 
 	return (
 		// why is mantine set to light mode by default?
