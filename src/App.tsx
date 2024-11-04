@@ -139,6 +139,42 @@ export default function App() {
         [nodes, edges],
     );
 
+    const handleSignUpConfirm = async (email: string, password: string) => {
+		console.log(`Signing up with email: ${email}, password: ${password}`);
+		
+		const { data, error } = await supabase.auth.signUp({
+			email: email,
+			password: password,
+		});
+	
+		if (error) {
+			console.error('Error signing up:', error.message);
+			return;
+		}
+	
+		console.log('Sign up successful:', data);
+		setSignUpOpened(false);
+	};
+
+	const handleSignInConfirm = async (email: string, password: string) => {
+		// Perform sign-in actions (e.g., authenticate with Supabase)
+		console.log(`Signing in with email: ${email}, password: ${password}`);
+
+		const { data, error } = await supabase.auth.signInWithPassword({
+			email: email,
+			password: password,
+		});
+	
+		if (error) {
+			console.error('Error signing in:', error.message);
+			return;
+		}
+	
+		console.log('Sign in successful:', data);
+
+		setSignInOpened(false);
+	};
+
 
     const [helpOpened, helpHandler] = useDisclosure((showHelp != "false"));
 
@@ -364,6 +400,41 @@ export default function App() {
 					>
 						Help
 					</Button>
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: "10px",
+                            right: "10px",
+                            display: "flex",
+                            gap: "10px"
+                        }}
+                    >
+
+                        <Button
+                            onClick={() => setSignUpOpened(true)}
+                        >
+                            Sign Up
+                        </Button>
+
+                        <Button
+                            onClick={() => setSignInOpened(true)}
+                        >
+                            Sign In
+                        </Button>
+                    </div>
+
+                    <SignUpModal
+                        opened={signUpOpened}
+                        onClose={() => setSignUpOpened(false)}
+                        onConfirm={handleSignUpConfirm}
+                    />
+
+                    <SignInModal
+                        opened={signInOpened}
+                        onClose={() => setSignInOpened(false)}
+                        onConfirm={handleSignInConfirm}
+                    />
+
 				</div>
 				{showNotesWindow &&
 					<NotesWindow

@@ -1,7 +1,7 @@
 import React from 'react';
 // import { Panel } from '@xyflow/react';\
 import { Modal, Button, TextInput, rem } from '@mantine/core';
-import { IconAt, IconLock } from '@tabler/icons-react';
+// import { IconAt, IconLock } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 
 interface Props {
@@ -12,8 +12,8 @@ interface Props {
 
 
 const SignInModal: React.FC<Props> = ({opened, onClose, onConfirm}) => {
-  const emailIcon = <IconAt style={{ width: rem(16), height: rem(16) }} />;
-  const passIcon = <IconLock style={{ width: rem(16), height: rem(16) }} />;
+  // const emailIcon = <IconAt style={{ width: rem(16), height: rem(16) }} />;
+  // const passIcon = <IconLock style={{ width: rem(16), height: rem(16) }} />;
 
   const signUpForm = useForm({
     initialValues: {
@@ -51,8 +51,8 @@ const SignInModal: React.FC<Props> = ({opened, onClose, onConfirm}) => {
         })}>
           <h2 style={{ textAlign: 'center' }}>Sign In</h2>
           <TextInput
-            leftSectionPointerEvents="none"
-            leftSection={emailIcon}
+            // leftSectionPointerEvents="none"
+            // leftSection={emailIcon}
             label="Email"
             placeholder="user@example.com"
             key={signUpForm.key('email')}
@@ -61,8 +61,8 @@ const SignInModal: React.FC<Props> = ({opened, onClose, onConfirm}) => {
           <TextInput
             type="password"
             mt="md"
-            rightSectionPointerEvents="none"
-            leftSection={passIcon}
+            // rightSectionPointerEvents="none"
+            // leftSection={passIcon}
             label="Password"
             placeholder="********"
             key={signUpForm.key('password')}

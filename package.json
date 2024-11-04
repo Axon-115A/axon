@@ -19,7 +19,6 @@
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.45.6",
     "@szhsin/react-menu": "^4.2.2",
-    "@tabler/icons-react": "^3.21.0",
     "@types/uuid": "^10.0.0",
     "@xyflow/react": "^12.3.2",
     "install": "^0.13.0",
