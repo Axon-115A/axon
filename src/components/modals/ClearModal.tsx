@@ -30,7 +30,7 @@ const ClearModal: React.FC<Props> = ({opened, onClose, onConfirm}) => (
         <p style={{ textAlign: 'center' }}>
             <b>Are you sure you want to clear the canvas? This action cannot be undone.</b>
         </p>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: "center" }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Button color="gray" onClick={onClose} style={{ marginRight: '0.5rem', width: '100px', height: '40px' }}>
                 Cancel
             </Button>
