@@ -376,6 +376,13 @@ export default function App() {
 						onDelete={onDelete}
 					/>
 
+                        <EditLabelModal
+                        opened={editModalOpened}
+                        label={currentLabel}
+                        onClose={() => setEditModalOpened(false)}
+                        onConfirm={handleLabelChange}
+                    />
+
 					{/* help dialog and button */}
 					<HelpModal
 						opened={helpOpened}
