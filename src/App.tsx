@@ -376,7 +376,7 @@ export default function App() {
 						onDelete={onDelete}
 					/>
 
-                        <EditLabelModal
+                    <EditLabelModal
                         opened={editModalOpened}
                         label={currentLabel}
                         onClose={() => setEditModalOpened(false)}

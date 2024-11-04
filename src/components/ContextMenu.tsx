@@ -1,5 +1,6 @@
 import { ControlledMenu, MenuItem } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
+import '@szhsin/react-menu/dist/theme-dark.css';
 import { FC } from 'react';
 
 interface ContextMenuProps {
@@ -20,6 +21,7 @@ const ContextMenu: FC<ContextMenuProps> = ({ isOpen, setOpen, anchorX, anchorY, 
             state={isOpen ? 'open' : 'closed'}
             direction="right"
             onClose={() => setOpen(false)}
+            theming='dark'
         >
             <MenuItem value="Change Shape" onClick={onShapeChange}>
                 Change Shape
