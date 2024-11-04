@@ -28,6 +28,7 @@ import RectNode from './components/RectNode';
 import ContextMenu from './components/ContextMenu';
 import NotesWindow from './components/NotesWindow';
 import HelpModal from './components/modals/HelpModal';
+import ClearModal from './components/modals/ClearModal';
 import ExtendedCanvasControls from './components/ExtendedCanvasControls';
 
 // todo move this elsewhere
@@ -57,7 +58,7 @@ export default function App() {
 	const [showNotesWindow, setNotesWindowVisibility] = useState(false);
 	const [notesWindowNode, setNotesWindowNode] = useState(null);
 	const [isMouseOverNode, setMouseOverNode] = useState(false);
-
+	const [clearModalOpened, setClearModalOpened] = useState(false);
 
 	// Context menu state
 	const [contextMenu, setContextMenu] = useState({
@@ -236,6 +237,12 @@ export default function App() {
 		setNodes((nds) => nds.concat(newNode));
 	};
 
+	const handleClearCanvas = () => {
+        setNodes([]);
+        setEdges([]);
+		setNotesWindowVisibility(false);
+    };
+
 	return (
 		// why is mantine set to light mode by default?
 		<MantineProvider defaultColorScheme="dark">
@@ -272,7 +279,7 @@ export default function App() {
 
 					<MiniMap position="bottom-right" style={{ position: 'absolute', bottom: '0px', right: '30px' }}/>
 					<ExtendedCanvasControls 
-						clearCanvas={() => { setNodes([]); setEdges([]); setNotesWindowVisibility(false); }} 
+						clearCanvas={() => setClearModalOpened(true)}
 						position="bottom-right" 
 					/>
 					<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
@@ -291,6 +298,11 @@ export default function App() {
 					<HelpModal
 						opened={helpOpened}
 						onClose = {handleClose}
+					/>
+					<ClearModal
+						opened={clearModalOpened}
+						onClose={() => setClearModalOpened(false)}
+						onConfirm={handleClearCanvas}
 					/>
 					<Button
 						variant="filled"
