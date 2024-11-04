@@ -1,14 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import { Panel } from '@xyflow/react';
 import './styles/NotesWindow.css';
+import './save/Save';
 
 
 interface Props {
     onCloseWindow: () => void;
     node: any
+
+    // for setNodes to be available in NotesWindow to update node state
+    setNodes: (updateFn: (nodes: any[]) => any[]) => void;
 }
 
-const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
+const NotesWindow: React.FC<Props> = ({ onCloseWindow, node, setNodes }) => {
     const [notesData, setNotes] = useState(node.data.data.notes);
     const [spellCheckEnabled, setSpellCheck] = useState(false);
 
@@ -20,7 +24,28 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
     const onNotesInput = (e: any) => {
         setNotes(e.target.value); //updates the display textbox
         node.data.data.notes = e.target.value; //updates the node data itself
-    }
+
+        // need to implement setNodes funciton because isNew update doesn't persist in App.tsx. 
+        setNodes((nodes) =>
+            nodes.map((n) => {
+                if (n.id === node.id) {
+                    return {
+                        ...n,
+                        data: {
+                            ...n.data,
+                            data: {
+                                ...n.data.data,
+                                notes:  e.target.value,
+                            },
+                        },
+                        isNew: false, // Mark as updated
+                    };
+                }
+                return n;
+            })
+        );
+    };
+
 
     return (
         <Panel position='bottom-left' className='panel'>
