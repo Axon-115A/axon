@@ -347,15 +347,16 @@ export default function App() {
 						onNodeMouseEnter={() => { setMouseOverNode(true) }}   //this way, if the mouse is over a node, isMouseOverNode = true
 						onNodeMouseLeave={() => { setMouseOverNode(false) }}  //this can be checked in onDoubleClick to prevent placing a new node when double clicking on an existing node
 						onNodesDelete={onNodeDelete}
-						connectionRadius={35}
+						connectionRadius={35} //the min distance an edge has to be dragged close to a handle before it snaps to it. default is 20
 					>
 
-						<MiniMap position="bottom-right" style={{ position: 'absolute', bottom: '0px', right: '30px' }} />
-						<ExtendedCanvasControls
-							clearCanvas={() => setClearModalOpened(true)}
-							position="bottom-right"
-						/>
-						<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+					<MiniMap position="bottom-right" style={{ position: 'absolute', bottom: '0px', right: '30px' }} />
+					<ExtendedCanvasControls
+						clearCanvas={() => setClearModalOpened(true)}
+						position="bottom-right"
+						saveCanvas={() => {}} //empty placeholder to silence typescript error
+					/>
+					<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
 					</ReactFlow>
 					<ContextMenu
 						isOpen={contextMenu.isOpen}
