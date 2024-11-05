@@ -1,19 +1,19 @@
 import React, { useCallback, useState } from 'react';
 import {
-    ReactFlow,
-    useNodesState,
-    useEdgesState,
-    addEdge,
-    MiniMap,
-    Background,
-    SimpleBezierEdge,
-    ReactFlowProvider,
-    ReactFlowInstance,
-    BackgroundVariant,
-    getIncomers,
-    getOutgoers,
-    getConnectedEdges,
-    ConnectionMode,
+	ReactFlow,
+	useNodesState,
+	useEdgesState,
+	addEdge,
+	MiniMap,
+	Background,
+	SimpleBezierEdge,
+	ReactFlowProvider,
+	ReactFlowInstance,
+	BackgroundVariant,
+	getIncomers,
+	getOutgoers,
+	getConnectedEdges,
+	ConnectionMode,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -77,81 +77,77 @@ export default function App() {
 	const [signUpOpened, setSignUpOpened] = useState(false);
 	const [signInOpened, setSignInOpened] = useState(false);
 
-    // Context menu state
-    const [contextMenu, setContextMenu] = useState({
-        isOpen: false,
-        anchorX: 0,
-        anchorY: 0,
-        selectedNodeId: null as string | null
-    });
+	// Context menu state
+	const [contextMenu, setContextMenu] = useState({
+		isOpen: false,
+		anchorX: 0,
+		anchorY: 0,
+		selectedNodeId: null as string | null
+	});
 
 
-    const [showHelp] = useState(() => {
-        // Get value from localStorage if it exists
-        const savedVal = localStorage.getItem("showHelp");
-        return savedVal || "true";
-    })
+	const [showHelp] = useState(() => {
+		// Get value from localStorage if it exists
+		const savedVal = localStorage.getItem("showHelp");
+		return savedVal || "true";
+	})
 
 
+	const onInit = (instance: ReactFlowInstance) => {
+		setReactFlowInstance(instance);
+		// console.log(supabase)
+	};
 
 
+	const onConnect = useCallback((params: any) =>
+		setEdges((eds) => addEdge(params, eds)),
+		[setEdges],
+	);
 
 
-    const onInit = (instance: ReactFlowInstance) => {
-        setReactFlowInstance(instance);
-        // console.log(supabase)
-    };
+	const onNodesDelete = useCallback(
+		(deleted: any) => {
+			setEdges(
+				deleted.reduce((acc: any, node: any) => {
+					const incomers = getIncomers(node, nodes, edges);
+					const outgoers = getOutgoers(node, nodes, edges);
+					const connectedEdges = getConnectedEdges([node], edges);
 
 
-    const onConnect = useCallback((params: any) =>
-        setEdges((eds) => addEdge(params, eds)),
-        [setEdges],
-    );
+					const remainingEdges = acc.filter(
+						(edge: any) => !connectedEdges.includes(edge),
+					);
 
 
-    const onNodesDelete = useCallback(
-        (deleted: any) => {
-            setEdges(
-                deleted.reduce((acc: any, node: any) => {
-                    const incomers = getIncomers(node, nodes, edges);
-                    const outgoers = getOutgoers(node, nodes, edges);
-                    const connectedEdges = getConnectedEdges([node], edges);
+					const createdEdges = incomers.flatMap(({ id: source }) =>
+						outgoers.map(({ id: target }) => ({
+							id: `${source}->${target}`,
+							source,
+							target,
+						})),
+					);
 
 
-                    const remainingEdges = acc.filter(
-                        (edge: any) => !connectedEdges.includes(edge),
-                    );
+					return [...remainingEdges, ...createdEdges];
+				}, edges),
+			);
+		},
+		[nodes, edges],
+	);
 
-
-                    const createdEdges = incomers.flatMap(({ id: source }) =>
-                        outgoers.map(({ id: target }) => ({
-                            id: `${source}->${target}`,
-                            source,
-                            target,
-                        })),
-                    );
-
-
-                    return [...remainingEdges, ...createdEdges];
-                }, edges),
-            );
-        },
-        [nodes, edges],
-    );
-
-    const handleSignUpConfirm = async (email: string, password: string) => {
+	const handleSignUpConfirm = async (email: string, password: string) => {
 		console.log(`Signing up with email: ${email}, password: ${password}`);
-		
+
 		const { data, error } = await supabase.auth.signUp({
 			email: email,
 			password: password,
 		});
-	
+
 		if (error) {
 			console.error('Error signing up:', error.message);
 			return;
 		}
-	
+
 		console.log('Sign up successful:', data);
 		setSignUpOpened(false);
 	};
@@ -164,166 +160,160 @@ export default function App() {
 			email: email,
 			password: password,
 		});
-	
+
 		if (error) {
 			console.error('Error signing in:', error.message);
 			return;
 		}
-	
+
 		console.log('Sign in successful:', data);
 
 		setSignInOpened(false);
 	};
 
 
-    const [helpOpened, helpHandler] = useDisclosure((showHelp != "false"));
+	const [helpOpened, helpHandler] = useDisclosure((showHelp != "false"));
 
 
-    const handleConfirm = () => {
-        // make sure it won't show up in future
-        localStorage.setItem('showHelp', "false")
-    };
+	const handleConfirm = () => {
+		// make sure it won't show up in future
+		localStorage.setItem('showHelp', "false")
+	};
 
 
-    const handleClose = () => {
-        handleConfirm();
-        helpHandler.close();
-    };
+	const handleClose = () => {
+		handleConfirm();
+		helpHandler.close();
+	};
+
+	/* Emma continues here to detect mouse on item. Editing is prompted open if clicked on the node. */
+	const onNodeContextMenu = (event: React.MouseEvent, node: any) => {
+		event.preventDefault();
+		/* If clicled over the node, setContextMenu occurs. */
+		setContextMenu({
+			isOpen: true,
+			anchorX: event.clientX,
+			anchorY: event.clientY,
+			selectedNodeId: node.id
+		});
+	};
+
+	const onClick = () => {
+		setContextMenu(prev => ({ ...prev, isOpen: false }));
+	};
 
 
-    /* Emma continues here to detect mouse on item. Editing is prompted open if clicked on the node. */
-    const onNodeContextMenu = (event: React.MouseEvent, node: any) => {
-        event.preventDefault();
-        console.log(node)
-        /* If clicled over the node, setContextMenu occurs. */
-        setContextMenu({
-            isOpen: true,
-            anchorX: event.clientX,
-            anchorY: event.clientY,
-            selectedNodeId: node.id
-        });
-    };
+	const onNodeClick = (_event: React.MouseEvent, node: any) => {
+		setNotesWindowNode(node);
+		setNotesWindowVisibility(true);
+	}
 
 
-    const onClick = () => {
-        setContextMenu(prev => ({ ...prev, isOpen: false }));
-    };
+	const onShapeChange = () => {
+		if (contextMenu.selectedNodeId) {
+			setNodes(nodes.map(node => {
+				if (node.id === contextMenu.selectedNodeId) {
+					return {
+						...node,
+						type: node.type === 'circle' ? 'rect' : 'circle'
+					};
+				}
+				return node;
+			}));
+		}
+		setContextMenu(prev => ({ ...prev, isOpen: false }));
+	};
+
+	const onEdit = () => {
+		if (contextMenu.selectedNodeId) {
+			const selectedNode = nodes.find(node => node.id === contextMenu.selectedNodeId);
+			if (selectedNode) {
+				setCurrentLabel(selectedNode.data.label as string);
+				setEditModalOpened(true);
+			}
+		}
+		setContextMenu(prev => ({ ...prev, isOpen: false }));
+	};
+
+	const handleLabelChange = (newLabel: string) => {
+		setNodes(nodes.map(node => {
+			if (node.id === contextMenu.selectedNodeId) {
+				return {
+					...node,
+					data: { ...node.data, label: newLabel }
+				};
+			}
+			return node;
+		}));
+	};
+
+	const onDelete = () => {
+		if (contextMenu.selectedNodeId) {
+			setNodes(nodes.filter(node => node.id !== contextMenu.selectedNodeId));
+		}
+		setContextMenu(prev => ({ ...prev, isOpen: false }));
+	};
 
 
-    const onNodeClick = (_event: React.MouseEvent, node: any) => {
-        setNotesWindowNode(node);
-        setNotesWindowVisibility(true);
-    }
+	const onNodeDelete = () => {
+		//for some reason, when a node is deleted, the onNodeMouseLeave callback is not called
+		//this leads to a bug where the program thinks the mouse is now perpetually hovering over a node, preventing the user
+		//from double clicking to make a new node.
+		//need to manually set this to false when the node is deleted
+		setMouseOverNode(false);
+		setNotesWindowVisibility(false);
+	}
 
 
-    const onShapeChange = () => {
-        if (contextMenu.selectedNodeId) {
-            setNodes(nodes.map(node => {
-                if (node.id === contextMenu.selectedNodeId) {
-                    return {
-                        ...node,
-                        type: node.type === 'circle' ? 'rect' : 'circle'
-                    };
-                }
-                return node;
-            }));
-        }
-        setContextMenu(prev => ({ ...prev, isOpen: false }));
-    };
+	// const handleDoubleClickEdit = (event: React.MouseEvent, node: any) => {
+	//  // event.preventDefault();
+	//  // console.log(node)
+	//  // setContextMenu(
+	//  //  prev => ({ ...prev, selectedNodeId: node.id })
+	//  // )
+	//  // console.log(contextMenu)
+	//  // handleEdit()
+	//  console.log(`${node.label} was doubleclicked`);
+	// }
 
-    const onEdit = () => {
-        if (contextMenu.selectedNodeId) {
-            const selectedNode = nodes.find(node => node.id === contextMenu.selectedNodeId);
-            if (selectedNode) {
-                setCurrentLabel(selectedNode.data.label as string);
-                setEditModalOpened(true);
-            }
-        }
-        setContextMenu(prev => ({ ...prev, isOpen: false }));
-    };
-   
-    const handleLabelChange = (newLabel: string) => {
-        setNodes(nodes.map(node => {
-            if (node.id === contextMenu.selectedNodeId) {
-                return {
-                    ...node,
-                    data: { ...node.data, label: newLabel }
-                };
-            }
-            return node;
-        }));
-    };
-
-    const onDelete = () => {
-        if (contextMenu.selectedNodeId) {
-            setNodes(nodes.filter(node => node.id !== contextMenu.selectedNodeId));
-        }
-        setContextMenu(prev => ({ ...prev, isOpen: false }));
-    };
+	const onDoubleClick = (event: React.MouseEvent) => {
+		if (isMouseOverNode) return;
 
 
-    const onNodeDelete = () => {
-        //for some reason, when a node is deleted, the onNodeMouseLeave callback is not called
-        //this leads to a bug where the program thinks the mouse is now perpetually hovering over a node, preventing the user
-        //from double clicking to make a new node.
-        //need to manually set this to false when the node is deleted
-        setMouseOverNode(false);
-        setNotesWindowVisibility(false);
-    }
+		//convert mouse coordinates to canvas coordinates
+		const position = reactFlowInstance?.screenToFlowPosition({
+			x: event.clientX - 30,
+			y: event.clientY - 30,
+		});
 
 
-    // const handleDoubleClickEdit = (event: React.MouseEvent, node: any) => {
-    //  // event.preventDefault();
-    //  // console.log(node)
-    //  // setContextMenu(
-    //  //  prev => ({ ...prev, selectedNodeId: node.id })
-    //  // )
-    //  // console.log(contextMenu)
-    //  // handleEdit()
-    //  console.log(`${node.label} was doubleclicked`);
-    // }
+		const newNode = {
+			// not unique enough
+			// id: (nodeID++).toString(),
+			id: uuidv4(),
+			position: { x: position?.x ?? 0, y: position?.y ?? 0 },
+			data: {
+				//to add custom data to a node, you need a dictionary called "data" inside data
+				//so to access the notes, you need to do `node.data.data.notes`
+				//thank you react flow, very cool
+				label: "New Node",
+				data: {
+					notes: ""
+				}
+			},
+			type: 'rect',
+		};
 
 
-
-
-    const onDoubleClick = (event: React.MouseEvent) => {
-        if (isMouseOverNode) return;
-
-
-        //convert mouse coordinates to canvas coordinates
-        const position = reactFlowInstance?.screenToFlowPosition({
-            x: event.clientX - 30,
-            y: event.clientY - 30,
-        });
-
-
-        const newNode = {
-            // not unique enough
-            // id: (nodeID++).toString(),
-            id: uuidv4(),
-            position: { x: position?.x ?? 0, y: position?.y ?? 0 },
-            data: {
-                //to add custom data to a node, you need a dictionary called "data" inside data
-                //so to access the notes, you need to do `node.data.data.notes`
-                //thank you react flow, very cool
-                label: "New Node",
-                data: {
-                    notes: ""
-                }
-            },
-            type: 'rect',
-        };
-
-
-    setNodes((nds) => nds.concat(newNode));
-    };
+		setNodes((nds) => nds.concat(newNode));
+	};
 
 	// clearing the canvas and closing notes window
 	const handleClearCanvas = () => {
-	        setNodes([]);
-	        setEdges([]);
+		setNodes([]);
+		setEdges([]);
 		setNotesWindowVisibility(false);
-    	};
+	};
 
 	return (
 		// why is mantine set to light mode by default?
@@ -357,14 +347,15 @@ export default function App() {
 						onNodeMouseEnter={() => { setMouseOverNode(true) }}   //this way, if the mouse is over a node, isMouseOverNode = true
 						onNodeMouseLeave={() => { setMouseOverNode(false) }}  //this can be checked in onDoubleClick to prevent placing a new node when double clicking on an existing node
 						onNodesDelete={onNodeDelete}
+						connectionRadius={35}
 					>
 
-					<MiniMap position="bottom-right" style={{ position: 'absolute', bottom: '0px', right: '30px' }}/>
-					<ExtendedCanvasControls 
-						clearCanvas={() => setClearModalOpened(true)}
-						position="bottom-right" 
-					/>
-					<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+						<MiniMap position="bottom-right" style={{ position: 'absolute', bottom: '0px', right: '30px' }} />
+						<ExtendedCanvasControls
+							clearCanvas={() => setClearModalOpened(true)}
+							position="bottom-right"
+						/>
+						<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
 					</ReactFlow>
 					<ContextMenu
 						isOpen={contextMenu.isOpen}
@@ -376,17 +367,17 @@ export default function App() {
 						onDelete={onDelete}
 					/>
 
-                    <EditLabelModal
-                        opened={editModalOpened}
-                        label={currentLabel}
-                        onClose={() => setEditModalOpened(false)}
-                        onConfirm={handleLabelChange}
-                    />
+					<EditLabelModal
+						opened={editModalOpened}
+						label={currentLabel}
+						onClose={() => setEditModalOpened(false)}
+						onConfirm={handleLabelChange}
+					/>
 
 					{/* help dialog and button */}
 					<HelpModal
 						opened={helpOpened}
-						onClose = {handleClose}
+						onClose={handleClose}
 					/>
 					<ClearModal
 						opened={clearModalOpened}
@@ -407,40 +398,40 @@ export default function App() {
 					>
 						Help
 					</Button>
-                    <div
-                        style={{
-                            position: "absolute",
-                            top: "10px",
-                            right: "10px",
-                            display: "flex",
-                            gap: "10px"
-                        }}
-                    >
+					<div
+						style={{
+							position: "absolute",
+							top: "10px",
+							right: "10px",
+							display: "flex",
+							gap: "10px"
+						}}
+					>
 
-                        <Button
-                            onClick={() => setSignUpOpened(true)}
-                        >
-                            Sign Up
-                        </Button>
+						<Button
+							onClick={() => setSignUpOpened(true)}
+						>
+							Sign Up
+						</Button>
 
-                        <Button
-                            onClick={() => setSignInOpened(true)}
-                        >
-                            Sign In
-                        </Button>
-                    </div>
+						<Button
+							onClick={() => setSignInOpened(true)}
+						>
+							Sign In
+						</Button>
+					</div>
 
-                    <SignUpModal
-                        opened={signUpOpened}
-                        onClose={() => setSignUpOpened(false)}
-                        onConfirm={handleSignUpConfirm}
-                    />
+					<SignUpModal
+						opened={signUpOpened}
+						onClose={() => setSignUpOpened(false)}
+						onConfirm={handleSignUpConfirm}
+					/>
 
-                    <SignInModal
-                        opened={signInOpened}
-                        onClose={() => setSignInOpened(false)}
-                        onConfirm={handleSignInConfirm}
-                    />
+					<SignInModal
+						opened={signInOpened}
+						onClose={() => setSignInOpened(false)}
+						onConfirm={handleSignInConfirm}
+					/>
 
 				</div>
 				{showNotesWindow &&

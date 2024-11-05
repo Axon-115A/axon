@@ -5,13 +5,10 @@ import SaveIcon from './../assets/floppy.svg';
 interface ExtendedCanvasControlsProps {
     clearCanvas: () => void;
     position: any;
-
-
     saveCanvas: () => void;
-
 }
 
-const ExtendedCanvasControls: React.FC<ExtendedCanvasControlsProps> = ({ clearCanvas, saveCanvas, position }) => {
+const ExtendedCanvasControls: React.FC<ExtendedCanvasControlsProps> = ({ clearCanvas, position, saveCanvas }) => {
     return (
         <Controls position={position}>
             <ControlButton onClick={clearCanvas} title='Clear graph'>
