@@ -47,7 +47,7 @@ const SignInModal: React.FC<Props> = ({opened, onClose, onConfirm}) => {
       >
         <form onSubmit={signUpForm.onSubmit((values) => {
           onConfirm(values.email, values.password);
-          onClose();
+          // onClose();
         })}>
           <h2 style={{ textAlign: 'center' }}>Sign In</h2>
           <TextInput

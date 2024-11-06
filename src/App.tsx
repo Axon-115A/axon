@@ -26,7 +26,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { useDisclosure } from '@mantine/hooks';
 import { Button, Center, Loader, MantineProvider } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
+import { Notifications, notifications } from '@mantine/notifications';
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 
 // todo move this elsewhere?
 import { createClient, Session } from '@supabase/supabase-js'
@@ -94,14 +96,18 @@ export default function App() {
 			const { data, error } = await supabase
 				.from('user_data')
 				.select()
+				.eq('user_id', sessionData.session.user.id)
+				.limit(1)
+				.single()
+
 
 			if (error) {
 				console.log("failed to retrieve user's nodes", error);
 				return;
 			}
 
-			console.log(data[0].user_data)
-			const flow = data[0].user_data
+			console.log(data.user_data)
+			const flow = data.user_data
 			console.log(flow.nodes, flow.edges)
 			setNodes(flow.nodes || []);
 			setEdges(flow.edges || []);
@@ -202,6 +208,11 @@ export default function App() {
 
 		if (error) {
 			console.error('Error signing up:', error.message);
+			notifications.show({
+				title: 'Error Signing Up',
+				message: error.message,
+				color: 'red',
+			});
 			return;
 		}
 
@@ -212,7 +223,6 @@ export default function App() {
 	};
 
 	const handleSignIn = async (email: string, password: string) => {
-		// Perform sign-in actions (e.g., authenticate with Supabase)
 		console.log(`Signing in with email: ${email}, password: ${password}`);
 
 		const { data: sessionData, error: sessionError } = await supabase.auth.signInWithPassword({
@@ -222,6 +232,11 @@ export default function App() {
 
 		if (sessionError) {
 			console.error('Error signing in:', sessionError);
+			notifications.show({
+				title: 'Error Signing In',
+				message: sessionError.message,
+				color: 'red',
+			});
 			return;
 		}
 
@@ -233,14 +248,17 @@ export default function App() {
 		const { data, error } = await supabase
 			.from('user_data')
 			.select()
+			.eq('user_id', sessionData.session.user.id)
+			.limit(1)
+			.single()
 
 		if (error) {
 			console.log("failed to retrieve user's nodes", error);
 			return;
 		}
 
-		console.log(data[0].user_data)
-		const flow = data[0].user_data
+		console.log(data.user_data)
+		const flow = data.user_data
 		console.log(flow.nodes, flow.edges)
 		setNodes(flow.nodes || []);
 		setEdges(flow.edges || []);
@@ -251,7 +269,17 @@ export default function App() {
 
 	const handleLogOut = async () => {
 		const { error } = await supabase.auth.signOut();
-		if (error) console.error('Error signing out:', error.message); else setSession(null);
+		if  (error) { 
+			console.error('Error signing out:', error.message) 
+			notifications.show({
+				title: 'Error Logging Out',
+				message: error.message,
+				color: 'red',
+			});
+		} else { 
+			setSession(null); 
+		}
+
 	};
 
 	const handleSaveState = async () => {
@@ -277,6 +305,11 @@ export default function App() {
 			console.log("successfully saved state", data)
 		} else if (error) {
 			console.log("failed to save state", error)
+			notifications.show({
+				title: 'Error Saving Nodes',
+				message: error.message,
+				color: 'red',
+			});
 		}
 	} 
 
@@ -441,6 +474,7 @@ export default function App() {
 	return (
 		// why is mantine set to light mode by default?
 		<MantineProvider defaultColorScheme="dark">
+			<Notifications />
 			<ModalsProvider>
 				<ReactFlowProvider>
 					<div style={{ width: '100vw', height: '100vh' }}>
@@ -478,7 +512,7 @@ export default function App() {
 						<ExtendedCanvasControls
 							clearCanvas={() => setClearModalOpened(true)}
 							position="bottom-right"
-							saveCanvas={() => {handleSaveState()}} //empty placeholder to silence typescript error
+							saveCanvas={() => {handleSaveState()}} 
 						/>
 						<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
 						</ReactFlow>
