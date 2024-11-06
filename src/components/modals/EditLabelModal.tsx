@@ -57,6 +57,7 @@ const EditLabelModal: React.FC<EditLabelModalProps> = ({ opened, label, onClose,
                     onChange={(event) => setNewLabel(event.currentTarget.value)}
                     onKeyDown={handleKeyPress}
                     style={{ textAlign: 'center', width: '200px', alignItems: 'center', justifyContent: 'center' }}
+                    maxLength={30}
                 />
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: "0.5rem"}}>

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
 	ReactFlow,
 	useNodesState,
@@ -22,7 +22,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 import { useDisclosure } from '@mantine/hooks';
-import { Button, MantineProvider } from '@mantine/core';
+import { Button, Loader, MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
 
 
@@ -37,12 +37,13 @@ import ExtendedCanvasControls from './components/ExtendedCanvasControls';
 
 
 // todo move this elsewhere
-import { createClient } from '@supabase/supabase-js'
+import { createClient, Session } from '@supabase/supabase-js'
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
 import SignInModal from "./components/auth/SignIn"
 import SignUpModal from './components/auth/SignUp';
 import { ModalsProvider } from '@mantine/modals';
+import LogOutModal from './components/auth/LogOut';
 
 // todo maybe move these to .env?
 const SUPABASE_URL = "https://tugoremjbojyqanvwglz.supabase.co"
@@ -63,7 +64,25 @@ const proOptions = { hideAttribution: true };
 
 
 export default function App() {
-	const [session, setSession] = useState(null)
+	const [loading, setLoading] = useState(true);
+	const [session, setSession] = useState<Session | null>(null)
+	useEffect(() => {
+		const fetchSession = async () => {
+		  const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+	  
+		  if (sessionData?.session) {
+			setSession(sessionData.session);
+			console.log("retrieved session: ", sessionData)
+		  } else if (sessionError) {
+			console.log("Error when retrieving session:", sessionError);
+		  }
+	  
+		  // Set loading to false after fetching session
+		  setLoading(false);
+		};
+	  
+		fetchSession();
+	}, []);
 
 
 	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -77,6 +96,7 @@ export default function App() {
 	const [currentLabel, setCurrentLabel] = useState("");
 	const [signUpOpened, setSignUpOpened] = useState(false);
 	const [signInOpened, setSignInOpened] = useState(false);
+	const [logOutOpened, setLogOutOpened] = useState(false);
 
 	// Context menu state
 	const [contextMenu, setContextMenu] = useState({
@@ -150,6 +170,8 @@ export default function App() {
 		}
 
 		console.log('Sign up successful:', data);
+		setSession(data.session);
+
 		setSignUpOpened(false);
 	};
 
@@ -168,13 +190,14 @@ export default function App() {
 		}
 
 		console.log('Sign in successful:', data);
+		setSession(data.session);
 
 		setSignInOpened(false);
 	};
 
-	const handleLogout = async () => {
+	const handleLogOut = async () => {
 		const { error } = await supabase.auth.signOut();
-		if (error) console.error('Error signing out:', error.message);
+		if (error) console.error('Error signing out:', error.message); else setSession(null);
 	};
 
 
@@ -321,6 +344,14 @@ export default function App() {
 		setNotesWindowVisibility(false);
 	};
 
+	if (loading) {
+		return (
+			<MantineProvider defaultColorScheme="dark">
+				<Loader color="blue" />;
+			</MantineProvider>
+		)
+	}
+
 	return (
 		// why is mantine set to light mode by default?
 		<MantineProvider defaultColorScheme="dark">
@@ -415,21 +446,22 @@ export default function App() {
 								gap: "10px"
 							}}
 						>
-						    if (session) {
-								<Button onClick={() => setSignUpOpened(true)}>
+							
+							{session ? (
+								<Button onClick={() => setLogOutOpened(true)}>
 									Log Out
 								</Button>
-							} else {
+							) : (
 								<>
-									<Button onClick={() => setSignUpOpened(true)}>
-										Sign Up
-									</Button>
+								<Button onClick={() => setSignUpOpened(true)}>
+									Sign Up
+								</Button>
 
-									<Button onClick={() => setSignInOpened(true)}>
-										Sign In
-									</Button>
+								<Button onClick={() => setSignInOpened(true)}>
+									Sign In
+								</Button>
 								</>
-							}
+							)}
 
 							
 						</div>
@@ -444,6 +476,12 @@ export default function App() {
 							opened={signInOpened}
 							onClose={() => setSignInOpened(false)}
 							onConfirm={handleSignIn}
+						/>
+						
+						<LogOutModal
+							opened={logOutOpened}
+							onClose={() => setLogOutOpened(false)}
+							onConfirm={handleLogOut}
 						/>
 
 					</div>

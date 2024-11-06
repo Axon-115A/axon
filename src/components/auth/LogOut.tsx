@@ -26,9 +26,9 @@ const LogOutModal: React.FC<Props> = ({opened, onClose, onConfirm}) => (
             alignItems: "center",
         }}
       >
-        <h2 style={{ textAlign: 'center' }}>Clear Canvas?</h2>
+        <h2 style={{ textAlign: 'center' }}>Log Out</h2>
         <p style={{ textAlign: 'center' }}>
-            <b>Are you sure you want to log out?</b>
+            Are you sure you want to log out?
         </p>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Button color="gray" onClick={onClose} style={{ marginRight: '0.5rem', width: '100px', height: '40px' }}>
