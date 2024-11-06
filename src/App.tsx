@@ -14,11 +14,12 @@ import {
 	getOutgoers,
 	getConnectedEdges,
 	ConnectionMode,
+	useReactFlow,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
-// react flow recommends against using their built-in state management, uses zustand to replace it
-import { useShallow } from 'zustand/react/shallow';
+// react flow recommends against using their built-in state management, uses zustand to replace it?
+// import { useShallow } from 'zustand/react/shallow';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -29,8 +30,8 @@ import '@mantine/core/styles.css';
 
 // todo move this elsewhere?
 import { createClient, Session } from '@supabase/supabase-js'
-import { Auth } from '@supabase/auth-ui-react'
-import { ThemeSupa } from '@supabase/auth-ui-shared'
+// import { Auth } from '@supabase/auth-ui-react'
+// import { ThemeSupa } from '@supabase/auth-ui-shared'
 
 // custom components
 import CircleNode from './components/CircleNode';
@@ -49,7 +50,7 @@ import LogOutModal from './components/auth/LogOut';
 const SUPABASE_URL = "https://tugoremjbojyqanvwglz.supabase.co"
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1Z29yZW1qYm9qeXFhbnZ3Z2x6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg0MTk2ODgsImV4cCI6MjA0Mzk5NTY4OH0.RvmWr4VrQ0ioRR34vpGYeBEz8qFOPh68ZURNf41yhts"
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
-
+const flowKey = 'axon-flow';
 
 
 
@@ -66,28 +67,11 @@ const proOptions = { hideAttribution: true };
 export default function App() {
 	const [loading, setLoading] = useState(true);
 	const [session, setSession] = useState<Session | null>(null)
-	useEffect(() => {
-		const fetchSession = async () => {
-		  const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-	  
-		  if (sessionData?.session) {
-			setSession(sessionData.session);
-			console.log("retrieved session: ", sessionData)
-		  } else if (sessionError) {
-			console.log("Error when retrieving session:", sessionError);
-		  }
-	  
-		  // Set loading to false after fetching session
-		  setLoading(false);
-		};
-	  
-		fetchSession();
-	}, []);
-
 
 	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
 	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 	const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
+	// const { setViewport } = useReactFlow();
 	const [showNotesWindow, setNotesWindowVisibility] = useState(false);
 	const [notesWindowNode, setNotesWindowNode] = useState(null);
 	const [isMouseOverNode, setMouseOverNode] = useState(false);
@@ -97,6 +81,35 @@ export default function App() {
 	const [signUpOpened, setSignUpOpened] = useState(false);
 	const [signInOpened, setSignInOpened] = useState(false);
 	const [logOutOpened, setLogOutOpened] = useState(false);
+
+	useEffect(() => {
+		const fetchSession = async () => {
+		  const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+	  
+		  if (sessionData?.session) {
+			setSession(sessionData.session);
+			console.log("retrieved session: ", sessionData)
+		  } else if (sessionError) {
+			console.log("Error when retrieving session:", sessionError);
+		  } else {
+			const flow = JSON.parse(localStorage.getItem(flowKey) ?? "");
+			console.log("no session, restoring state from local storage: ", flow)
+			if (flow) {
+				// const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+				console.log(flow.nodes, flow.edges)
+				setNodes(flow.nodes || []);
+				setEdges(flow.edges || []);
+				// setViewport({ x, y, zoom });
+			}
+		  }
+	  
+		  // Set loading to false after fetching session
+		  setLoading(false);
+		};
+	  
+		fetchSession();
+	}, []);
+
 
 	// Context menu state
 	const [contextMenu, setContextMenu] = useState({
@@ -199,6 +212,32 @@ export default function App() {
 		const { error } = await supabase.auth.signOut();
 		if (error) console.error('Error signing out:', error.message); else setSession(null);
 	};
+
+	const handleSaveState = async () => {
+
+		if (reactFlowInstance == null) {
+			console.log("React flow instance null, nothing to save");
+			return;
+		}
+
+		const flow = reactFlowInstance.toObject()
+
+		if (session == null) {
+			console.log("User is not signed in, saving to local storage");
+			localStorage.setItem(flowKey, JSON.stringify(flow));
+			return;
+		}
+
+		const { data, error } = await supabase
+			.from('user_data')
+			.upsert({ user_id: session.user.id, user_data: flow})
+			.select()
+		if (data) {
+			console.log("successfully saved state", data)
+		} else if (error) {
+			console.log("failed to save state", error)
+		}
+	} 
 
 
 	const [helpOpened, helpHandler] = useDisclosure((showHelp != "false"));
@@ -394,7 +433,7 @@ export default function App() {
 						<ExtendedCanvasControls
 							clearCanvas={() => setClearModalOpened(true)}
 							position="bottom-right"
-							saveCanvas={() => {}} //empty placeholder to silence typescript error
+							saveCanvas={() => {handleSaveState()}} //empty placeholder to silence typescript error
 						/>
 						<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
 						</ReactFlow>
