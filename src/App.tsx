@@ -111,15 +111,19 @@ export default function App() {
 		  } else if (sessionError) {
 			console.log("Error when retrieving session:", sessionError);
 		  } else {
-			const flow = JSON.parse(localStorage.getItem(flowKey) ?? "");
-			console.log("no session, restoring state from local storage: ", flow)
-			if (flow) {
-				// const { x = 0, y = 0, zoom = 1 } = flow.viewport;
-				console.log(flow.nodes, flow.edges)
-				setNodes(flow.nodes || []);
-				setEdges(flow.edges || []);
-				// setViewport({ x, y, zoom });
+			const flowJson = localStorage.getItem(flowKey);
+			if (flowJson != null) {
+				const flow = JSON.parse(flowJson);
+				console.log("no session, restoring state from local storage: ", flow)
+				if (flow) {
+					// const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+					console.log(flow.nodes, flow.edges)
+					setNodes(flow.nodes || []);
+					setEdges(flow.edges || []);
+					// setViewport({ x, y, zoom });
+				}
 			}
+			
 		  }
 	  
 		  // Set loading to false after fetching session
@@ -211,18 +215,36 @@ export default function App() {
 		// Perform sign-in actions (e.g., authenticate with Supabase)
 		console.log(`Signing in with email: ${email}, password: ${password}`);
 
-		const { data, error } = await supabase.auth.signInWithPassword({
+		const { data: sessionData, error: sessionError } = await supabase.auth.signInWithPassword({
 			email: email,
 			password: password,
 		});
 
-		if (error) {
-			console.error('Error signing in:', error.message);
+		if (sessionError) {
+			console.error('Error signing in:', sessionError);
 			return;
 		}
 
-		console.log('Sign in successful:', data);
-		setSession(data.session);
+		console.log('Sign in successful:', sessionData);
+		
+		setSession(sessionData.session);
+
+		// try to get saved json from supabase
+		const { data, error } = await supabase
+			.from('user_data')
+			.select()
+
+		if (error) {
+			console.log("failed to retrieve user's nodes", error);
+			return;
+		}
+
+		console.log(data[0].user_data)
+		const flow = data[0].user_data
+		console.log(flow.nodes, flow.edges)
+		setNodes(flow.nodes || []);
+		setEdges(flow.edges || []);
+
 
 		setSignInOpened(false);
 	};
@@ -400,7 +422,7 @@ export default function App() {
 		setNodes([]);
 		setEdges([]);
 		setNotesWindowVisibility(false);
-		
+
 		// Run handleSaveState after ensuring nodes and edges are updated
 		setTimeout(handleSaveState, 0);
 
