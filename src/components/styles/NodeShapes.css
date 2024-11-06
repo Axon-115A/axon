@@ -1,14 +1,17 @@
 /* styles for the look of all custom shapes */
 
+/* Node  appearance */
 .rect {
-    width: 180px;
-    height: 60px;
+    width: auto; 
+    height: auto; 
+    padding: 10px 10px; 
     color: white;
-    display: flex;
-    justify-Content: center;
+    display: inline-flex; /* Keeps block flexible and adjusts size */
+    justify-content: center;
     align-items: center;
     background-color: #6c5ce7;
     border-radius: 2px;
+    word-wrap: break-word; /* Ensures the text wraps within the block */
 }
 
 .circle {

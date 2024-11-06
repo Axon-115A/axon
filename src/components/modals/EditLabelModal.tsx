@@ -18,8 +18,11 @@ const EditLabelModal: React.FC<EditLabelModalProps> = ({ opened, label, onClose,
         }
     }, [opened, label]);
 
+    const truncateLabel = (label: string): string => 
+        label.length > 30 ? label.substring(0, 30) : label;
+
     const handleSubmit = () => {
-        onConfirm(newLabel);
+        onConfirm(truncateLabel(newLabel));
         onClose();
     };
 

@@ -276,16 +276,17 @@ export default function App() {
 	//  console.log(`${node.label} was doubleclicked`);
 	// }
 
+
+	// Emma added the text limit in this function block
+
 	const onDoubleClick = (event: React.MouseEvent) => {
 		if (isMouseOverNode) return;
-
 
 		//convert mouse coordinates to canvas coordinates
 		const position = reactFlowInstance?.screenToFlowPosition({
 			x: event.clientX - 30,
 			y: event.clientY - 30,
 		});
-
 
 		const newNode = {
 			// not unique enough
@@ -299,11 +300,10 @@ export default function App() {
 				label: "New Node",
 				data: {
 					notes: ""
-				}
+				},
 			},
 			type: 'rect',
 		};
-
 
 		setNodes((nds) => nds.concat(newNode));
 	};
