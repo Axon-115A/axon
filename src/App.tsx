@@ -89,6 +89,25 @@ export default function App() {
 		  if (sessionData?.session) {
 			setSession(sessionData.session);
 			console.log("retrieved session: ", sessionData)
+
+			// try to get saved json from supabase
+			const { data, error } = await supabase
+				.from('user_data')
+				.select()
+
+			if (error) {
+				console.log("failed to retrieve user's nodes", error);
+				return;
+			}
+
+			console.log(data[0].user_data)
+			const flow = data[0].user_data
+			console.log(flow.nodes, flow.edges)
+			setNodes(flow.nodes || []);
+			setEdges(flow.edges || []);
+
+
+
 		  } else if (sessionError) {
 			console.log("Error when retrieving session:", sessionError);
 		  } else {
@@ -381,6 +400,10 @@ export default function App() {
 		setNodes([]);
 		setEdges([]);
 		setNotesWindowVisibility(false);
+		
+		// Run handleSaveState after ensuring nodes and edges are updated
+		setTimeout(handleSaveState, 0);
+
 	};
 
 	if (loading) {
