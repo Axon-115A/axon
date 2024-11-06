@@ -42,6 +42,7 @@ import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
 import SignInModal from "./components/auth/SignIn"
 import SignUpModal from './components/auth/SignUp';
+import { ModalsProvider } from '@mantine/modals';
 
 // todo maybe move these to .env?
 const SUPABASE_URL = "https://tugoremjbojyqanvwglz.supabase.co"
@@ -135,7 +136,7 @@ export default function App() {
 		[nodes, edges],
 	);
 
-	const handleSignUpConfirm = async (email: string, password: string) => {
+	const handleSignUp = async (email: string, password: string) => {
 		console.log(`Signing up with email: ${email}, password: ${password}`);
 
 		const { data, error } = await supabase.auth.signUp({
@@ -152,7 +153,7 @@ export default function App() {
 		setSignUpOpened(false);
 	};
 
-	const handleSignInConfirm = async (email: string, password: string) => {
+	const handleSignIn = async (email: string, password: string) => {
 		// Perform sign-in actions (e.g., authenticate with Supabase)
 		console.log(`Signing in with email: ${email}, password: ${password}`);
 
@@ -169,6 +170,11 @@ export default function App() {
 		console.log('Sign in successful:', data);
 
 		setSignInOpened(false);
+	};
+
+	const handleLogout = async () => {
+		const { error } = await supabase.auth.signOut();
+		if (error) console.error('Error signing out:', error.message);
 	};
 
 
@@ -318,130 +324,137 @@ export default function App() {
 	return (
 		// why is mantine set to light mode by default?
 		<MantineProvider defaultColorScheme="dark">
-			<ReactFlowProvider>
-				<div style={{ width: '100vw', height: '100vh' }}>
-					<ReactFlow
-						nodes={nodes}
-						edges={edges}
-						onNodesChange={onNodesChange}
-						// todo pls fix	
-						// after adding more handles and making them all connectable to each other, this does not properly update connections to the right handle
-						// once that is fixed, uncomment this - prasiddh
-						// onNodesDelete={onNodesDelete}
-						onEdgesChange={onEdgesChange}
-						onConnect={onConnect}
-						zoomOnDoubleClick={false}
-						onDoubleClick={onDoubleClick}
-						// this still triggers regular doube click for some reason
-						// onNodeDoubleClick={handleDoubleClickEdit}
-						onNodeContextMenu={onNodeContextMenu}
-						onClick={onClick}
-						onNodeClick={onNodeClick}
-						edgeTypes={{ simpleBezier: SimpleBezierEdge }}
-						onInit={onInit}
-						colorMode='dark'
-						deleteKeyCode='Delete'
-						proOptions={proOptions}
-						nodeTypes={nodeTypes}
-						connectionMode={ConnectionMode.Loose}
-						onNodeMouseEnter={() => { setMouseOverNode(true) }}   //this way, if the mouse is over a node, isMouseOverNode = true
-						onNodeMouseLeave={() => { setMouseOverNode(false) }}  //this can be checked in onDoubleClick to prevent placing a new node when double clicking on an existing node
-						onNodesDelete={onNodeDelete}
-						connectionRadius={35} //the min distance an edge has to be dragged close to a handle before it snaps to it. default is 20
-					>
-
-					<MiniMap position="bottom-right" style={{ position: 'absolute', bottom: '0px', right: '30px' }} />
-					<ExtendedCanvasControls
-						clearCanvas={() => setClearModalOpened(true)}
-						position="bottom-right"
-						saveCanvas={() => {}} //empty placeholder to silence typescript error
-					/>
-					<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
-					</ReactFlow>
-					<ContextMenu
-						isOpen={contextMenu.isOpen}
-						setOpen={(open) => setContextMenu(prev => ({ ...prev, isOpen: open }))}
-						anchorX={contextMenu.anchorX}
-						anchorY={contextMenu.anchorY}
-						onShapeChange={onShapeChange}
-						onEdit={onEdit}
-						onDelete={onDelete}
-					/>
-
-					<EditLabelModal
-						opened={editModalOpened}
-						label={currentLabel}
-						onClose={() => setEditModalOpened(false)}
-						onConfirm={handleLabelChange}
-					/>
-
-					{/* help dialog and button */}
-					<HelpModal
-						opened={helpOpened}
-						onClose={handleClose}
-					/>
-					<ClearModal
-						opened={clearModalOpened}
-						onClose={() => setClearModalOpened(false)}
-						onConfirm={handleClearCanvas}
-					/>
-					<Button
-						variant="filled"
-						color="teal"
-						onClick={helpHandler.open}
-						style={{
-							position: 'absolute',
-							bottom: '20px',
-							left: '50%',  // Center the button horizontally
-							transform: 'translateX(-50%)',  // Offset by half of its width to align in center
-							fontSize: '16px',
-						}}
-					>
-						Help
-					</Button>
-					<div
-						style={{
-							position: "absolute",
-							top: "10px",
-							right: "10px",
-							display: "flex",
-							gap: "10px"
-						}}
-					>
-
-						<Button
-							onClick={() => setSignUpOpened(true)}
+			<ModalsProvider>
+				<ReactFlowProvider>
+					<div style={{ width: '100vw', height: '100vh' }}>
+						<ReactFlow
+							nodes={nodes}
+							edges={edges}
+							onNodesChange={onNodesChange}
+							// todo pls fix	
+							// after adding more handles and making them all connectable to each other, this does not properly update connections to the right handle
+							// once that is fixed, uncomment this - prasiddh
+							// onNodesDelete={onNodesDelete}
+							onEdgesChange={onEdgesChange}
+							onConnect={onConnect}
+							zoomOnDoubleClick={false}
+							onDoubleClick={onDoubleClick}
+							// this still triggers regular doube click for some reason
+							// onNodeDoubleClick={handleDoubleClickEdit}
+							onNodeContextMenu={onNodeContextMenu}
+							onClick={onClick}
+							onNodeClick={onNodeClick}
+							edgeTypes={{ simpleBezier: SimpleBezierEdge }}
+							onInit={onInit}
+							colorMode='dark'
+							deleteKeyCode='Delete'
+							proOptions={proOptions}
+							nodeTypes={nodeTypes}
+							connectionMode={ConnectionMode.Loose}
+							onNodeMouseEnter={() => { setMouseOverNode(true) }}   //this way, if the mouse is over a node, isMouseOverNode = true
+							onNodeMouseLeave={() => { setMouseOverNode(false) }}  //this can be checked in onDoubleClick to prevent placing a new node when double clicking on an existing node
+							onNodesDelete={onNodeDelete}
+							connectionRadius={35} //the min distance an edge has to be dragged close to a handle before it snaps to it. default is 20
 						>
-							Sign Up
-						</Button>
 
+						<MiniMap position="bottom-right" style={{ position: 'absolute', bottom: '0px', right: '30px' }} />
+						<ExtendedCanvasControls
+							clearCanvas={() => setClearModalOpened(true)}
+							position="bottom-right"
+							saveCanvas={() => {}} //empty placeholder to silence typescript error
+						/>
+						<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+						</ReactFlow>
+						<ContextMenu
+							isOpen={contextMenu.isOpen}
+							setOpen={(open) => setContextMenu(prev => ({ ...prev, isOpen: open }))}
+							anchorX={contextMenu.anchorX}
+							anchorY={contextMenu.anchorY}
+							onShapeChange={onShapeChange}
+							onEdit={onEdit}
+							onDelete={onDelete}
+						/>
+
+						<EditLabelModal
+							opened={editModalOpened}
+							label={currentLabel}
+							onClose={() => setEditModalOpened(false)}
+							onConfirm={handleLabelChange}
+						/>
+
+						{/* help dialog and button */}
+						<HelpModal
+							opened={helpOpened}
+							onClose={handleClose}
+						/>
+						<ClearModal
+							opened={clearModalOpened}
+							onClose={() => setClearModalOpened(false)}
+							onConfirm={handleClearCanvas}
+						/>
 						<Button
-							onClick={() => setSignInOpened(true)}
+							variant="filled"
+							color="teal"
+							onClick={helpHandler.open}
+							style={{
+								position: 'absolute',
+								bottom: '20px',
+								left: '50%',  // Center the button horizontally
+								transform: 'translateX(-50%)',  // Offset by half of its width to align in center
+								fontSize: '16px',
+							}}
 						>
-							Sign In
+							Help
 						</Button>
+						<div
+							style={{
+								position: "absolute",
+								top: "10px",
+								right: "10px",
+								display: "flex",
+								gap: "10px"
+							}}
+						>
+						    if (session) {
+								<Button onClick={() => setSignUpOpened(true)}>
+									Log Out
+								</Button>
+							} else {
+								<>
+									<Button onClick={() => setSignUpOpened(true)}>
+										Sign Up
+									</Button>
+
+									<Button onClick={() => setSignInOpened(true)}>
+										Sign In
+									</Button>
+								</>
+							}
+
+							
+						</div>
+
+						<SignUpModal
+							opened={signUpOpened}
+							onClose={() => setSignUpOpened(false)}
+							onConfirm={handleSignUp}
+						/>
+
+						<SignInModal
+							opened={signInOpened}
+							onClose={() => setSignInOpened(false)}
+							onConfirm={handleSignIn}
+						/>
+
 					</div>
-
-					<SignUpModal
-						opened={signUpOpened}
-						onClose={() => setSignUpOpened(false)}
-						onConfirm={handleSignUpConfirm}
-					/>
-
-					<SignInModal
-						opened={signInOpened}
-						onClose={() => setSignInOpened(false)}
-						onConfirm={handleSignInConfirm}
-					/>
-
-				</div>
-				{showNotesWindow &&
-					<NotesWindow
-						node={notesWindowNode}
-						onCloseWindow={() => { setNotesWindowVisibility(false) }}
-					/>
-				}
-			</ReactFlowProvider>
+					{showNotesWindow &&
+						<NotesWindow
+							node={notesWindowNode}
+							onCloseWindow={() => { setNotesWindowVisibility(false) }}
+						/>
+					}
+				</ReactFlowProvider>
+			</ModalsProvider>
 		</MantineProvider>
 	);
 }
