@@ -22,7 +22,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 import { useDisclosure } from '@mantine/hooks';
-import { Button, Loader, MantineProvider } from '@mantine/core';
+import { Button, Center, Loader, MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
 
 
@@ -347,7 +347,9 @@ export default function App() {
 	if (loading) {
 		return (
 			<MantineProvider defaultColorScheme="dark">
-				<Loader color="blue" />;
+				<Center style={{ width: '100vw', height: '100vh' }}>
+					<Loader color="blue" size={'lg'} type="dots"/>
+				</Center>
 			</MantineProvider>
 		)
 	}
