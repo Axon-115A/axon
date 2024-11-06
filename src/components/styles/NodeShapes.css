@@ -6,21 +6,28 @@
     height: auto; 
     padding: 10px 10px; 
     color: white;
-    display: inline-flex; /* Keeps block flexible and adjusts size */
+    display: inline-flex;
     justify-content: center;
     align-items: center;
     background-color: #6c5ce7;
     border-radius: 2px;
-    word-wrap: break-word; /* Ensures the text wraps within the block */
+    word-wrap: break-word; 
 }
 
 .circle {
-    width: 75px;
-    height: 75px;
+    padding: 10px 20px;
     border-radius: 50%;
     background-color: #6c5ce7;
     color: white;
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
+    max-width: 150px;
+    aspect-ratio: 1 / 1; 
+    font-size: 1rem;
+    text-align: center;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
+
+
