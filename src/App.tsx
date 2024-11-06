@@ -17,15 +17,22 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
+// react flow recommends against using their built-in state management, uses zustand to replace it
+import { useShallow } from 'zustand/react/shallow';
 
 import { v4 as uuidv4 } from 'uuid';
 
-
 import { useDisclosure } from '@mantine/hooks';
 import { Button, Center, Loader, MantineProvider } from '@mantine/core';
+import { ModalsProvider } from '@mantine/modals';
 import '@mantine/core/styles.css';
 
+// todo move this elsewhere?
+import { createClient, Session } from '@supabase/supabase-js'
+import { Auth } from '@supabase/auth-ui-react'
+import { ThemeSupa } from '@supabase/auth-ui-shared'
 
+// custom components
 import CircleNode from './components/CircleNode';
 import RectNode from './components/RectNode';
 import ContextMenu from './components/ContextMenu';
@@ -34,15 +41,8 @@ import HelpModal from './components/modals/HelpModal';
 import ClearModal from './components/modals/ClearModal';
 import EditLabelModal from './components/modals/EditLabelModal';
 import ExtendedCanvasControls from './components/ExtendedCanvasControls';
-
-
-// todo move this elsewhere
-import { createClient, Session } from '@supabase/supabase-js'
-import { Auth } from '@supabase/auth-ui-react'
-import { ThemeSupa } from '@supabase/auth-ui-shared'
 import SignInModal from "./components/auth/SignIn"
 import SignUpModal from './components/auth/SignUp';
-import { ModalsProvider } from '@mantine/modals';
 import LogOutModal from './components/auth/LogOut';
 
 // todo maybe move these to .env?
