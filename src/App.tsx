@@ -45,6 +45,7 @@ import ExtendedCanvasControls from './components/ExtendedCanvasControls';
 import SignInModal from "./components/auth/SignIn"
 import SignUpModal from './components/auth/SignUp';
 import LogOutModal from './components/auth/LogOut';
+import NodeList from './components/NodeList';
 
 // todo maybe move these to .env?
 const SUPABASE_URL = "https://tugoremjbojyqanvwglz.supabase.co"
@@ -148,7 +149,7 @@ export default function App() {
 		const savedVal = localStorage.getItem("showHelp");
 		return savedVal || "true";
 	})
-
+	const [helpOpened, helpHandler] = useDisclosure((showHelp != "false"));
 
 	const onInit = (instance: ReactFlowInstance) => {
 		setReactFlowInstance(instance);
@@ -280,10 +281,6 @@ export default function App() {
 		}
 	} 
 
-
-	const [helpOpened, helpHandler] = useDisclosure((showHelp != "false"));
-
-
 	const handleConfirm = () => {
 		// make sure it won't show up in future
 		localStorage.setItem('showHelp', "false")
@@ -295,7 +292,6 @@ export default function App() {
 		helpHandler.close();
 	};
 
-	/* Emma continues here to detect mouse on item. Editing is prompted open if clicked on the node. */
 	const onNodeContextMenu = (event: React.MouseEvent, node: any) => {
 		event.preventDefault();
 		/* If clicled over the node, setContextMenu occurs. */
@@ -577,6 +573,8 @@ export default function App() {
 							onCloseWindow={() => { setNotesWindowVisibility(false) }}
 						/>
 					}
+
+					<NodeList nodeList={nodes} />
 				</ReactFlowProvider>
 			</ModalsProvider>
 		</MantineProvider>

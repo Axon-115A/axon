@@ -1,0 +1,50 @@
+/* Accordion container styles */
+.nodeAccordion {
+    position: absolute;
+    top: 20px;
+    left: 10px;
+    background-color: black;
+    width: 300px;
+    padding-bottom: 0;
+}
+
+/* Accordion Panel scroll settings */
+.nodeAccordion .mantine-Accordion-panel {
+    min-height: 100%;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* make accordion title ("All Nodes") white instead of gray */
+.nodeAccordion .mantine-Accordion-control {
+    color: #fff;
+}
+
+.nodeAccordion .mantine-Accordion-panel::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+}
+
+
+/* for some reason, there is a thin gray line at the bottom of the accordion by default. */
+/* after digging around with the dev tools, i found that this property is responsible for its existence. */
+/* i dont know what .m_9bd7b098 is, but it fixes the issue */
+:where([data-mantine-color-scheme="dark"]) .m_9bd7b098 {
+    --item-border-color: transparent;
+}
+
+.fullList {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}
+
+.nodeListButton {
+    width: 280px;
+    margin-bottom: 2px;
+}
