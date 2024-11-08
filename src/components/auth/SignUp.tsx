@@ -5,6 +5,7 @@ import { Modal, Button, TextInput, Text, rem } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { GithubButton } from './social/GithubButton';
 import { GoogleButton } from './social/GoogleButton';
+import OauthButtons from './social/OauthButtons';
 
 interface Props {
     opened: boolean,
@@ -53,11 +54,8 @@ const SignUpModal: React.FC<Props> = ({opened, onClose, onConfirm, onOauthConfir
           onConfirm(values.email, values.password);
           // onClose();
         })}>
-          <h2 style={{ textAlign: 'center' }}>Sign Up</h2>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: "center", flexDirection: 'column', gap: '0.5rem'}}>
-						<GithubButton onClick={() => {onOauthConfirm('github')}}>Sign In With Github</GithubButton>
-						<GoogleButton onClick={() => {onOauthConfirm('google')}}>Sign In With Google</GoogleButton>
-					</div>
+          <h2 style={{ textAlign: 'center', fontWeight: 'normal'}}>Create Account</h2>
+          <OauthButtons onOauthConfirm={onOauthConfirm}/>
           <TextInput
             //   leftSectionPointerEvents="none"
             //   leftSection={emailIcon}

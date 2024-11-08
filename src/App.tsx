@@ -80,7 +80,6 @@ export default function App() {
 	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
 	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 	const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
-	// const { setViewport } = useReactFlow();
 	const [showNotesWindow, setNotesWindowVisibility] = useState(false);
 	const [notesWindowNode, setNotesWindowNode] = useState(null);
 	const [isMouseOverNode, setMouseOverNode] = useState(false);
@@ -90,6 +89,12 @@ export default function App() {
 	const [signUpOpened, setSignUpOpened] = useState(false);
 	const [signInOpened, setSignInOpened] = useState(false);
 	const [logOutOpened, setLogOutOpened] = useState(false);
+
+	const defaultViewport = {
+		"x": 0,
+		"y": 0,
+		"zoom": 1
+	}
 
 	useEffect(() => {
 		const fetchSession = async () => {
@@ -144,6 +149,9 @@ export default function App() {
 			console.log(flow, flow.nodes, flow.edges)
 			setNodes(flow.nodes || []);
 			setEdges(flow.edges || []);
+			if (reactFlowInstance) {
+				reactFlowInstance?.setViewport(flow.viewport || defaultViewport)
+			}
 
 
 
@@ -159,6 +167,9 @@ export default function App() {
 					console.log(flow.nodes, flow.edges)
 					setNodes(flow.nodes || []);
 					setEdges(flow.edges || []);
+					if (reactFlowInstance) {
+						reactFlowInstance?.setViewport(flow.viewport || defaultViewport)
+					}
 					// setViewport({ x, y, zoom });
 				}
 			}
@@ -295,6 +306,9 @@ export default function App() {
 		console.log(flow.nodes, flow.edges)
 		setNodes(flow.nodes || []);
 		setEdges(flow.edges || []);
+		if (reactFlowInstance) {
+			reactFlowInstance?.setViewport(flow.viewport || defaultViewport)
+		}
 
 
 		setSignInOpened(false);
@@ -347,12 +361,18 @@ export default function App() {
 					console.log(flow.nodes, flow.edges)
 					setNodes(flow.nodes || []);
 					setEdges(flow.edges || []);
+					if (reactFlowInstance) {
+						reactFlowInstance?.setViewport(flow.viewport || defaultViewport)
+					}
 					// setViewport({ x, y, zoom });
 				}
 			} else {
 				console.log("user logged out, clearing canvas - localstorage empty", flowJson);
 				setNodes([]);
 				setEdges([]);
+				if (reactFlowInstance) {
+					reactFlowInstance?.setViewport(defaultViewport)
+				}
 			}
 		}
 
