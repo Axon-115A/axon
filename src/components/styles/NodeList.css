@@ -6,6 +6,7 @@
     background-color: black;
     width: 300px;
     padding-bottom: 0;
+    border-radius: 10px;
 }
 
 /* Accordion Panel scroll settings */
