@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
 	ReactFlow,
 	useNodesState,
@@ -33,6 +33,7 @@ import '@mantine/notifications/styles.css';
 import { createClient, Provider, Session } from '@supabase/supabase-js'
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
+import debounce from 'lodash.debounce';
 
 // custom components
 import CircleNode from './components/CircleNode';
@@ -183,6 +184,11 @@ export default function App() {
 		fetchSession();
 	}, []);
 
+	// useEffect(() => {
+	// 	// This callback will fire whenever nodes or edges change
+	// 	console.log('Nodes or edges have changed:', nodes, edges);
+	//   }, [nodes, edges]);	
+
 
 	// Context menu state
 	const [contextMenu, setContextMenu] = useState({
@@ -241,6 +247,7 @@ export default function App() {
 		},
 		[nodes, edges],
 	);
+
 
 	const handleSignUp = async (email: string, password: string) => {
 		console.log(`Signing up`);
@@ -378,6 +385,8 @@ export default function App() {
 
 	};
 
+	
+
 	const handlePasswordReset = () => {
 	}
 
@@ -391,36 +400,52 @@ export default function App() {
 		}
 	}
 
-	const handleSaveState = async () => {
-
-		if (reactFlowInstance == null) {
-			console.log("React flow instance null, nothing to save");
-			return;
+	const handleSaveState = useCallback(async () => {
+		if (!reactFlowInstance) {
+		  console.log("React flow instance null, nothing to save");
+		  return;
 		}
-
-		const flow = reactFlowInstance.toObject()
-
-		if (session == null) {
-			console.log("User is not signed in, saving to local storage");
-			localStorage.setItem(flowKey, JSON.stringify(flow));
-			return;
+	  
+		const flow = reactFlowInstance.toObject();
+	  
+		if (!session) {
+		  console.log("User is not signed in, saving to local storage");
+		  localStorage.setItem(flowKey, JSON.stringify(flow));
+		  return;
 		}
-
+	  
 		const { data, error } = await supabase
-			.from('user_data')
-			.upsert({ user_id: session.user.id, user_data: flow})
-			.select()
+		  .from('user_data')
+		  .upsert({ user_id: session.user.id, user_data: flow })
+		  .select();
+	  
 		if (data) {
-			console.log("successfully saved state", data)
+		  console.log("Successfully saved state", data);
 		} else if (error) {
-			console.log("failed to save state", error)
-			notifications.show({
-				title: 'Error Saving Nodes',
-				message: error.message,
-				color: 'red',
-			});
+		  console.log("Failed to save state", error);
+		  notifications.show({
+			title: 'Error Saving Nodes',
+			message: error.message,
+			color: 'red',
+		  });
 		}
-	} 
+	}, [reactFlowInstance, session]);
+
+	const debouncedHandleSaveState = useMemo(
+		() => debounce(handleSaveState, 500),
+		[handleSaveState]
+	);
+
+	useEffect(() => {
+		debouncedHandleSaveState();
+		
+		// Cleanup function to cancel debounce on unmount or when dependencies change
+		return () => {
+			debouncedHandleSaveState.cancel();
+		};
+	}, [nodes, edges, debouncedHandleSaveState]);
+
+
 
 	const handleConfirm = () => {
 		// make sure it won't show up in future
