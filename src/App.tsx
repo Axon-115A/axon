@@ -31,8 +31,6 @@ import '@mantine/notifications/styles.css';
 
 // todo move this elsewhere?
 import { createClient, Provider, Session } from '@supabase/supabase-js'
-import { Auth } from '@supabase/auth-ui-react'
-import { ThemeSupa } from '@supabase/auth-ui-shared'
 import debounce from 'lodash.debounce';
 
 // custom components
@@ -134,6 +132,8 @@ export default function App() {
 							message: error.message,
 							color: 'red',
 						});
+					} else {
+						console.log("retrieved: ", data)
 					}
 				} else {
 					notifications.show({
@@ -145,14 +145,17 @@ export default function App() {
 				}
 			}
 
-			console.log(data.user_data)
-			const flow = data.user_data
-			console.log(flow, flow.nodes, flow.edges)
-			setNodes(flow.nodes || []);
-			setEdges(flow.edges || []);
-			if (reactFlowInstance) {
-				reactFlowInstance?.setViewport(flow.viewport || defaultViewport)
+			if (data != null) {
+				console.log(data.user_data)
+				const flow = data.user_data
+				console.log(flow, flow.nodes, flow.edges)
+				setNodes(flow.nodes || []);
+				setEdges(flow.edges || []);
+				if (reactFlowInstance) {
+					reactFlowInstance?.setViewport(flow.viewport || defaultViewport)
+				}
 			}
+ 			
 
 
 
