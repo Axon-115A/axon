@@ -509,7 +509,7 @@ export default function App() {
 							position="bottom-right"
 							saveCanvas={() => {handleSaveState()}} 
 						/>
-						<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+						<Background variant={BackgroundVariant.Dots} gap={24} size={2} />
 						</ReactFlow>
 						<ContextMenu
 							isOpen={contextMenu.isOpen}
