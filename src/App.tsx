@@ -232,7 +232,7 @@ export default function App() {
 	);
 
 	const handleSignUp = async (email: string, password: string) => {
-		console.log(`Signing up with email: ${email}, password: ${password}`);
+		console.log(`Signing up`);
 
 		const { data, error } = await supabase.auth.signUp({
 			email: email,
@@ -256,7 +256,7 @@ export default function App() {
 	};
 
 	const handleSignIn = async (email: string, password: string) => {
-		console.log(`Signing in with email: ${email}, password: ${password}`);
+		console.log(`Signing in`);
 
 		const { data: sessionData, error: sessionError } = await supabase.auth.signInWithPassword({
 			email: email,
@@ -338,6 +338,22 @@ export default function App() {
 			});
 		} else { 
 			setSession(null); 
+			const flowJson = localStorage.getItem(flowKey);
+			if (flowJson != null) {
+				console.log("user logged out, clearing canvas and replacing from local storage", flowJson);
+				const flow = JSON.parse(flowJson);
+				if (flow) {
+					// const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+					console.log(flow.nodes, flow.edges)
+					setNodes(flow.nodes || []);
+					setEdges(flow.edges || []);
+					// setViewport({ x, y, zoom });
+				}
+			} else {
+				console.log("user logged out, clearing canvas - localstorage empty", flowJson);
+				setNodes([]);
+				setEdges([]);
+			}
 		}
 
 	};
