@@ -113,12 +113,30 @@ export default function App() {
 				if (error.code === "406" || error.code === "PGRST116") {
 					// add new row for user if it doesn't exist
 					console.log("user has no rows in database, adding empty row, or localstorage if it exists", console.log(localStorage.getItem(flowKey)))
-					await supabase
+					const {data, error} = await supabase
 						.from('user_data')
 						.upsert({ user_id: sessionData.session.user.id, user_data: JSON.parse(localStorage.getItem(flowKey) ?? "{}")})
 						.select()
+
+					// clear user's local storage after it's copied so it doesn't show up after they log out
+					if (localStorage.getItem(flowKey)) {
+						localStorage.removeItem(flowKey)
+					}
+					if (error) {
+						notifications.show({
+							title: 'Error Fetching Session',
+							message: error.message,
+							color: 'red',
+						});
+					}
+				} else {
+					notifications.show({
+						title: 'Error Fetching Session',
+						message: error.message,
+						color: 'red',
+					});
+					return;
 				}
-				return;
 			}
 
 			console.log(data.user_data)
@@ -299,6 +317,13 @@ export default function App() {
 				provider: gotrue_provider
 			})
 			console.log(data, error)
+			if (error) {
+				notifications.show({
+					title: 'Error Signing In',
+					message: error.message,
+					color: 'red',
+				});
+			}
 		}
 	}
 
@@ -316,6 +341,9 @@ export default function App() {
 		}
 
 	};
+
+	const handlePasswordReset = () => {
+	}
 
 	const handleAuthModalSwitch = () => {
 		if (signUpOpened) {
