@@ -30,9 +30,9 @@ import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 
 // todo move this elsewhere?
-import { createClient, Session } from '@supabase/supabase-js'
-// import { Auth } from '@supabase/auth-ui-react'
-// import { ThemeSupa } from '@supabase/auth-ui-shared'
+import { createClient, Provider, Session } from '@supabase/supabase-js'
+import { Auth } from '@supabase/auth-ui-react'
+import { ThemeSupa } from '@supabase/auth-ui-shared'
 
 // custom components
 import CircleNode from './components/CircleNode';
@@ -67,6 +67,13 @@ const proOptions = { hideAttribution: true };
 
 
 export default function App() {
+
+	// return (
+	// 	<Auth
+	// 		supabaseClient={supabase}
+	// 		appearance={{ theme: ThemeSupa }}
+	// 	/>
+	// )
 	const [loading, setLoading] = useState(true);
 	const [session, setSession] = useState<Session | null>(null)
 
@@ -103,12 +110,20 @@ export default function App() {
 
 			if (error) {
 				console.log("failed to retrieve user's nodes", error);
+				if (error.code === "406" || error.code === "PGRST116") {
+					// add new row for user if it doesn't exist
+					console.log("user has no rows in database, adding empty row, or localstorage if it exists", console.log(localStorage.getItem(flowKey)))
+					await supabase
+						.from('user_data')
+						.upsert({ user_id: sessionData.session.user.id, user_data: JSON.parse(localStorage.getItem(flowKey) ?? "{}")})
+						.select()
+				}
 				return;
 			}
 
 			console.log(data.user_data)
 			const flow = data.user_data
-			console.log(flow.nodes, flow.edges)
+			console.log(flow, flow.nodes, flow.edges)
 			setNodes(flow.nodes || []);
 			setEdges(flow.edges || []);
 
@@ -267,6 +282,26 @@ export default function App() {
 		setSignInOpened(false);
 	};
 
+	const handleOauthSignIn = async (provider: string) => {
+		let gotrue_provider: Provider | null = null;
+		switch(provider) {
+			case "google":
+				gotrue_provider = 'google';
+				break;
+			case "github":
+				gotrue_provider = 'github';
+				break;
+			default:
+				console.error("Invalid provider: ", provider)
+		}
+		if (gotrue_provider) {
+			const { data, error } = await supabase.auth.signInWithOAuth({
+				provider: gotrue_provider
+			})
+			console.log(data, error)
+		}
+	}
+
 	const handleLogOut = async () => {
 		const { error } = await supabase.auth.signOut();
 		if  (error) { 
@@ -281,6 +316,16 @@ export default function App() {
 		}
 
 	};
+
+	const handleAuthModalSwitch = () => {
+		if (signUpOpened) {
+			setSignUpOpened(false)
+			setSignInOpened(true)
+		} else {
+			setSignInOpened(false)
+			setSignUpOpened(true)
+		}
+	}
 
 	const handleSaveState = async () => {
 
@@ -585,12 +630,16 @@ export default function App() {
 							opened={signUpOpened}
 							onClose={() => setSignUpOpened(false)}
 							onConfirm={handleSignUp}
+							onOauthConfirm={handleOauthSignIn}
+							onSignIn={handleAuthModalSwitch}
 						/>
 
 						<SignInModal
 							opened={signInOpened}
 							onClose={() => setSignInOpened(false)}
 							onConfirm={handleSignIn}
+							onOauthConfirm={handleOauthSignIn}
+							onSignUp={handleAuthModalSwitch}
 						/>
 						
 						<LogOutModal
