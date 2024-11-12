@@ -55,7 +55,8 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
                     style={{
                         width: '100%',
                         height: '93%',
-                        cursor: 'text'
+                        cursor: 'text',
+                        marginTop: '-20px'
                     }}
                 >
                     <ReactMarkdown>{notesData}</ReactMarkdown>
