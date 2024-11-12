@@ -1,10 +1,8 @@
 import React from 'react';
 // import { Panel } from '@xyflow/react';\
-import { Modal, Button, TextInput, Text, rem } from '@mantine/core';
+import { Modal, Button, TextInput, Text } from '@mantine/core';
 // import { IconAt, IconLock } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
-import { GithubButton } from './social/GithubButton';
-import { GoogleButton } from './social/GoogleButton';
 import OauthButtons from './social/OauthButtons';
 
 interface Props {
