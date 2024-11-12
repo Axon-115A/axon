@@ -23,7 +23,7 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
     };
 
     const toggleEdit = () => {
-        setIsEditing((prev) => !prev);
+        setIsEditing(!isEditing);
     };
 
     return (
@@ -52,12 +52,7 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
             ) : (
                 <div
                     onClick={toggleEdit}
-                    style={{
-                        width: '100%',
-                        height: '93%',
-                        cursor: 'text',
-                        marginTop: '-20px'
-                    }}
+                    className="textBoxMarkdownDiv"
                 >
                     <ReactMarkdown>{notesData}</ReactMarkdown>
                 </div>
