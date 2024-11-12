@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import ReactMarkdown from 'react-markdown';
 import { Panel } from '@xyflow/react';
 import './styles/NotesWindow.css';
 
@@ -9,7 +10,7 @@ interface Props {
 
 const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
     const [notesData, setNotes] = useState(node.data.data.notes);
-    const [spellCheckEnabled, setSpellCheck] = useState(false);
+    const [isEditing, setIsEditing] = useState(false); //Used to be: const [spellCheckEnabled, setSpellCheck] = useState(false);
 
     //forces notesData to update whenever setNotes is called
     useEffect(() => {
@@ -21,6 +22,9 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
         node.data.data.notes = e.target.value; //updates the node data itself
     };
 
+const toggleEdit = () => {
+    setIsEditing((prev) => !prev);
+};
 
     return (
         <Panel position='bottom-left' className='panel'>
@@ -28,19 +32,33 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
             <button onClick={onCloseWindow} className='closeButton'>
                 <img src="src/assets/white_x.svg" className='closeButtonIcon'/>
             </button>
-            <textarea
-                value={notesData}
-                onChange={onNotesInput}
-                rows={20}
-                className='textBox'
+            {isEditing ? (
+                <textarea
+                    value={notesData}
+                    onChange={onNotesInput}
+                    rows={20}
+                    className='textBox'
+                    onBlur={toggleEdit}
+                    autoFocus
 
-                //enable browser spell checking only when the box is selected
-                spellCheck={spellCheckEnabled}
-                onFocus={() => {setSpellCheck(true)}}
-                onBlur={() => {setSpellCheck(false)}}
-            />
+                    /*
+                    //enable browser spell checking only when the box is selected
+                    spellCheck={spellCheckEnabled}
+                    onFocus={() => {setSpellCheck(true)}}
+                    onBlur={() => {setSpellCheck(false)}}
+                    */
+
+                />
+            ) : (
+                <div
+                className='markdownPreview'
+                onClick={toggleEdit}
+                >
+                    <ReactMarkdown>{notesData}</ReactMarkdown>
+                </div>
+            )}
         </Panel>
-    )
+    );
 };
 
 export default NotesWindow;
