@@ -97,93 +97,93 @@ export default function App() {
 
 	useEffect(() => {
 		const fetchSession = async () => {
-		  const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-	  
-		  if (sessionData?.session) {
-			setSession(sessionData.session);
-			console.log("retrieved session: ", sessionData)
+			const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
 
-			// try to get saved json from supabase
-			const { data, error } = await supabase
-				.from('user_data')
-				.select()
-				.eq('user_id', sessionData.session.user.id)
-				.limit(1)
-				.single()
+			if (sessionData?.session) {
+				setSession(sessionData.session);
+				console.log("retrieved session: ", sessionData)
+
+				// try to get saved json from supabase
+				const { data, error } = await supabase
+					.from('user_data')
+					.select()
+					.eq('user_id', sessionData.session.user.id)
+					.limit(1)
+					.single()
 
 
-			if (error) {
-				console.log("failed to retrieve user's nodes", error);
-				if (error.code === "406" || error.code === "PGRST116") {
-					// add new row for user if it doesn't exist
-					console.log("user has no rows in database, adding empty row, or localstorage if it exists", console.log(localStorage.getItem(flowKey)))
-					const {data, error} = await supabase
-						.from('user_data')
-						.upsert({ user_id: sessionData.session.user.id, user_data: JSON.parse(localStorage.getItem(flowKey) ?? "{}")})
-						.select()
+				if (error) {
+					console.log("failed to retrieve user's nodes", error);
+					if (error.code === "406" || error.code === "PGRST116") {
+						// add new row for user if it doesn't exist
+						console.log("user has no rows in database, adding empty row, or localstorage if it exists", console.log(localStorage.getItem(flowKey)))
+						const { data, error } = await supabase
+							.from('user_data')
+							.upsert({ user_id: sessionData.session.user.id, user_data: JSON.parse(localStorage.getItem(flowKey) ?? "{}") })
+							.select()
 
-					// clear user's local storage after it's copied so it doesn't show up after they log out
-					if (localStorage.getItem(flowKey)) {
-						localStorage.removeItem(flowKey)
-					}
-					if (error) {
+						// clear user's local storage after it's copied so it doesn't show up after they log out
+						if (localStorage.getItem(flowKey)) {
+							localStorage.removeItem(flowKey)
+						}
+						if (error) {
+							notifications.show({
+								title: 'Error Fetching Session',
+								message: error.message,
+								color: 'red',
+							});
+						} else {
+							console.log("retrieved: ", data)
+						}
+					} else {
 						notifications.show({
 							title: 'Error Fetching Session',
 							message: error.message,
 							color: 'red',
 						});
-					} else {
-						console.log("retrieved: ", data)
+						return;
 					}
-				} else {
-					notifications.show({
-						title: 'Error Fetching Session',
-						message: error.message,
-						color: 'red',
-					});
-					return;
 				}
-			}
 
-			if (data != null) {
-				console.log(data.user_data)
-				const flow = data.user_data
-				console.log(flow, flow.nodes, flow.edges)
-				setNodes(flow.nodes || []);
-				setEdges(flow.edges || []);
-				if (reactFlowInstance) {
-					reactFlowInstance?.setViewport(flow.viewport || defaultViewport)
-				}
-			}
- 			
-
-
-
-		  } else if (sessionError) {
-			console.log("Error when retrieving session:", sessionError);
-		  } else {
-			const flowJson = localStorage.getItem(flowKey);
-			if (flowJson != null) {
-				const flow = JSON.parse(flowJson);
-				console.log("no session, restoring state from local storage: ", flow)
-				if (flow) {
-					// const { x = 0, y = 0, zoom = 1 } = flow.viewport;
-					console.log(flow.nodes, flow.edges)
+				if (data != null) {
+					console.log(data.user_data)
+					const flow = data.user_data
+					console.log(flow, flow.nodes, flow.edges)
 					setNodes(flow.nodes || []);
 					setEdges(flow.edges || []);
 					if (reactFlowInstance) {
 						reactFlowInstance?.setViewport(flow.viewport || defaultViewport)
 					}
-					// setViewport({ x, y, zoom });
 				}
+
+
+
+
+			} else if (sessionError) {
+				console.log("Error when retrieving session:", sessionError);
+			} else {
+				const flowJson = localStorage.getItem(flowKey);
+				if (flowJson != null) {
+					const flow = JSON.parse(flowJson);
+					console.log("no session, restoring state from local storage: ", flow)
+					if (flow) {
+						// const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+						console.log(flow.nodes, flow.edges)
+						setNodes(flow.nodes || []);
+						setEdges(flow.edges || []);
+						if (reactFlowInstance) {
+							reactFlowInstance?.setViewport(flow.viewport || defaultViewport)
+						}
+						// setViewport({ x, y, zoom });
+					}
+				}
+
 			}
-			
-		  }
-	  
-		  // Set loading to false after fetching session
-		  setLoading(false);
+
+			// Set loading to false after fetching session
+			setLoading(false);
 		};
-	  
+
 		fetchSession();
 	}, []);
 
@@ -293,7 +293,7 @@ export default function App() {
 		}
 
 		console.log('Sign in successful:', sessionData);
-		
+
 		setSession(sessionData.session);
 
 		// try to get saved json from supabase
@@ -324,7 +324,7 @@ export default function App() {
 
 	const handleOauthSignIn = async (provider: string) => {
 		let gotrue_provider: Provider | null = null;
-		switch(provider) {
+		switch (provider) {
 			case "google":
 				gotrue_provider = 'google';
 				break;
@@ -351,15 +351,15 @@ export default function App() {
 
 	const handleLogOut = async () => {
 		const { error } = await supabase.auth.signOut();
-		if  (error) { 
-			console.error('Error signing out:', error.message) 
+		if (error) {
+			console.error('Error signing out:', error.message)
 			notifications.show({
 				title: 'Error Logging Out',
 				message: error.message,
 				color: 'red',
 			});
-		} else { 
-			setSession(null); 
+		} else {
+			setSession(null);
 			const flowJson = localStorage.getItem(flowKey);
 			if (flowJson != null) {
 				console.log("user logged out, clearing canvas and replacing from local storage", flowJson);
@@ -386,7 +386,7 @@ export default function App() {
 
 	};
 
-	
+
 
 	const handlePasswordReset = () => {
 	}
@@ -403,32 +403,32 @@ export default function App() {
 
 	const handleSaveState = useCallback(async () => {
 		if (!reactFlowInstance) {
-		  console.log("React flow instance null, nothing to save");
-		  return;
+			console.log("React flow instance null, nothing to save");
+			return;
 		}
-	  
+
 		const flow = reactFlowInstance.toObject();
-	  
+
 		if (!session) {
-		  console.log("User is not signed in, saving to local storage");
-		  localStorage.setItem(flowKey, JSON.stringify(flow));
-		  return;
+			console.log("User is not signed in, saving to local storage");
+			localStorage.setItem(flowKey, JSON.stringify(flow));
+			return;
 		}
-	  
+
 		const { data, error } = await supabase
-		  .from('user_data')
-		  .upsert({ user_id: session.user.id, user_data: flow })
-		  .select();
-	  
+			.from('user_data')
+			.upsert({ user_id: session.user.id, user_data: flow })
+			.select();
+
 		if (data) {
-		  console.log("Successfully saved state", data);
+			console.log("Successfully saved state", data);
 		} else if (error) {
-		  console.log("Failed to save state", error);
-		  notifications.show({
-			title: 'Error Saving Nodes',
-			message: error.message,
-			color: 'red',
-		  });
+			console.log("Failed to save state", error);
+			notifications.show({
+				title: 'Error Saving Nodes',
+				message: error.message,
+				color: 'red',
+			});
 		}
 	}, [reactFlowInstance, session]);
 
@@ -439,7 +439,7 @@ export default function App() {
 
 	useEffect(() => {
 		debouncedHandleSaveState();
-		
+
 		// Cleanup function to cancel debounce on unmount or when dependencies change
 		return () => {
 			debouncedHandleSaveState.cancel();
@@ -535,20 +535,6 @@ export default function App() {
 	}
 
 
-	// const handleDoubleClickEdit = (event: React.MouseEvent, node: any) => {
-	//  // event.preventDefault();
-	//  // console.log(node)
-	//  // setContextMenu(
-	//  //  prev => ({ ...prev, selectedNodeId: node.id })
-	//  // )
-	//  // console.log(contextMenu)
-	//  // handleEdit()
-	//  console.log(`${node.label} was doubleclicked`);
-	// }
-
-
-	// Emma added the text limit in this function block
-
 	const onDoubleClick = (event: React.MouseEvent) => {
 		if (isMouseOverNode) return;
 
@@ -593,7 +579,7 @@ export default function App() {
 		return (
 			<MantineProvider defaultColorScheme="dark">
 				<Center style={{ width: '100vw', height: '100vh' }}>
-					<Loader color="blue" size={'lg'} type="dots"/>
+					<Loader color="blue" size={'lg'} type="dots" />
 				</Center>
 			</MantineProvider>
 		)
@@ -602,7 +588,7 @@ export default function App() {
 	return (
 		// why is mantine set to light mode by default?
 		<MantineProvider defaultColorScheme="dark">
-			<Notifications autoClose={5000}/>
+			<Notifications autoClose={5000} />
 			<ModalsProvider>
 				<ReactFlowProvider>
 					<div style={{ width: '100vw', height: '100vh' }}>
@@ -636,13 +622,13 @@ export default function App() {
 							connectionRadius={35} //the min distance an edge has to be dragged close to a handle before it snaps to it. default is 20
 						>
 
-						<MiniMap position="bottom-right" style={{ position: 'absolute', bottom: '0px', right: '30px' }} />
-						<ExtendedCanvasControls
-							clearCanvas={() => setClearModalOpened(true)}
-							position="bottom-right"
-							saveCanvas={() => {handleSaveState()}} 
-						/>
-						<Background variant={BackgroundVariant.Dots} gap={24} size={2} />
+							<MiniMap position="bottom-right" style={{ position: 'absolute', bottom: '0px', right: '30px' }} />
+							<ExtendedCanvasControls
+								clearCanvas={() => setClearModalOpened(true)}
+								position="bottom-right"
+								saveCanvas={() => { handleSaveState() }}
+							/>
+							<Background variant={BackgroundVariant.Dots} gap={24} size={2} />
 						</ReactFlow>
 						<ContextMenu
 							isOpen={contextMenu.isOpen}
@@ -692,24 +678,24 @@ export default function App() {
 								gap: "10px"
 							}}
 						>
-							
+
 							{session ? (
 								<Button onClick={() => setLogOutOpened(true)}>
 									Log Out
 								</Button>
 							) : (
 								<>
-								<Button onClick={() => setSignUpOpened(true)}>
-									Sign Up
-								</Button>
+									<Button onClick={() => setSignUpOpened(true)}>
+										Sign Up
+									</Button>
 
-								<Button onClick={() => setSignInOpened(true)}>
-									Sign In
-								</Button>
+									<Button onClick={() => setSignInOpened(true)}>
+										Sign In
+									</Button>
 								</>
 							)}
 
-							
+
 						</div>
 
 						<SignUpModal
@@ -727,7 +713,7 @@ export default function App() {
 							onOauthConfirm={handleOauthSignIn}
 							onSignUp={handleAuthModalSwitch}
 						/>
-						
+
 						<LogOutModal
 							opened={logOutOpened}
 							onClose={() => setLogOutOpened(false)}
