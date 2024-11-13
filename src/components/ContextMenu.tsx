@@ -1,39 +1,30 @@
-import { ControlledMenu, MenuItem } from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
-import '@szhsin/react-menu/dist/theme-dark.css';
+import { NodeToolbar, Position } from '@xyflow/react';
 import { FC } from 'react';
 
-interface ContextMenuProps {
-    isOpen: boolean;
-    setOpen: (open: boolean) => void;
-    anchorX: number;
-    anchorY: number;
+interface NodeToolbarProps {
+    //label: string;
     onShapeChange: () => void;
+    setOpen: (open: boolean) => void;
     onEdit: () => void;
     onDelete: () => void;
+    isOpen: boolean;
 }
 
-// context menu
-const ContextMenu: FC<ContextMenuProps> = ({ isOpen, setOpen, anchorX, anchorY, onShapeChange, onEdit, onDelete }) => {
-	return (
-        <ControlledMenu
-            anchorPoint={{x: anchorX, y: anchorY}}
-            state={isOpen ? 'open' : 'closed'}
-            direction="right"
-            onClose={() => setOpen(false)}
-            theming='dark'
+const Toolbar: FC<NodeToolbarProps> = ({ onEdit, onDelete, onShapeChange, isOpen, setOpen }) => {
+    console.log("toolbar open?:" + isOpen);
+    return (
+        <NodeToolbar
+        isVisible={isOpen}
+        position={Position.Top}
         >
-            <MenuItem value="Change Shape" onClick={onShapeChange}>
-                Change Shape
-            </MenuItem>
-            <MenuItem value="Edit" onClick={onEdit}>
-                Edit
-            </MenuItem>
-            <MenuItem value="Delete" onClick={onDelete}>
-                Delete
-            </MenuItem>
-        </ControlledMenu>
-      );
+            <div style={{ position: 'absolute', top: 100, left: 100 }}>
+                <p>AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHh</p>
+                <button onClick={onShapeChange}>Change Shape</button>
+                <button onClick={onEdit}>Edit Label</button>
+                <button onClick={() => onDelete()}>Delete Node</button>
+            </div>
+        </NodeToolbar>
+    );
 };
 
-export default ContextMenu;
+export default Toolbar;

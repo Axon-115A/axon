@@ -196,8 +196,6 @@ export default function App() {
 	// Context menu state
 	const [contextMenu, setContextMenu] = useState({
 		isOpen: false,
-		anchorX: 0,
-		anchorY: 0,
 		selectedNodeId: null as string | null
 	});
 
@@ -466,8 +464,6 @@ export default function App() {
 		/* If clicled over the node, setContextMenu occurs. */
 		setContextMenu({
 			isOpen: true,
-			anchorX: event.clientX,
-			anchorY: event.clientY,
 			selectedNodeId: node.id
 		});
 	};
@@ -651,8 +647,6 @@ export default function App() {
 						<ContextMenu
 							isOpen={contextMenu.isOpen}
 							setOpen={(open) => setContextMenu(prev => ({ ...prev, isOpen: open }))}
-							anchorX={contextMenu.anchorX}
-							anchorY={contextMenu.anchorY}
 							onShapeChange={onShapeChange}
 							onEdit={onEdit}
 							onDelete={onDelete}
@@ -754,4 +748,3 @@ export default function App() {
 		</MantineProvider>
 	);
 }
-
