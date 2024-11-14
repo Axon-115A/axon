@@ -36,7 +36,8 @@ import debounce from 'lodash.debounce';
 // custom components
 import CircleNode from './components/CircleNode';
 import RectNode from './components/RectNode';
-import ContextMenu from './components/ContextMenu';
+//import ContextMenu from './components/ContextMenu';
+import NodeBar from './components/NodeToolbar';
 import NotesWindow from './components/NotesWindow';
 import HelpModal from './components/modals/HelpModal';
 import ClearModal from './components/modals/ClearModal';
@@ -194,11 +195,10 @@ export default function App() {
 
 
 	// Context menu state
-	const [contextMenu, setContextMenu] = useState({
+	const [nodeToolBar, setNodeToolBar] = useState({
 		isOpen: false,
 		selectedNodeId: null as string | null
 	});
-
 
 	const [showHelp] = useState(() => {
 		// Get value from localStorage if it exists
@@ -462,14 +462,14 @@ export default function App() {
 	const onNodeContextMenu = (event: React.MouseEvent, node: any) => {
 		event.preventDefault();
 		/* If clicled over the node, setContextMenu occurs. */
-		setContextMenu({
+		setNodeToolBar({
 			isOpen: true,
 			selectedNodeId: node.id
 		});
 	};
 
 	const onClick = () => {
-		setContextMenu(prev => ({ ...prev, isOpen: false }));
+		setNodeToolBar(prev => ({ ...prev, isOpen: false }));
 	};
 
 
@@ -480,9 +480,9 @@ export default function App() {
 
 
 	const onShapeChange = () => {
-		if (contextMenu.selectedNodeId) {
+		if (nodeToolBar.selectedNodeId) {
 			setNodes(nodes.map(node => {
-				if (node.id === contextMenu.selectedNodeId) {
+				if (node.id === nodeToolBar.selectedNodeId) {
 					return {
 						...node,
 						type: node.type === 'circle' ? 'rect' : 'circle'
@@ -491,23 +491,23 @@ export default function App() {
 				return node;
 			}));
 		}
-		setContextMenu(prev => ({ ...prev, isOpen: false }));
+		setNodeToolBar(prev => ({ ...prev, isOpen: false }));
 	};
 
 	const onEdit = () => {
-		if (contextMenu.selectedNodeId) {
-			const selectedNode = nodes.find(node => node.id === contextMenu.selectedNodeId);
+		if (nodeToolBar.selectedNodeId) {
+			const selectedNode = nodes.find(node => node.id === nodeToolBar.selectedNodeId);
 			if (selectedNode) {
 				setCurrentLabel(selectedNode.data.label as string);
 				setEditModalOpened(true);
 			}
 		}
-		setContextMenu(prev => ({ ...prev, isOpen: false }));
+		setNodeToolBar(prev => ({ ...prev, isOpen: false }));
 	};
 
 	const handleLabelChange = (newLabel: string) => {
 		setNodes(nodes.map(node => {
-			if (node.id === contextMenu.selectedNodeId) {
+			if (node.id === nodeToolBar.selectedNodeId) {
 				return {
 					...node,
 					data: { ...node.data, label: newLabel }
@@ -518,10 +518,10 @@ export default function App() {
 	};
 
 	const onDelete = () => {
-		if (contextMenu.selectedNodeId) {
-			setNodes(nodes.filter(node => node.id !== contextMenu.selectedNodeId));
+		if (nodeToolBar.selectedNodeId) {
+			setNodes(nodes.filter(node => node.id !== nodeToolBar.selectedNodeId));
 		}
-		setContextMenu(prev => ({ ...prev, isOpen: false }));
+		setNodeToolBar(prev => ({ ...prev, isOpen: false }));
 	};
 
 
@@ -630,14 +630,12 @@ export default function App() {
 							/>
 							<Background variant={BackgroundVariant.Dots} gap={24} size={2} />
 						</ReactFlow>
-						<ContextMenu
-							isOpen={contextMenu.isOpen}
-							setOpen={(open) => setContextMenu(prev => ({ ...prev, isOpen: open }))}
+						<NodeBar
+							isOpen={nodeToolBar.isOpen}
 							onShapeChange={onShapeChange}
 							onEdit={onEdit}
 							onDelete={onDelete}
 						/>
-
 						<EditLabelModal
 							opened={editModalOpened}
 							label={currentLabel}
