@@ -23,6 +23,9 @@ const ContextMenu: FC<ContextMenuProps> = ({ isOpen, setOpen, anchorX, anchorY, 
             onClose={() => setOpen(false)}
             theming='dark'
         >
+            <MenuItem value="Change Color" onClick={onDelete}>
+                Change Color
+            </MenuItem>
             <MenuItem value="Change Shape" onClick={onShapeChange}>
                 Change Shape
             </MenuItem>
