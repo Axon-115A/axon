@@ -77,7 +77,7 @@ const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ opened, onClose, on
                 withEyeDropper={false}
                 onChange={(newColor) => setSelectedColor(newColor)}
                 onKeyDown={handleKeyPress}
-                fixOnBlur={false}
+                // fixOnBlur={false}
             />
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
                 <Button color="gray" onClick={onClose} style={{ marginRight: '0.5rem', width: '100px' }}>
