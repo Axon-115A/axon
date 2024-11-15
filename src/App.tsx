@@ -28,6 +28,7 @@ import { ModalsProvider } from '@mantine/modals';
 import { Notifications, notifications } from '@mantine/notifications';
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
+import '@mantine/tiptap/styles.css';
 
 // todo move this elsewhere?
 import { createClient, Provider, Session } from '@supabase/supabase-js'
@@ -38,6 +39,7 @@ import CircleNode from './components/CircleNode';
 import RectNode from './components/RectNode';
 import ContextMenu from './components/ContextMenu';
 import NotesWindow from './components/NotesWindow';
+import NotesWindowMantine from './components/NotesWindowMantine';
 import HelpModal from './components/modals/HelpModal';
 import ClearModal from './components/modals/ClearModal';
 import EditLabelModal from './components/modals/EditLabelModal';
