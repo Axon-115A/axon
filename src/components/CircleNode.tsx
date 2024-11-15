@@ -8,7 +8,8 @@ const CircleNode = ({ data }: any) => {
 		<div className="circle">
 			<div style={{
 				textAlign: 'center',
-				width: '100%'
+				width: '100%',
+				background: data.backgroundColor
 			}}>
 				{data.label}
 			</div>
