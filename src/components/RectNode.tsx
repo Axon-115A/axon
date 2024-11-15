@@ -24,7 +24,7 @@ const RectNode = ({ data }: any) => {
 
     return (
         <div className="rect" style={{ background: data.backgroundColor }}>
-            <div style={{ color: luminanceFromRGB(data.backgroundColor) < 128 ? 'white' : 'black' }}>
+            <div style={{ color: luminanceFromRGB(data.backgroundColor ?? "#6c5ce7") < 128 ? 'white' : 'black' }}>
                 {data.label}
             </div>
             <Handle type="source" position={Position.Top} id="top" />
