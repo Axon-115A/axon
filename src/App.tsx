@@ -545,7 +545,7 @@ export default function App() {
 		if (contextMenu.selectedNodeId) {
 			const selectedNode = nodes.find(node => node.id === contextMenu.selectedNodeId);
 			if (selectedNode) {
-				setSelectedColor(selectedNode.data.color as string);
+				setSelectedColor(selectedNode.data.backgroundColor as string);
 				setColorModalOpened(true);
 			}
 		}
