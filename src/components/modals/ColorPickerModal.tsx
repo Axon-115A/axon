@@ -71,6 +71,7 @@ const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ opened, onClose, on
                 }}
             />
             <ColorInput
+                value={selectedColor}
                 withPicker={false} 
                 placeholder="Enter value"
                 withEyeDropper={false}
