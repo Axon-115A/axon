@@ -9,17 +9,17 @@ interface Props {
 }
 
 const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
-    const [notesData, setNotes] = useState(node.data.data.notes);
+    const [notesData, setNotes] = useState(node.data.notes);
     const [isEditing, setIsEditing] = useState(false); //Used to be: const [spellCheckEnabled, setSpellCheck] = useState(false);
 
     //forces notesData to update whenever setNotes is called
     useEffect(() => {
-        if (node) setNotes(node.data.data.notes);
+        if (node) setNotes(node.data.notes);
     }, [node]);
 
     const onNotesInput = (e: any) => {
         setNotes(e.target.value); //updates the display textbox
-        node.data.data.notes = e.target.value; //updates the node data itself
+        node.data.notes = e.target.value; //updates the node data itself
     };
 
     const toggleEdit = () => {

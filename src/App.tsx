@@ -577,18 +577,12 @@ export default function App() {
 		});
 
 		const newNode = {
-			// not unique enough
-			// id: (nodeID++).toString(),
 			id: uuidv4(),
 			position: { x: position?.x ?? 0, y: position?.y ?? 0 },
 			data: {
-				//to add custom data to a node, you need a dictionary called "data" inside data
-				//so to access the notes, you need to do `node.data.data.notes`
-				//thank you react flow, very cool
 				label: "New Node",
-				data: {
-					notes: ""
-				},
+				notes: "",
+				backgroundColor: "#6c5ce7"
 			},
 			type: 'rect',
 		};

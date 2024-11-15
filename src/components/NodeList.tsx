@@ -14,9 +14,10 @@ const NodeList: React.FC<Props> = ({ nodeList }) => {
         setCenter(nodeData.position.x + 60, nodeData.position.y + 30, { duration: 800 });
     }, [setCenter]);
 
+
     const nodesInList = nodeList.map((node: any, index: any) => (
         <li key={index}>
-            <Button onClick={() => { zoomToNode(node) }} className='nodeListButton'>
+            <Button onClick={() => { zoomToNode(node) }} className='nodeListButton' color={node.data.backgroundColor}>
                 {node.data.label}
             </Button>
         </li>
