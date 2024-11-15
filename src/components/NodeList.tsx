@@ -18,7 +18,7 @@ const NodeList: React.FC<Props> = ({ nodeList }) => {
 
     const nodesInList = nodeList.map((node: any, index: any) => (
         <li key={index}>
-            <Button onClick={() => { zoomToNode(node) }} className='nodeListButton' color={node.data.backgroundColor} style={{color: adaptTextColor(node.data.backgroundColor)}}>
+            <Button onClick={() => { zoomToNode(node) }} className='nodeListButton' color={node.data.backgroundColor} style={{color: adaptTextColor(node.data.backgroundColor ?? "#6c5ce7")}}>
                 {node.data.label}
             </Button>
         </li>
