@@ -1,4 +1,5 @@
 import { ControlledMenu, MenuItem } from '@szhsin/react-menu';
+import { ColorPicker } from '@mantine/core';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/theme-dark.css';
 import { FC } from 'react';
@@ -11,10 +12,11 @@ interface ContextMenuProps {
     onShapeChange: () => void;
     onEdit: () => void;
     onDelete: () => void;
+    onColorChange: () => void;
 }
 
 // context menu
-const ContextMenu: FC<ContextMenuProps> = ({ isOpen, setOpen, anchorX, anchorY, onShapeChange, onEdit, onDelete }) => {
+const ContextMenu: FC<ContextMenuProps> = ({ isOpen, setOpen, anchorX, anchorY, onShapeChange, onEdit, onDelete, onColorChange }) => {
 	return (
         <ControlledMenu
             anchorPoint={{x: anchorX, y: anchorY}}
@@ -23,7 +25,7 @@ const ContextMenu: FC<ContextMenuProps> = ({ isOpen, setOpen, anchorX, anchorY, 
             onClose={() => setOpen(false)}
             theming='dark'
         >
-            <MenuItem value="Change Color" onClick={onDelete}>
+            <MenuItem value="Change Color" onClick={onColorChange}>
                 Change Color
             </MenuItem>
             <MenuItem value="Change Shape" onClick={onShapeChange}>

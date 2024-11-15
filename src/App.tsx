@@ -23,7 +23,7 @@ import '@xyflow/react/dist/style.css';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useDisclosure } from '@mantine/hooks';
-import { Button, Center, Loader, MantineProvider } from '@mantine/core';
+import { Button, Center, Loader, MantineProvider, ColorPicker, ColorInput } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications, notifications } from '@mantine/notifications';
 import '@mantine/core/styles.css';
@@ -46,6 +46,7 @@ import SignInModal from "./components/auth/SignIn"
 import SignUpModal from './components/auth/SignUp';
 import LogOutModal from './components/auth/LogOut';
 import NodeList from './components/NodeList';
+import ColorPickerModal from './components/modals/ColorPickerModal';
 
 // todo maybe move these to .env?
 const SUPABASE_URL = "https://tugoremjbojyqanvwglz.supabase.co"
@@ -88,6 +89,8 @@ export default function App() {
 	const [signUpOpened, setSignUpOpened] = useState(false);
 	const [signInOpened, setSignInOpened] = useState(false);
 	const [logOutOpened, setLogOutOpened] = useState(false);
+	const [selectedColor, setSelectedColor] = useState('#ffffff');
+	const [colorModalOpened, setColorModalOpened] = useState(false);
 
 	const defaultViewport = {
 		"x": 0,
@@ -538,6 +541,17 @@ export default function App() {
 		setNotesWindowVisibility(false);
 	}
 
+	const onColorChange = () => {
+		if (contextMenu.selectedNodeId) {
+			const selectedNode = nodes.find(node => node.id === contextMenu.selectedNodeId);
+			if (selectedNode) {
+				setCurrentLabel(selectedNode.data.color as string);
+				setColorModalOpened(true);
+			}
+		}
+		setContextMenu(prev => ({ ...prev, isOpen: false }));
+	};
+
 
 	// const handleDoubleClickEdit = (event: React.MouseEvent, node: any) => {
 	//  // event.preventDefault();
@@ -592,6 +606,9 @@ export default function App() {
 		setTimeout(handleSaveState, 0);
 
 	};
+
+	const handleColorChange = (newColor: string) => {
+	  };
 
 	if (loading) {
 		return (
@@ -656,6 +673,7 @@ export default function App() {
 							onShapeChange={onShapeChange}
 							onEdit={onEdit}
 							onDelete={onDelete}
+							onColorChange={onColorChange}
 						/>
 
 						<EditLabelModal
@@ -674,6 +692,12 @@ export default function App() {
 							opened={clearModalOpened}
 							onClose={() => setClearModalOpened(false)}
 							onConfirm={handleClearCanvas}
+						/>
+						<ColorPickerModal
+							opened={colorModalOpened}
+							onClose={() => setColorModalOpened(false)}
+							onConfirm={handleColorChange}
+							initialColor={"black"}
 						/>
 						<Button
 							variant="filled"
