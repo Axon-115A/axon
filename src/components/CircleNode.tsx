@@ -5,11 +5,10 @@ import './styles/NodeShapes.css'
 // Custom node component to render as a circle
 const CircleNode = ({ data }: any) => {
 	return (
-		<div className="circle">
+		<div className="circle" style={{background: data.backgroundColor}}>
 			<div style={{
 				textAlign: 'center',
 				width: '100%',
-				background: data.backgroundColor
 			}}>
 				{data.label}
 			</div>
