@@ -1,6 +1,6 @@
 // components/EditLabelModal.tsx
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, ColorPicker } from '@mantine/core';
+import { Modal, Button, ColorPicker, ColorInput } from '@mantine/core';
 
 interface ColorPickerModalProps {
     opened: boolean;
@@ -21,6 +21,12 @@ const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ opened, onClose, on
     const handleSubmit = () => {
         onConfirm(selectedColor);
         onClose();
+    };
+
+    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            handleSubmit();
+        }
     };
 
     return (
@@ -45,22 +51,31 @@ const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ opened, onClose, on
             <ColorPicker
                 format="hex"
                 value={selectedColor}
-                onChange={setSelectedColor}
+                onChange={(newColor) => setSelectedColor(newColor)}
+                onKeyDown={handleKeyPress}
                 swatches={[
                     '#fa5252', '#fab005', '#40c057', '#228be6', '#2e2e2e'
                 ]}
-                swatchesPerRow={10}
+                swatchesPerRow={8}
                 styles={{
                   swatch: {
-                    width: '20px',
-                    height: '20px',
-                    margin: '4px', 
+                    width: '15px',
+                    height: '10px',
+                    margin: '4px',
+                    left: '5px' 
                   },
                 }}
                 style={{
                     justifyContent: 'center',
                     alignItems: 'center'
                 }}
+            />
+            <ColorInput
+                withPicker={false} 
+                placeholder="Enter value"
+                withEyeDropper={false}
+                onChange={(newColor) => setSelectedColor(newColor)}
+                onKeyDown={handleKeyPress}
             />
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
                 <Button color="gray" onClick={onClose} style={{ marginRight: '0.5rem', width: '100px' }}>

@@ -1,5 +1,4 @@
 import { ControlledMenu, MenuItem } from '@szhsin/react-menu';
-import { ColorPicker } from '@mantine/core';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/theme-dark.css';
 import { FC } from 'react';

@@ -23,7 +23,7 @@ import '@xyflow/react/dist/style.css';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useDisclosure } from '@mantine/hooks';
-import { Button, Center, Loader, MantineProvider, ColorPicker, ColorInput } from '@mantine/core';
+import { Button, Center, Loader, MantineProvider } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications, notifications } from '@mantine/notifications';
 import '@mantine/core/styles.css';
@@ -545,7 +545,7 @@ export default function App() {
 		if (contextMenu.selectedNodeId) {
 			const selectedNode = nodes.find(node => node.id === contextMenu.selectedNodeId);
 			if (selectedNode) {
-				setCurrentLabel(selectedNode.data.color as string);
+				setSelectedColor(selectedNode.data.color as string);
 				setColorModalOpened(true);
 			}
 		}
@@ -608,7 +608,16 @@ export default function App() {
 	};
 
 	const handleColorChange = (newColor: string) => {
-	  };
+		setNodes(nodes.map(node => {
+			if (node.id === contextMenu.selectedNodeId) {
+				return {
+					...node,
+					data: { ...node.data, backgroundColor: newColor}
+				};
+			}
+			return node;
+		}));
+	};
 
 	if (loading) {
 		return (
@@ -697,7 +706,7 @@ export default function App() {
 							opened={colorModalOpened}
 							onClose={() => setColorModalOpened(false)}
 							onConfirm={handleColorChange}
-							initialColor={"black"}
+							initialColor={selectedColor}
 						/>
 						<Button
 							variant="filled"
