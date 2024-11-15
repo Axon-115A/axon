@@ -1,14 +1,15 @@
 import { Handle, Position } from '@xyflow/react';
 import './styles/Handles.css'
 import './styles/NodeShapes.css'
+import { adaptTextColor } from '../App';
 
-// Custom node component to render as a circle
 const CircleNode = ({ data }: any) => {
 	return (
 		<div className="circle" style={{background: data.backgroundColor}}>
 			<div style={{
 				textAlign: 'center',
 				width: '100%',
+				color: adaptTextColor(data.backgroundColor ?? "#6c5ce7")
 			}}>
 				{data.label}
 			</div>

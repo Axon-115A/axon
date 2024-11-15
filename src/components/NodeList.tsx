@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
 import { useReactFlow } from '@xyflow/react';
-import './styles/NodeList.css';
 import { Button, Accordion } from '@mantine/core';
+import './styles/NodeList.css';
+import { adaptTextColor } from '../App';
 
 interface Props {
     nodeList: any
@@ -17,7 +18,7 @@ const NodeList: React.FC<Props> = ({ nodeList }) => {
 
     const nodesInList = nodeList.map((node: any, index: any) => (
         <li key={index}>
-            <Button onClick={() => { zoomToNode(node) }} className='nodeListButton' color={node.data.backgroundColor}>
+            <Button onClick={() => { zoomToNode(node) }} className='nodeListButton' color={node.data.backgroundColor} style={{color: adaptTextColor(node.data.backgroundColor)}}>
                 {node.data.label}
             </Button>
         </li>
