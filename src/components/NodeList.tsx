@@ -27,9 +27,9 @@ const NodeList: React.FC<Props> = ({ nodeList }) => {
                 if (searchBarValue.length == 0) return true; //minor optimization, probably not needed
 
                 const matchesLabel = searchQuery.test(node.data.label);
-                const matchesNotes = searchQuery.test(node.data.notes);
+                const matchesNotes = (includeNotes) ? searchQuery.test(node.data.notes) : false;
 
-                return matchesLabel || (includeNotes && matchesNotes);
+                return matchesLabel || matchesNotes;
             })
             .map((node: any, index: any) => (
                 <li key={index}>
