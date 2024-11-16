@@ -30,8 +30,8 @@ const ContextMenu: FC<ContextMenuProps> = ({ isOpen, setOpen, anchorX, anchorY, 
             <MenuItem value="Change Shape" onClick={onShapeChange}>
                 Change Shape
             </MenuItem>
-            <MenuItem value="Edit" onClick={onEdit}>
-                Edit
+            <MenuItem value="Rename" onClick={onEdit}>
+                Rename
             </MenuItem>
             <MenuItem value="Delete" onClick={onDelete}>
                 Delete

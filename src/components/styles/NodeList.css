@@ -49,3 +49,8 @@
     width: 280px;
     margin-bottom: 2px;
 }
+
+.nodeSearchBar {
+    padding-top: 2px;
+    padding-bottom: 7px;
+}
