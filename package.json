@@ -37,6 +37,7 @@
     "@types/lodash.debounce": "^4.0.9",
     "@types/uuid": "^10.0.0",
     "@xyflow/react": "^12.3.2",
+    "reactflow": "^11.7.3",
     "install": "^0.13.0",
     "lodash.debounce": "^4.0.8",
     "npm": "^10.9.0",

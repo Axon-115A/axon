@@ -17,6 +17,7 @@ import {
 	useReactFlow,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import { Connection, Edge } from 'reactflow';
 
 // react flow recommends against using their built-in state management, uses zustand to replace it?
 // import { useShallow } from 'zustand/react/shallow';
@@ -35,10 +36,16 @@ import '@mantine/tiptap/styles.css';
 import { createClient, Provider, Session } from '@supabase/supabase-js'
 import debounce from 'lodash.debounce';
 
+// S: imports for custom edges 
+import CustomEdge from './components/CustomEdge';
+
+
+
 // custom components
 import CircleNode from './components/CircleNode';
 import RectNode from './components/RectNode';
 import ContextMenu from './components/ContextMenu';
+import EdgeContextMenu from './components/EdgeContextMenu';
 import NotesWindow from './components/NotesWindow';
 import NotesWindowMantine from './components/NotesWindowMantine';
 import HelpModal from './components/modals/HelpModal';
@@ -66,7 +73,9 @@ const initialEdges: any = [];
 const nodeTypes = { 'circle': CircleNode, 'rect': RectNode };
 const proOptions = { hideAttribution: true };
 
-
+const edgeTypes = {
+	'custom-edge': CustomEdge,
+};
 
 
 export default function App() {
@@ -94,6 +103,8 @@ export default function App() {
 	const [logOutOpened, setLogOutOpened] = useState(false);
 	const [selectedColor, setSelectedColor] = useState('#ffffff');
 	const [colorModalOpened, setColorModalOpened] = useState(false);
+
+
 
 	const defaultViewport = {
 		"x": 0,
@@ -208,6 +219,15 @@ export default function App() {
 	});
 
 
+	// S: adding a state to track context menu
+	const [edgeContextMenu, setEdgeContextMenu] = useState({
+		isOpen: false,
+		anchorX: 0,
+		anchorY: 0,
+		selectedEdgeId: null as string | null
+	});
+
+
 	const [showHelp] = useState(() => {
 		// Get value from localStorage if it exists
 		const savedVal = localStorage.getItem("showHelp");
@@ -221,10 +241,42 @@ export default function App() {
 	};
 
 
-	const onConnect = useCallback((params: any) =>
-		setEdges((eds) => addEdge(params, eds)),
-		[setEdges],
-	);
+	// S: [OLD WORK] referenced in https://reactflow.dev/learn/customization/custom-edges
+	const onConnect = useCallback(
+		(params: Connection) => {
+		  const edge = {
+			...params,
+			type: 'custom-edge',
+			id: uuidv4(),
+			data: { color: 'rgb(0, 0, 255)' }, // Add color as metadata
+		  };
+		  setEdges((eds) => addEdge(edge, eds));
+		},
+		[setEdges]
+	  );
+	// const onConnect = useCallback(
+	// 	(params: Connection) => {
+	// 		const edge = { ...params, type: 'custom-edge', id: uuidv4(), color: 'rgb(0, 0, 255)' }; // Add 'custom-edge' type to the connection
+	// 		// const edge = {
+	// 		// 	source: params.source?,
+	// 		// 	target: params.target?,
+	// 		// 	sourceHandle: params.sourceHandle?,
+	// 		// 	targetHandle: params.targetHandle?,
+	// 		// 	type: 'custom-edge',
+	// 		// 	id: uuidv4(),
+	// 		// 	color: "#0000FF"
+	// 		// }
+	// 		setEdges((eds) => addEdge(edge, eds)); // Add the new edge to the current edges
+	// 	},
+	// 	[setEdges]
+	// );
+// console.log(edges)
+
+	// S: temporaroily commenting this out because I've redeclared it with more stuff earlier on
+	// const onConnect = useCallback((params: any) =>
+	// 	setEdges((eds) => addEdge(params, eds)),
+	// 	[setEdges],
+	// );
 
 
 	const onNodesDelete = useCallback(
@@ -394,10 +446,13 @@ export default function App() {
 
 	};
 
+<<<<<<< Updated upstream
 
 
 	const handlePasswordReset = () => {
 	}
+=======
+>>>>>>> Stashed changes
 
 	const handleAuthModalSwitch = () => {
 		if (signUpOpened) {
@@ -486,6 +541,17 @@ export default function App() {
 		});
 	};
 
+	// S: 
+	const onEdgeContextMenu = (event: React.MouseEvent, edge: any) => {
+		event.preventDefault();
+		setEdgeContextMenu({
+			isOpen: true,
+			anchorX: event.clientX,
+			anchorY: event.clientY,
+			edgeId: edge.Id,
+		});
+	};
+
 	const onClick = () => {
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
@@ -564,6 +630,19 @@ export default function App() {
 	};
 
 
+	//S: ALL FUNCTIONS FOR EDGE CUSTOMIZATION 
+	const onColorChangeEdge = () => {
+		if (edgeContextMenu.selectedEdgeId) {
+			const selectedEdge = edges.find(edge => edge.id === edgeContextMenu.selectedEdgeId);
+			if (selectedEdge) {
+				setSelectedColor(selectedEdge.color );
+				setColorModalOpened(true);
+			}
+		}
+		setContextMenu(prev => ({ ...prev, isOpen: false }));
+	};
+
+
 	// const handleDoubleClickEdit = (event: React.MouseEvent, node: any) => {
 	//  // event.preventDefault();
 	//  // console.log(node)
@@ -621,6 +700,9 @@ export default function App() {
 		}));
 	};
 
+
+
+
 	if (loading) {
 		return (
 			<MantineProvider defaultColorScheme="dark">
@@ -653,14 +735,19 @@ export default function App() {
 							// this still triggers regular doube click for some reason
 							// onNodeDoubleClick={handleDoubleClickEdit}
 							onNodeContextMenu={onNodeContextMenu}
+							onEdgeContextMenu={onEdgeContextMenu}
+
 							onClick={onClick}
 							onNodeClick={onNodeClick}
-							edgeTypes={{ simpleBezier: SimpleBezierEdge }}
+
+							fitView
 							onInit={onInit}
 							colorMode='dark'
 							deleteKeyCode='Delete'
 							proOptions={proOptions}
 							nodeTypes={nodeTypes}
+							// S: referenced https://reactflow.dev/learn/customization/custom-edges
+							edgeTypes={edgeTypes}
 							connectionMode={ConnectionMode.Loose}
 							onNodeMouseEnter={() => { setMouseOverNode(true) }}   //this way, if the mouse is over a node, isMouseOverNode = true
 							onNodeMouseLeave={() => { setMouseOverNode(false) }}  //this can be checked in onDoubleClick to prevent placing a new node when double clicking on an existing node
@@ -686,6 +773,18 @@ export default function App() {
 							onDelete={onDelete}
 							onColorChange={onColorChange}
 						/>
+						{/* <EdgeContextMenu
+							isOpen={edgeContextMenu.isOpen}
+							setOpen={(open) => setEdgeContextMenu(prev => ({ ...prev, isOpen: open }))}
+							anchorX={edgeContextMenu.anchorX}
+							anchorY={edgeContextMenu.anchorY}
+							//onEditLabel={onEditLabel}
+							// onThickness={onThickness}
+							// onTexture={onTexture}
+							onColorChangeEdge={onColorChangeEdge}
+							// onDirectionRight={onDirectionRight}
+							// onDirectionLeft={onDirectionLeft}
+						/> */}
 
 						<EditLabelModal
 							opened={editModalOpened}
