@@ -8,16 +8,17 @@ interface EdgeContextMenuProps {
     setOpen: (open: boolean) => void;
     anchorX: number;
     anchorY: number;
-    onEditLabel: () => void;
-    onThickness: () => void;
-    onTexture: () =>void;
+    // onEditLabel: () => void;
+    // onThickness: () => void;
+    // onTexture: () =>void;
     onColorChangeEdge: () => void;
-    onDirectionLeft: () => void;
-    onDirectionRight: () => void;
+    // onDirectionLeft: () => void;
+    // onDirectionRight: () => void;
 }
 
-// context menu {{}} onEdit, onColorChange
-const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, anchorY, onEditLabel, onThickness, onTexture, onColorChangeEdge, onDirectionLeft, onDirectionRight }) => {
+// context menu {{}} onEdit, onColorChange, 
+// onEditLabel, onThickness, onTexture,  onDirectionLeft, onDirectionRight 
+const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, anchorY, onColorChangeEdge}) => {
 	return (
         <ControlledMenu
             anchorPoint={{x: anchorX, y: anchorY}}
@@ -26,7 +27,7 @@ const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, a
             onClose={() => setOpen(false)}
             theming='dark'
         >
-            <MenuItem value="Rename" onClick={onEditLabel}>
+            {/* <MenuItem value="Rename" onClick={onEditLabel}>
                 Set Label
             </MenuItem>
             <MenuItem value="Change Color" onClick={onThickness}>
@@ -34,16 +35,16 @@ const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, a
             </MenuItem>
             <MenuItem value="Change Color" onClick={onTexture}>
                 Change Color
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem value="Change Color" onClick={onColorChangeEdge}>
                 Change Color
             </MenuItem>
-            <MenuItem value="Change Color" onClick={onDirectionLeft}>
+            {/* <MenuItem value="Change Color" onClick={onDirectionLeft}>
                 Change Color
             </MenuItem>
             <MenuItem value="Change Color" onClick={onDirectionRight}>
                 Change Color
-            </MenuItem>
+            </MenuItem> */}
         </ControlledMenu>
       );
 };

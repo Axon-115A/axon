@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import {
 	ReactFlow,
 	useNodesState,
-	useEdgesState,
 	addEdge,
 	MiniMap,
 	Background,
@@ -17,7 +16,6 @@ import {
 	useReactFlow,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { Connection, Edge } from 'reactflow';
 
 // react flow recommends against using their built-in state management, uses zustand to replace it?
 // import { useShallow } from 'zustand/react/shallow';
@@ -36,16 +34,10 @@ import '@mantine/tiptap/styles.css';
 import { createClient, Provider, Session } from '@supabase/supabase-js'
 import debounce from 'lodash.debounce';
 
-// S: imports for custom edges 
-import CustomEdge from './components/CustomEdge';
-
-
-
 // custom components
 import CircleNode from './components/CircleNode';
 import RectNode from './components/RectNode';
 import ContextMenu from './components/ContextMenu';
-import EdgeContextMenu from './components/EdgeContextMenu';
 import NotesWindow from './components/NotesWindow';
 import NotesWindowMantine from './components/NotesWindowMantine';
 import HelpModal from './components/modals/HelpModal';
@@ -67,15 +59,37 @@ const flowKey = 'axon-flow';
 
 
 const initialNodes: any = [];
-const initialEdges: any = [];
+// const initialEdges: any = [];
 
 
 const nodeTypes = { 'circle': CircleNode, 'rect': RectNode };
 const proOptions = { hideAttribution: true };
 
+
+// S 
+import { Connection, Edge } from 'reactflow';
+import { useEdgesState} from '@xyflow/react';
+import CustomEdge from './components/CustomEdge';
+import EdgeContextMenu from './components/EdgeContextMenu';
 const edgeTypes = {
 	'custom-edge': CustomEdge,
 };
+export type CustomEdge = Edge & {
+	data: {
+		color: string;
+	};
+}
+// const initialEdges: CustomEdge[] = [];
+// const initialEdges: CustomEdge[] = [
+//     {
+//         id: 'e1-2',
+//         source: 'node-1',
+//         target: 'node-2',
+//         type: 'custom-edge',
+//         data: { color: 'rgb(0, 0, 255)' }, // Custom data
+//     },
+// ];
+const initialEdges = [] as CustomEdge[];
 
 
 export default function App() {
@@ -90,7 +104,12 @@ export default function App() {
 	const [session, setSession] = useState<Session | null>(null)
 
 	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+	//const [edges, setEdges, onEdgesChange] = useEdgesState<CustomEdge[]>(initialEdges as CustomEdge[]);
+	// const initialEdges : CustomEdge[] = [];
+	//const [edges, setEdges, onEdgesChange] = useEdgesState<CustomEdge[]>(initialEdges);
 	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+	const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null);
+
 	const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
 	const [showNotesWindow, setNotesWindowVisibility] = useState(false);
 	const [notesWindowNode, setNotesWindowNode] = useState(null);
@@ -244,16 +263,38 @@ export default function App() {
 	// S: [OLD WORK] referenced in https://reactflow.dev/learn/customization/custom-edges
 	const onConnect = useCallback(
 		(params: Connection) => {
-		  const edge = {
-			...params,
-			type: 'custom-edge',
-			id: uuidv4(),
-			data: { color: 'rgb(0, 0, 255)' }, // Add color as metadata
-		  };
-		  setEdges((eds) => addEdge(edge, eds));
+			// Ensure source and target are valid
+			if (!params.source || !params.target) {
+				console.error('Connection must have source and target');
+				return;
+			}
+	
+			const edge: CustomEdge = {
+				id: uuidv4(),
+				type: 'custom-edge',
+				source: params.source, // Guaranteed to be a string
+				target: params.target, // Guaranteed to be a string
+				sourceHandle: params.sourceHandle || null,
+				targetHandle: params.targetHandle || null,
+				data: { color: 'rgb(0, 0, 255)' }, // Add custom metadata
+			};
+	
+			setEdges((eds) => addEdge(edge, eds) as CustomEdge[]);
 		},
 		[setEdges]
-	  );
+	);
+	// const onConnect = useCallback(
+	// 	(params: Connection) => {
+	// 	  const edge: CustomEdge = {
+	// 		...params,
+	// 		type: 'custom-edge',
+	// 		id: uuidv4(),
+	// 		data: { color: 'rgb(0, 0, 255)' }, // Add color as metadata
+	// 	  };
+	// 	  setEdges((eds) => addEdge(edge, eds) as CustomEdge[]);
+	// 	},
+	// 	[setEdges]
+	//   );
 	// const onConnect = useCallback(
 	// 	(params: Connection) => {
 	// 		const edge = { ...params, type: 'custom-edge', id: uuidv4(), color: 'rgb(0, 0, 255)' }; // Add 'custom-edge' type to the connection
@@ -545,7 +586,7 @@ export default function App() {
 			isOpen: true,
 			anchorX: event.clientX,
 			anchorY: event.clientY,
-			edgeId: edge.Id,
+			selectedEdgeId: edge.Id,
 		});
 	};
 
@@ -632,12 +673,23 @@ export default function App() {
 		if (edgeContextMenu.selectedEdgeId) {
 			const selectedEdge = edges.find(edge => edge.id === edgeContextMenu.selectedEdgeId);
 			if (selectedEdge) {
-				setSelectedColor(selectedEdge.color );
+				setSelectedColor(selectedEdge.data.color); //  as string
 				setColorModalOpened(true);
 			}
 		}
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
+
+	const handleColorConfirm = (newColor: string) => {
+        setEdges((prevEdges) =>
+            prevEdges.map((edge) =>
+                edge.id === selectedEdgeId
+                    ? { ...edge, data: { ...edge.data, color: newColor } } // Update the color
+                    : edge
+            )
+        );
+        setColorModalOpened(false); // Close the modal
+    };
 
 
 	// const handleDoubleClickEdit = (event: React.MouseEvent, node: any) => {
@@ -737,14 +789,19 @@ export default function App() {
 							onClick={onClick}
 							onNodeClick={onNodeClick}
 
+							//S: adding edge customization functionality
+							// S: referenced https://reactflow.dev/learn/customization/custom-edges
+							edgeTypes={edgeTypes}
+							
+
+
 							fitView
 							onInit={onInit}
 							colorMode='dark'
 							deleteKeyCode='Delete'
 							proOptions={proOptions}
 							nodeTypes={nodeTypes}
-							// S: referenced https://reactflow.dev/learn/customization/custom-edges
-							edgeTypes={edgeTypes}
+							
 							connectionMode={ConnectionMode.Loose}
 							onNodeMouseEnter={() => { setMouseOverNode(true) }}   //this way, if the mouse is over a node, isMouseOverNode = true
 							onNodeMouseLeave={() => { setMouseOverNode(false) }}  //this can be checked in onDoubleClick to prevent placing a new node when double clicking on an existing node
@@ -770,7 +827,7 @@ export default function App() {
 							onDelete={onDelete}
 							onColorChange={onColorChange}
 						/>
-						{/* <EdgeContextMenu
+						<EdgeContextMenu
 							isOpen={edgeContextMenu.isOpen}
 							setOpen={(open) => setEdgeContextMenu(prev => ({ ...prev, isOpen: open }))}
 							anchorX={edgeContextMenu.anchorX}
@@ -781,7 +838,7 @@ export default function App() {
 							onColorChangeEdge={onColorChangeEdge}
 							// onDirectionRight={onDirectionRight}
 							// onDirectionLeft={onDirectionLeft}
-						/> */}
+						/>
 
 						<EditLabelModal
 							opened={editModalOpened}
