@@ -446,13 +446,10 @@ export default function App() {
 
 	};
 
-<<<<<<< Updated upstream
 
 
 	const handlePasswordReset = () => {
 	}
-=======
->>>>>>> Stashed changes
 
 	const handleAuthModalSwitch = () => {
 		if (signUpOpened) {
