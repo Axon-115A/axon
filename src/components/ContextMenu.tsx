@@ -22,17 +22,18 @@ interface ContextMenuProps {
 
 // context menu
 const ContextMenu: FC<ContextMenuProps> = ({ isOpen, setOpen, anchorX, anchorY, onShapeChange, onEdit, onDelete, onColorChange }) => {
-	return (
+    return (
         <ControlledMenu
-            anchorPoint={{x: anchorX - 75, y: anchorY}}
+            anchorPoint={{ x: anchorX, y: anchorY }}
             state={isOpen ? 'open' : 'closed'}
             direction="top"
             onClose={() => setOpen(false)}
             theming='dark'
             className="custom-menu"
+            align='center'
         >
             <div className="menu-row">
-            <MenuItem value="Change Color" onClick={onColorChange}>
+                <MenuItem value="Change Color" onClick={onColorChange}>
                     <div>
                         <img src={ColorWheel} />
                     </div>
@@ -54,7 +55,7 @@ const ContextMenu: FC<ContextMenuProps> = ({ isOpen, setOpen, anchorX, anchorY, 
                 </MenuItem>
             </div>
         </ControlledMenu>
-      );
+    );
 };
 
 export default ContextMenu;
