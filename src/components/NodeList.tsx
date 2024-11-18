@@ -36,7 +36,7 @@ const NodeList: React.FC<Props> = ({ nodeList }) => {
                     <Button
                         onClick={() => { zoomToNode(node) }}
                         className='nodeListButton' color={node.data.backgroundColor}
-                        style={{ color: adaptTextColor(node.data.backgroundColor) }}
+                        style={{ color: adaptTextColor(node.data.backgroundColor ?? "6c5ce7") }}
                     >
                         {node.data.label}
                     </Button>
