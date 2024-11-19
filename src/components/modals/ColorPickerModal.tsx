@@ -5,11 +5,12 @@ import { Modal, Button, ColorPicker, ColorInput } from '@mantine/core';
 interface ColorPickerModalProps {
     opened: boolean;
     onClose: () => void;
-    onConfirm: (color: string) => void;
+    onConfirm: (color: string, isNode: boolean) => void;
     initialColor: string;
+    isForNode: boolean; // this is for differentiating between edge and node for colorpicker
 }
 
-const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ opened, onClose, onConfirm, initialColor }) => {
+const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ opened, onClose, onConfirm, initialColor, isForNode }) => {
     const [selectedColor, setSelectedColor] = useState(initialColor);
 
     useEffect(() => {
@@ -19,7 +20,7 @@ const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ opened, onClose, on
     }, [opened, initialColor]);
 
     const handleSubmit = () => {
-        onConfirm(selectedColor);
+        onConfirm(selectedColor, isForNode);
         onClose();
     };
 

@@ -35,6 +35,10 @@ import { createClient, Provider, Session } from '@supabase/supabase-js'
 import debounce from 'lodash.debounce';
 
 // custom components
+import { Connection, Edge } from 'reactflow';
+import { useEdgesState } from '@xyflow/react';
+import CustomEdge from './components/CustomEdge';
+import EdgeContextMenu from './components/EdgeContextMenu';
 import CircleNode from './components/CircleNode';
 import RectNode from './components/RectNode';
 import ContextMenu from './components/ContextMenu';
@@ -66,11 +70,7 @@ const nodeTypes = { 'circle': CircleNode, 'rect': RectNode };
 const proOptions = { hideAttribution: true };
 
 
-// S 
-import { Connection, Edge } from 'reactflow';
-import { useEdgesState} from '@xyflow/react';
-import CustomEdge from './components/CustomEdge';
-import EdgeContextMenu from './components/EdgeContextMenu';
+// S: imports needed for edge customizations
 const edgeTypes = {
 	'custom-edge': CustomEdge,
 };
@@ -122,6 +122,9 @@ export default function App() {
 	const [logOutOpened, setLogOutOpened] = useState(false);
 	const [selectedColor, setSelectedColor] = useState('#ffffff');
 	const [colorModalOpened, setColorModalOpened] = useState(false);
+
+	//S: assigns a boolean on whether something is a Node or Edge, useful for color picker 
+	const [colorModalIsNode, setColorModalIsNode] = useState(true);
 
 
 
@@ -268,7 +271,7 @@ export default function App() {
 				console.error('Connection must have source and target');
 				return;
 			}
-	
+
 			const edge: CustomEdge = {
 				id: uuidv4(),
 				type: 'custom-edge',
@@ -278,7 +281,7 @@ export default function App() {
 				targetHandle: params.targetHandle || null,
 				data: { color: 'rgb(0, 0, 255)' }, // Add custom metadata
 			};
-	
+
 			setEdges((eds) => addEdge(edge, eds) as CustomEdge[]);
 		},
 		[setEdges]
@@ -311,7 +314,7 @@ export default function App() {
 	// 	},
 	// 	[setEdges]
 	// );
-// console.log(edges)
+	// console.log(edges)
 
 	// S: temporaroily commenting this out because I've redeclared it with more stuff earlier on
 	// const onConnect = useCallback((params: any) =>
@@ -565,7 +568,7 @@ export default function App() {
 
 		//node positions by default use the react flow canvas coordiante system. convert it to screen space coordinates
 		const nodePosInScreenSpace = reactFlowInstance?.flowToScreenPosition(node.position);
-		
+
 		//by default, the position of a node is its top left corner. to get the center of the node, we need to add half the width.
 		//but the width of the node varies depending on the zoom level. to account for this, we need to multiply half the node width by the zoom level
 		//get the zoom level of the canvas
@@ -573,7 +576,7 @@ export default function App() {
 
 		setContextMenu({
 			isOpen: true,
-			anchorX: (nodePosInScreenSpace?.x ?? 0) + (node.measured.width / 2) * zoomLevel,  
+			anchorX: (nodePosInScreenSpace?.x ?? 0) + (node.measured.width / 2) * zoomLevel,
 			anchorY: nodePosInScreenSpace?.y ?? 0,
 			selectedNodeId: node.id
 		});
@@ -662,6 +665,7 @@ export default function App() {
 			if (selectedNode) {
 				setSelectedColor(selectedNode.data.backgroundColor as string);
 				setColorModalOpened(true);
+				setColorModalIsNode(true);
 			}
 		}
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
@@ -675,21 +679,22 @@ export default function App() {
 			if (selectedEdge) {
 				setSelectedColor(selectedEdge.data.color); //  as string
 				setColorModalOpened(true);
+				setColorModalIsNode(false);
 			}
 		}
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
 
 	const handleColorConfirm = (newColor: string) => {
-        setEdges((prevEdges) =>
-            prevEdges.map((edge) =>
-                edge.id === selectedEdgeId
-                    ? { ...edge, data: { ...edge.data, color: newColor } } // Update the color
-                    : edge
-            )
-        );
-        setColorModalOpened(false); // Close the modal
-    };
+		setEdges((prevEdges) =>
+			prevEdges.map((edge) =>
+				edge.id === selectedEdgeId
+					? { ...edge, data: { ...edge.data, color: newColor } } // Update the color
+					: edge
+			)
+		);
+		setColorModalOpened(false); // Close the modal
+	};
 
 
 	// const handleDoubleClickEdit = (event: React.MouseEvent, node: any) => {
@@ -737,16 +742,29 @@ export default function App() {
 
 	};
 
-	const handleColorChange = (newColor: string) => {
-		setNodes(nodes.map(node => {
-			if (node.id === contextMenu.selectedNodeId) {
-				return {
-					...node,
-					data: { ...node.data, backgroundColor: newColor }
-				};
-			}
-			return node;
-		}));
+	const handleColorChange = (newColor: string, isNode: boolean) => {
+		if (isNode) {
+			setNodes(nodes.map(node => {
+				if (node.id === contextMenu.selectedNodeId) {
+					return {
+						...node,
+						data: { ...node.data, backgroundColor: newColor }
+					};
+				}
+				return node;
+			}));
+		}
+		else {
+			setEdges(edges.map(edge => {
+				if (edge.id === edgeContextMenu.selectedEdgeId) {
+					return {
+						...edge,
+						data: { ...edge.data, color: newColor }
+					};
+				}
+				return edge;
+			}));
+		}
 	};
 
 
@@ -792,7 +810,7 @@ export default function App() {
 							//S: adding edge customization functionality
 							// S: referenced https://reactflow.dev/learn/customization/custom-edges
 							edgeTypes={edgeTypes}
-							
+
 
 
 							fitView
@@ -801,7 +819,7 @@ export default function App() {
 							deleteKeyCode='Delete'
 							proOptions={proOptions}
 							nodeTypes={nodeTypes}
-							
+
 							connectionMode={ConnectionMode.Loose}
 							onNodeMouseEnter={() => { setMouseOverNode(true) }}   //this way, if the mouse is over a node, isMouseOverNode = true
 							onNodeMouseLeave={() => { setMouseOverNode(false) }}  //this can be checked in onDoubleClick to prevent placing a new node when double clicking on an existing node
@@ -836,8 +854,8 @@ export default function App() {
 							// onThickness={onThickness}
 							// onTexture={onTexture}
 							onColorChangeEdge={onColorChangeEdge}
-							// onDirectionRight={onDirectionRight}
-							// onDirectionLeft={onDirectionLeft}
+						// onDirectionRight={onDirectionRight}
+						// onDirectionLeft={onDirectionLeft}
 						/>
 
 						<EditLabelModal
@@ -862,6 +880,7 @@ export default function App() {
 							onClose={() => setColorModalOpened(false)}
 							onConfirm={handleColorChange}
 							initialColor={selectedColor}
+							isForNode={colorModalIsNode}
 						/>
 						<Button
 							variant="filled"
