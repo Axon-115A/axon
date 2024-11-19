@@ -12,6 +12,7 @@ interface CustomEdgeProps extends EdgeProps {
     data: {
         color: string;
         thickness: string; // 'thick' or 'default'
+        texture: string;
     };
     // edgeLabel: string;
     // texture: string; 
@@ -42,12 +43,28 @@ export default function CustomEdge({ id, sourceX, sourceY, targetX, targetY, dat
         thickness = 2; // fallback
     }
 
+    let texture: string;
+    if (data.texture === 'solid') {
+        texture = '0';
+    } else if (data.texture === 'dashed') {
+        texture = '10 5'
+    }else if (data.texture === 'dotted'){
+        if (data.thickness === 'thick'){
+            texture = '5 5'
+        } else {
+            texture = '1 5'
+        }
+        
+    }
+    
+
+
     //console.log(id, sourceX, sourceY, targetX, targetY, color)
 
     return (
         <>
 
-            <BaseEdge id={id} path={edgePath} style={{ stroke: edgeColor, strokeWidth: thickness}} />
+            <BaseEdge id={id} path={edgePath} style={{ stroke: edgeColor, strokeWidth: thickness, strokeDasharray: texture}} />
             <EdgeLabelRenderer>
                 <div style={{ position: 'absolute', transform: 'translate(-50%, -50%)' }}>
                     uhou

@@ -79,16 +79,7 @@ export type CustomEdge = Edge & {
 		color: string;
 	};
 }
-// const initialEdges: CustomEdge[] = [];
-// const initialEdges: CustomEdge[] = [
-//     {
-//         id: 'e1-2',
-//         source: 'node-1',
-//         target: 'node-2',
-//         type: 'custom-edge',
-//         data: { color: 'rgb(0, 0, 255)' }, // Custom data
-//     },
-// ];
+
 const initialEdges = [] as CustomEdge[];
 
 
@@ -104,9 +95,6 @@ export default function App() {
 	const [session, setSession] = useState<Session | null>(null)
 
 	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-	//const [edges, setEdges, onEdgesChange] = useEdgesState<CustomEdge[]>(initialEdges as CustomEdge[]);
-	// const initialEdges : CustomEdge[] = [];
-	//const [edges, setEdges, onEdgesChange] = useEdgesState<CustomEdge[]>(initialEdges);
 	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 	const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null);
 
@@ -274,13 +262,16 @@ export default function App() {
 
 			const edge: CustomEdge = {
 				id: uuidv4(),
+				animated: true,
 				type: 'custom-edge',
 				source: params.source, // Guaranteed to be a string
 				target: params.target, // Guaranteed to be a string
 				sourceHandle: params.sourceHandle || null,
 				targetHandle: params.targetHandle || null,
 				data: { color: 'rgb(128, 128, 128)',
-						thickness: 'default'
+						thickness: 'default', // 'default' vs 'thick' 
+						texture: 'solid' // 'solid' vs 'dashed' vs 'dotted'
+
 				 }, // Add custom metadata
 			};
 
@@ -640,6 +631,17 @@ export default function App() {
 	};
 
 
+	const handleColorConfirm = (newColor: string) => {
+		setEdges((prevEdges) =>
+			prevEdges.map((edge) =>
+				edge.id === selectedEdgeId
+					? { ...edge, data: { ...edge.data, color: newColor } } // Update the color
+					: edge
+			)
+		);
+		setColorModalOpened(false); // Close the modal
+	};
+
 	//ALL FUNCTIONS FOR EDGE CUSTOMIZATION 
 	const onColorChangeEdge = () => {
 		if (edgeContextMenu.selectedEdgeId) {
@@ -693,29 +695,66 @@ export default function App() {
 	
 		setContextMenu((prev) => ({ ...prev, isOpen: false }));
 	};
-	// const onDefaultThick = () => {
-	// 	if (edgeContextMenu.selectedEdgeId) {
-	// 		const selectedEdge = edges.find(edge => edge.id === edgeContextMenu.selectedEdgeId);
-	// 		if (selectedEdge) {
-	// 			return {
-	// 				...edges,
-	// 				data: {thickness: 'default'
-	// 					,}
-	// 			};
-	// 		}
-	// 	}
-	// 	setContextMenu(prev => ({ ...prev, isOpen: false }));
-	// }
 
-	const handleColorConfirm = (newColor: string) => {
-		setEdges((prevEdges) =>
-			prevEdges.map((edge) =>
-				edge.id === selectedEdgeId
-					? { ...edge, data: { ...edge.data, color: newColor } } // Update the color
-					: edge
-			)
-		);
-		setColorModalOpened(false); // Close the modal
+
+	const onTextureSolid = () => {
+		if (edgeContextMenu.selectedEdgeId) {
+			setEdges((prevEdges) =>
+				prevEdges.map((edge) =>
+					edge.id === edgeContextMenu.selectedEdgeId
+						? {
+							  ...edge, // Copy existing edge properties
+							  data: {
+								  ...edge.data, // Preserve other data properties
+								  texture: 'solid', // Update texture
+							  },
+						  }
+						: edge // Keep other edges unchanged
+				)
+			);
+		}
+	
+		setContextMenu((prev) => ({ ...prev, isOpen: false }));
+	};
+
+	const onTextureDashed = () => {
+		if (edgeContextMenu.selectedEdgeId) {
+			setEdges((prevEdges) =>
+				prevEdges.map((edge) =>
+					edge.id === edgeContextMenu.selectedEdgeId
+						? {
+							  ...edge, // Copy existing edge properties
+							  data: {
+								  ...edge.data, // Preserve other data properties
+								  texture: 'dashed', // Update texture
+							  },
+						  }
+						: edge // Keep other edges unchanged
+				)
+			);
+		}
+	
+		setContextMenu((prev) => ({ ...prev, isOpen: false }));
+	};
+
+	const onTextureDotted = () => {
+		if (edgeContextMenu.selectedEdgeId) {
+			setEdges((prevEdges) =>
+				prevEdges.map((edge) =>
+					edge.id === edgeContextMenu.selectedEdgeId
+						? {
+							  ...edge, // Copy existing edge properties
+							  data: {
+								  ...edge.data, // Preserve other data properties
+								  texture: 'dotted', // Update texture
+							  },
+						  }
+						: edge // Keep other edges unchanged
+				)
+			);
+		}
+	
+		setContextMenu((prev) => ({ ...prev, isOpen: false }));
 	};
 
 
@@ -875,8 +914,9 @@ export default function App() {
 							onThick={onThick}
 							onDefaultThick={onDefaultThick}
 							//onEditLabel={onEditLabel}
-							// onThickness={onThickness}
-							// onTexture={onTexture}
+							onTextureSolid={onTextureSolid}
+							onTextureDashed={onTextureDashed}
+							onTextureDotted={onTextureDotted}
 							onColorChangeEdge={onColorChangeEdge}
 						// onDirectionRight={onDirectionRight}
 						// onDirectionLeft={onDirectionLeft}
