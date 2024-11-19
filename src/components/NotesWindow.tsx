@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
 import { Panel } from '@xyflow/react';
+import { RichTextEditor, Link } from '@mantine/tiptap';
+import { useEditor } from '@tiptap/react';
+import Highlight from '@tiptap/extension-highlight';
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import TextAlign from '@tiptap/extension-text-align';
+import Superscript from '@tiptap/extension-superscript';
+import SubScript from '@tiptap/extension-subscript';
 import './styles/NotesWindow.css';
 
 interface Props {
@@ -10,21 +17,31 @@ interface Props {
 
 const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
     const [notesData, setNotes] = useState(node.data.notes);
-    const [isEditing, setIsEditing] = useState(false); //Used to be: const [spellCheckEnabled, setSpellCheck] = useState(false);
+
+    const editor = useEditor({
+        extensions: [
+            StarterKit,
+            Underline,
+            Link,
+            Superscript,
+            SubScript,
+            Highlight,
+            TextAlign.configure({ types: ['heading', 'paragraph'] }),
+        ],
+        content: notesData,
+        onUpdate: ({ editor }) => {
+            const html = editor.getHTML();
+            setNotes(html);
+            node.data.notes = html;
+        },
+    });
 
     //forces notesData to update whenever setNotes is called
     useEffect(() => {
-        if (node) setNotes(node.data.notes);
-    }, [node]);
-
-    const onNotesInput = (e: any) => {
-        setNotes(e.target.value); //updates the display textbox
-        node.data.notes = e.target.value; //updates the node data itself
-    };
-
-    const toggleEdit = () => {
-        setIsEditing(!isEditing);
-    };
+        if (editor && node) {
+            editor.commands.setContent(node.data.notes || '');
+        }
+    }, [node, editor]);
 
     return (
         <Panel position='bottom-left' className='panel'>
@@ -32,31 +49,59 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
             <button onClick={onCloseWindow} className='closeButton'>
                 <img src="src/assets/white_x.svg" className='closeButtonIcon' />
             </button>
-            {isEditing ? (
-                <textarea
-                    value={notesData}
-                    onChange={onNotesInput}
-                    rows={20}
-                    className='textBox'
-                    onBlur={toggleEdit}
-                    autoFocus
+            <RichTextEditor editor={editor} className="small-toolbar">
+                <RichTextEditor.Toolbar sticky stickyOffset={60}>
+                    <RichTextEditor.ControlsGroup>
+                        <RichTextEditor.Bold />
+                        <RichTextEditor.Italic />
+                        <RichTextEditor.Underline />
+                        <RichTextEditor.Strikethrough />
+                        <RichTextEditor.ClearFormatting />
+                        <RichTextEditor.Highlight />
+                        <RichTextEditor.Code />
+                    </RichTextEditor.ControlsGroup>
 
-                /*
-                //enable browser spell checking only when the box is selected
-                spellCheck={spellCheckEnabled}
-                onFocus={() => {setSpellCheck(true)}}
-                onBlur={() => {setSpellCheck(false)}}
-                */
+                    <RichTextEditor.ControlsGroup>
+                        <RichTextEditor.H1 />
+                        <RichTextEditor.H2 />
+                        <RichTextEditor.H3 />
+                        <RichTextEditor.H4 />
+                    </RichTextEditor.ControlsGroup>
 
-                />
-            ) : (
-                <div
-                    onClick={toggleEdit}
-                    className="textBoxMarkdownDiv"
-                >
-                    <ReactMarkdown>{notesData}</ReactMarkdown>
+                    <RichTextEditor.ControlsGroup>
+                        <RichTextEditor.Undo />
+                        <RichTextEditor.Redo />
+                    </RichTextEditor.ControlsGroup>
+
+                    <RichTextEditor.ControlsGroup>
+                        <RichTextEditor.Blockquote />
+                        <RichTextEditor.Hr />
+                        <RichTextEditor.BulletList />
+                        <RichTextEditor.OrderedList />
+                        <RichTextEditor.Subscript />
+                        <RichTextEditor.Superscript />
+                    </RichTextEditor.ControlsGroup>
+
+                    <RichTextEditor.ControlsGroup>
+                        <RichTextEditor.Link />
+                        <RichTextEditor.Unlink />
+                    </RichTextEditor.ControlsGroup>
+
+                    <RichTextEditor.ControlsGroup>
+                        <RichTextEditor.AlignLeft />
+                        <RichTextEditor.AlignCenter />
+                        <RichTextEditor.AlignJustify />
+                        <RichTextEditor.AlignRight />
+                    </RichTextEditor.ControlsGroup>
+
+                    
+                </RichTextEditor.Toolbar>
+
+                {/* Scrollable container */}
+                <div className="scrollable-content">
+                    <RichTextEditor.Content />
                 </div>
-            )}
+            </RichTextEditor>
         </Panel>
     );
 };
