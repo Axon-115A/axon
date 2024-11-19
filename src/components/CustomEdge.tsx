@@ -33,7 +33,7 @@ export default function CustomEdge({ id, sourceX, sourceY, targetX, targetY, dat
 
     });
 
-    const edgeColor = data?.color || '#FFF';
+    const edgeColor = data.color;
 
 //console.log(id, sourceX, sourceY, targetX, targetY, color)
 

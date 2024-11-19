@@ -586,7 +586,7 @@ export default function App() {
 			isOpen: true,
 			anchorX: event.clientX,
 			anchorY: event.clientY,
-			selectedEdgeId: edge.Id,
+			selectedEdgeId: edge.id,
 		});
 	};
 
