@@ -46,17 +46,21 @@
     width: 100%;
     height: 93%;
     resize: none;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    direction: ltr;
+    text-align: left;
     color: white;
     font-size: 16px;
     outline: none;
     font-family: Arial, sans-serif;
     outline: none;
-    border-radius: 8px;
+    border-radius: 4px;
     /* without this, the textbox will noticably shift when the box is selected. if the background color is changed, this needs to be
        updated as well to maintain the illusion of no border
     */
     border: 1px solid black; 
-    padding: 5px 5px;
+    padding: 10px 12px 10px 10px;
 
     /* without this stuff, the padding shifts the box around */
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
@@ -74,5 +78,17 @@
     width: 100%;
     height: 93%;
     cursor: text;
-    margin-top: -20px
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding: 0px 12px 10px 10px;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    border: 1px solid black;
+    border-radius: 4px;
+    background-color: black;
+    color: white;
+   
 }
