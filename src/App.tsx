@@ -241,7 +241,7 @@ export default function App() {
 	});
 
 
-	// S: adding a state to track context menu
+	// adding a state to track context menu
 	const [edgeContextMenu, setEdgeContextMenu] = useState({
 		isOpen: false,
 		anchorX: 0,
@@ -279,48 +279,16 @@ export default function App() {
 				target: params.target, // Guaranteed to be a string
 				sourceHandle: params.sourceHandle || null,
 				targetHandle: params.targetHandle || null,
-				data: { color: 'rgb(0, 0, 255)' }, // Add custom metadata
+				data: { color: 'rgb(128, 128, 128)',
+						thickness: 'default'
+				 }, // Add custom metadata
 			};
 
 			setEdges((eds) => addEdge(edge, eds) as CustomEdge[]);
 		},
 		[setEdges]
 	);
-	// const onConnect = useCallback(
-	// 	(params: Connection) => {
-	// 	  const edge: CustomEdge = {
-	// 		...params,
-	// 		type: 'custom-edge',
-	// 		id: uuidv4(),
-	// 		data: { color: 'rgb(0, 0, 255)' }, // Add color as metadata
-	// 	  };
-	// 	  setEdges((eds) => addEdge(edge, eds) as CustomEdge[]);
-	// 	},
-	// 	[setEdges]
-	//   );
-	// const onConnect = useCallback(
-	// 	(params: Connection) => {
-	// 		const edge = { ...params, type: 'custom-edge', id: uuidv4(), color: 'rgb(0, 0, 255)' }; // Add 'custom-edge' type to the connection
-	// 		// const edge = {
-	// 		// 	source: params.source?,
-	// 		// 	target: params.target?,
-	// 		// 	sourceHandle: params.sourceHandle?,
-	// 		// 	targetHandle: params.targetHandle?,
-	// 		// 	type: 'custom-edge',
-	// 		// 	id: uuidv4(),
-	// 		// 	color: "#0000FF"
-	// 		// }
-	// 		setEdges((eds) => addEdge(edge, eds)); // Add the new edge to the current edges
-	// 	},
-	// 	[setEdges]
-	// );
-	// console.log(edges)
 
-	// S: temporaroily commenting this out because I've redeclared it with more stuff earlier on
-	// const onConnect = useCallback((params: any) =>
-	// 	setEdges((eds) => addEdge(params, eds)),
-	// 	[setEdges],
-	// );
 
 
 	const onNodesDelete = useCallback(
@@ -672,7 +640,7 @@ export default function App() {
 	};
 
 
-	//S: ALL FUNCTIONS FOR EDGE CUSTOMIZATION 
+	//ALL FUNCTIONS FOR EDGE CUSTOMIZATION 
 	const onColorChangeEdge = () => {
 		if (edgeContextMenu.selectedEdgeId) {
 			const selectedEdge = edges.find(edge => edge.id === edgeContextMenu.selectedEdgeId);
@@ -684,6 +652,60 @@ export default function App() {
 		}
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
+
+
+	const onDefaultThick = () => {
+		if (edgeContextMenu.selectedEdgeId) {
+			setEdges((prevEdges) =>
+				prevEdges.map((edge) =>
+					edge.id === edgeContextMenu.selectedEdgeId
+						? {
+							  ...edge, // Copy existing edge properties
+							  data: {
+								  ...edge.data, // Preserve other data properties
+								  thickness: 'default', // Update thickness
+							  },
+						  }
+						: edge // Keep other edges unchanged
+				)
+			);
+		}
+	
+		setContextMenu((prev) => ({ ...prev, isOpen: false }));
+	};
+
+	const onThick = () => {
+		if (edgeContextMenu.selectedEdgeId) {
+			setEdges((prevEdges) =>
+				prevEdges.map((edge) =>
+					edge.id === edgeContextMenu.selectedEdgeId
+						? {
+							  ...edge, // Copy existing edge properties
+							  data: {
+								  ...edge.data, // Preserve other data properties
+								  thickness: 'thick', // Update thickness
+							  },
+						  }
+						: edge // Keep other edges unchanged
+				)
+			);
+		}
+	
+		setContextMenu((prev) => ({ ...prev, isOpen: false }));
+	};
+	// const onDefaultThick = () => {
+	// 	if (edgeContextMenu.selectedEdgeId) {
+	// 		const selectedEdge = edges.find(edge => edge.id === edgeContextMenu.selectedEdgeId);
+	// 		if (selectedEdge) {
+	// 			return {
+	// 				...edges,
+	// 				data: {thickness: 'default'
+	// 					,}
+	// 			};
+	// 		}
+	// 	}
+	// 	setContextMenu(prev => ({ ...prev, isOpen: false }));
+	// }
 
 	const handleColorConfirm = (newColor: string) => {
 		setEdges((prevEdges) =>
@@ -850,6 +872,8 @@ export default function App() {
 							setOpen={(open) => setEdgeContextMenu(prev => ({ ...prev, isOpen: open }))}
 							anchorX={edgeContextMenu.anchorX}
 							anchorY={edgeContextMenu.anchorY}
+							onThick={onThick}
+							onDefaultThick={onDefaultThick}
 							//onEditLabel={onEditLabel}
 							// onThickness={onThickness}
 							// onTexture={onTexture}
