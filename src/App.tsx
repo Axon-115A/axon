@@ -6,6 +6,7 @@ import {
 	MiniMap,
 	Background,
 	SimpleBezierEdge,
+	MarkerType,
 	ReactFlowProvider,
 	ReactFlowInstance,
 	BackgroundVariant,
@@ -113,7 +114,7 @@ export default function App() {
 
 	//S: assigns a boolean on whether something is a Node or Edge, useful for color picker 
 	const [colorModalIsNode, setColorModalIsNode] = useState(true);
-
+	const [editModalIsNode, setEditModalIsNode] = useState(true)
 
 
 	const defaultViewport = {
@@ -268,13 +269,22 @@ export default function App() {
 				target: params.target, // Guaranteed to be a string
 				sourceHandle: params.sourceHandle || null,
 				targetHandle: params.targetHandle || null,
-				data: { color: 'rgb(128, 128, 128)',
-						thickness: 'default', // 'default' vs 'thick' 
-						texture: 'solid' // 'solid' vs 'dashed' vs 'dotted'
+				data: {
+					color: 'rgb(128, 128, 128)',
+					thickness: 'default', // 'default' vs 'thic' 
+					texture: 'solid', // 'solid' vs 'dashed' vs 'dotted'
+					label: ''
 
-				 }, // Add custom metadata
+				}, // Add custom metadata
+				markerEnd: {
+					type: MarkerType.ArrowClosed
+				},  // type: MarkerType.ArrowClosed otherwise
+				markerStart: {
+					type: MarkerType.ArrowClosed,
+				},
+
 			};
-
+			console.log(initialEdges);
 			setEdges((eds) => addEdge(edge, eds) as CustomEdge[]);
 		},
 		[setEdges]
@@ -541,7 +551,6 @@ export default function App() {
 		});
 	};
 
-	// S: 
 	const onEdgeContextMenu = (event: React.MouseEvent, edge: any) => {
 		event.preventDefault();
 		setEdgeContextMenu({
@@ -589,17 +598,30 @@ export default function App() {
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
 
-	const handleLabelChange = (newLabel: string) => {
-		setNodes(nodes.map(node => {
-			if (node.id === contextMenu.selectedNodeId) {
-				return {
-					...node,
-					data: { ...node.data, label: newLabel }
-				};
-			}
-			return node;
-		}));
+	const handleLabelChange = (newLabel: string, isForNode: boolean) => {
+		if (isForNode) {
+			setNodes(nodes.map(node => {
+				if (node.id === contextMenu.selectedNodeId) {
+					return {
+						...node,
+						data: { ...node.data, label: newLabel },
+					};
+				}
+				return node;
+			}));
+		} else {
+			setEdges(edges.map(edge => {
+				if (edge.id === edgeContextMenu.selectedEdgeId) {
+					return {
+						...edge,
+						data: { ...edge.data, label: newLabel },
+					};
+				}
+				return edge;
+			}));
+		}
 	};
+
 
 	const onDelete = () => {
 		if (contextMenu.selectedNodeId) {
@@ -662,17 +684,17 @@ export default function App() {
 				prevEdges.map((edge) =>
 					edge.id === edgeContextMenu.selectedEdgeId
 						? {
-							  ...edge, // Copy existing edge properties
-							  data: {
-								  ...edge.data, // Preserve other data properties
-								  thickness: 'default', // Update thickness
-							  },
-						  }
+							...edge, // Copy existing edge properties
+							data: {
+								...edge.data, // Preserve other data properties
+								thickness: 'default', // Update thickness
+							},
+						}
 						: edge // Keep other edges unchanged
 				)
 			);
 		}
-	
+
 		setContextMenu((prev) => ({ ...prev, isOpen: false }));
 	};
 
@@ -682,17 +704,17 @@ export default function App() {
 				prevEdges.map((edge) =>
 					edge.id === edgeContextMenu.selectedEdgeId
 						? {
-							  ...edge, // Copy existing edge properties
-							  data: {
-								  ...edge.data, // Preserve other data properties
-								  thickness: 'thick', // Update thickness
-							  },
-						  }
+							...edge, // Copy existing edge properties
+							data: {
+								...edge.data, // Preserve other data properties
+								thickness: 'thick', // Update thickness
+							},
+						}
 						: edge // Keep other edges unchanged
 				)
 			);
 		}
-	
+
 		setContextMenu((prev) => ({ ...prev, isOpen: false }));
 	};
 
@@ -703,17 +725,17 @@ export default function App() {
 				prevEdges.map((edge) =>
 					edge.id === edgeContextMenu.selectedEdgeId
 						? {
-							  ...edge, // Copy existing edge properties
-							  data: {
-								  ...edge.data, // Preserve other data properties
-								  texture: 'solid', // Update texture
-							  },
-						  }
+							...edge, // Copy existing edge properties
+							data: {
+								...edge.data, // Preserve other data properties
+								texture: 'solid', // Update texture
+							},
+						}
 						: edge // Keep other edges unchanged
 				)
 			);
 		}
-	
+
 		setContextMenu((prev) => ({ ...prev, isOpen: false }));
 	};
 
@@ -723,17 +745,17 @@ export default function App() {
 				prevEdges.map((edge) =>
 					edge.id === edgeContextMenu.selectedEdgeId
 						? {
-							  ...edge, // Copy existing edge properties
-							  data: {
-								  ...edge.data, // Preserve other data properties
-								  texture: 'dashed', // Update texture
-							  },
-						  }
+							...edge, // Copy existing edge properties
+							data: {
+								...edge.data, // Preserve other data properties
+								texture: 'dashed', // Update texture
+							},
+						}
 						: edge // Keep other edges unchanged
 				)
 			);
 		}
-	
+
 		setContextMenu((prev) => ({ ...prev, isOpen: false }));
 	};
 
@@ -743,20 +765,111 @@ export default function App() {
 				prevEdges.map((edge) =>
 					edge.id === edgeContextMenu.selectedEdgeId
 						? {
-							  ...edge, // Copy existing edge properties
-							  data: {
-								  ...edge.data, // Preserve other data properties
-								  texture: 'dotted', // Update texture
-							  },
-						  }
+							...edge, // Copy existing edge properties
+							data: {
+								...edge.data, // Preserve other data properties
+								texture: 'dotted', // Update texture
+							},
+						}
 						: edge // Keep other edges unchanged
 				)
 			);
 		}
-	
+
 		setContextMenu((prev) => ({ ...prev, isOpen: false }));
 	};
 
+	const onDirectionLeft = () => {
+		if (edgeContextMenu.selectedEdgeId) {
+			setEdges((prevEdges) =>
+				prevEdges.map((edge) =>
+					edge.id === edgeContextMenu.selectedEdgeId
+						? {
+							...edge, // Copy existing edge properties
+							markerStart: {
+								type: MarkerType.ArrowClosed,
+							},
+						}
+						: edge // Keep other edges unchanged
+				)
+			);
+		}
+		setEdges((prevEdges) => [...prevEdges]);
+		setContextMenu((prev) => ({ ...prev, isOpen: false }));
+	};
+
+
+	const onDirectionRight = () => {
+		if (edgeContextMenu.selectedEdgeId) {
+			setEdges((prevEdges) =>
+				prevEdges.map((edge) =>
+					edge.id === edgeContextMenu.selectedEdgeId
+						? {
+							...edge, // Copy existing edge properties
+							markerEnd: {
+								type: MarkerType.ArrowClosed,
+							},
+						}
+						: edge // Keep other edges unchanged
+				)
+			);
+		}
+		setEdges((prevEdges) => [...prevEdges]);
+		setContextMenu((prev) => ({ ...prev, isOpen: false }));
+	};
+
+	const onEditEdgeLabel = () => {
+		if (edgeContextMenu.selectedEdgeId) {
+			const selectedEdge = edges.find(edges => edges.id === edgeContextMenu.selectedEdgeId);
+			if (selectedEdge) {
+				setCurrentLabel(selectedEdge.data.label as string);
+				setEditModalOpened(true);
+				setEditModalIsNode(false);
+			}
+		}
+		setContextMenu(prev => ({ ...prev, isOpen: false }));
+		// if (edgeContextMenu.selectedEdgeId) {
+		// 	setEdges((prevEdges) =>
+		// 		prevEdges.map((edge) =>
+		// 			edge.id === edgeContextMenu.selectedEdgeId
+		// 				? {
+		// 					  ...edge, // Copy existing edge properties
+		// 					  data: {
+		// 						  ...edge.data, // Preserve other data properties
+		// 						  label: 'dotted', // Update texture
+		// 					  },
+		// 				  }
+		// 				: edge // Keep other edges unchanged
+		// 		)
+		// 	);
+		// }
+	};
+
+
+
+	const handleEdgeLabelChange = (newLabel: string) => {
+		setEdges(edges.map(edge => {
+			if (edge.id === edgeContextMenu.selectedEdgeId) {
+				return {
+					...edge,
+					data: { ...edge.data, label: newLabel }
+				};
+			}
+			return edge;
+		}));
+	};
+
+
+	// const onEdit = () => {
+	// 	if (contextMenu.selectedNodeId) {
+	// 		const selectedNode = nodes.find(node => node.id === contextMenu.selectedNodeId);
+	// 		if (selectedNode) {
+	// 			setCurrentLabel(selectedNode.data.label as string);
+	// 			setEditModalOpened(true);
+	// 		}
+	// 	}
+	// 	setContextMenu(prev => ({ ...prev, isOpen: false }));
+	// };
 
 	// const handleDoubleClickEdit = (event: React.MouseEvent, node: any) => {
 	//  // event.preventDefault();
@@ -911,15 +1024,21 @@ export default function App() {
 							setOpen={(open) => setEdgeContextMenu(prev => ({ ...prev, isOpen: open }))}
 							anchorX={edgeContextMenu.anchorX}
 							anchorY={edgeContextMenu.anchorY}
+
 							onThick={onThick}
 							onDefaultThick={onDefaultThick}
-							//onEditLabel={onEditLabel}
+
+							onEditEdgeLabel={onEditEdgeLabel}
+
 							onTextureSolid={onTextureSolid}
 							onTextureDashed={onTextureDashed}
 							onTextureDotted={onTextureDotted}
+
 							onColorChangeEdge={onColorChangeEdge}
-						// onDirectionRight={onDirectionRight}
-						// onDirectionLeft={onDirectionLeft}
+
+							onDirectionRight={onDirectionRight}
+							onDirectionLeft={onDirectionLeft}
+
 						/>
 
 						<EditLabelModal
@@ -927,6 +1046,8 @@ export default function App() {
 							label={currentLabel}
 							onClose={() => setEditModalOpened(false)}
 							onConfirm={handleLabelChange}
+							isForNode={editModalIsNode}
+
 						/>
 
 						{/* help dialog and button */}

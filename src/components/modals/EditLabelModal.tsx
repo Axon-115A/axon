@@ -6,10 +6,13 @@ interface EditLabelModalProps {
     opened: boolean;
     label: string;
     onClose: () => void;
-    onConfirm: (newLabel: string) => void;
+    onConfirm: (newLabel: string, isNode: boolean) => void;
+    isForNode: boolean;
 }
 
-const EditLabelModal: React.FC<EditLabelModalProps> = ({ opened, label, onClose, onConfirm }) => {
+
+
+const EditLabelModal: React.FC<EditLabelModalProps> = ({ opened, label, onClose, onConfirm, isForNode}) => {
     const [newLabel, setNewLabel] = React.useState(label);
 
     useEffect(() => {
@@ -22,7 +25,7 @@ const EditLabelModal: React.FC<EditLabelModalProps> = ({ opened, label, onClose,
         label.length > 30 ? label.substring(0, 30) : label;
 
     const handleSubmit = () => {
-        onConfirm(truncateLabel(newLabel));
+        onConfirm(truncateLabel(newLabel), isForNode);
         onClose();
     };
 

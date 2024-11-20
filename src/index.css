@@ -96,3 +96,10 @@ button:focus-visible {
 .react-flow__node-circle.selected {
 	border: 2px solid #81ecec !important;
 }
+
+.edge-label-renderer__custom-edge {
+	position: absolute;
+	padding: 10px;
+	font-size: 12px;
+	font-weight: 700;
+  }
