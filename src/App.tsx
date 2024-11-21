@@ -731,7 +731,7 @@ export default function App() {
 								texture: textureType,
 							},
 						}
-						: edge 
+						: edge
 				)
 			);
 		}
@@ -914,7 +914,7 @@ export default function App() {
 		)
 	}
 
-	function nodeColor(node) {
+	function nodeColor(node: any) {
 		return node.data.backgroundColor ?? "#6c5ce7";
 	}
 
