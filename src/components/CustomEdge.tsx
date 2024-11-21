@@ -58,10 +58,10 @@ export default function CustomEdge({ id, sourceX, sourceY, sourcePosition, targe
         strokeWidth: thickness,
         strokeDasharray: texture
     }
-
+    
     return (
         <>
-            <BaseEdge id={id} path={edgePath} markerStart={MarkerType.ArrowClosed} markerEnd={MarkerType.ArrowClosed} style={edgeStyle} />
+            <BaseEdge id={id} path={edgePath} markerStart={markerStart} markerEnd={markerEnd} style={edgeStyle} />
             <EdgeLabelRenderer>
                 <div
                     style={{

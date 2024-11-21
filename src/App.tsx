@@ -261,30 +261,27 @@ export default function App() {
 				return;
 			}
 
-			const edge: CustomEdge = {
+			const edge = {
+				...params,
 				id: uuidv4(),
 				animated: true,
 				type: 'custom-edge',
-				source: params.source, // Guaranteed to be a string
-				target: params.target, // Guaranteed to be a string
-				sourceHandle: params.sourceHandle || null,
-				targetHandle: params.targetHandle || null,
 				data: {
-					color: 'rgb(128, 128, 128)',
-					thickness: 'default', // 'default' vs 'thic' 
-					texture: 'solid', // 'solid' vs 'dashed' vs 'dotted'
+					color: '#808080',
+					thickness: 'default',
+					texture: 'solid',
 					label: ''
 
-				}, // Add custom metadata
+				},
 				markerEnd: {
-					type: MarkerType.ArrowClosed
-				},  // type: MarkerType.ArrowClosed otherwise
+					type: MarkerType.ArrowClosed    
+				},
 				markerStart: {
-					type: MarkerType.ArrowClosed,
+					type: MarkerType.ArrowClosed,    
 				},
 
 			};
-			console.log(initialEdges);
+
 			setEdges((eds) => addEdge(edge, eds) as CustomEdge[]);
 		},
 		[setEdges]
@@ -893,7 +890,18 @@ export default function App() {
 				if (edge.id === edgeContextMenu.selectedEdgeId) {
 					return {
 						...edge,
-						data: { ...edge.data, color: newColor }
+						data: { 
+							...edge.data, 
+							color: newColor
+						},
+						markerEnd: {
+							...edge.markerEnd,
+							color: newColor
+						},
+						markerStart: {
+							...edge.markerStart,
+							color: newColor
+						},
 					};
 				}
 				return edge;
