@@ -32,13 +32,15 @@ const NodeList: React.FC<Props> = ({ nodeList }) => {
                 return matchesLabel || matchesNotes;
             })
             .map((node: any, index: any) => (
-                <li key={index}>
+                <li key={index} className="li">
                     <Button
                         onClick={() => { zoomToNode(node) }}
                         className='nodeListButton' color={node.data.backgroundColor}
                         style={{ color: adaptTextColor(node.data.backgroundColor ?? "6c5ce7") }}
                     >
-                        {node.data.label}
+                        <div style={{fontSize: '0.85em'}}>
+                            {node.data.label}
+                        </div>
                     </Button>
                 </li>
             ));

@@ -43,11 +43,12 @@
     justify-content: flex-start;
     align-items: center;
     width: 100%;
+    gap: 0;
 }
 
 .nodeListButton {
     width: 280px;
-    margin-bottom: 2px;
+    height: 20px;
 }
 
 .nodeSearchBar {
@@ -59,4 +60,11 @@
     display: flex;
     justify-content: center;
     padding-bottom: 7px;
+}
+
+.li {
+    padding-bottom: 2px;
+    margin: 0;
+    align-items: center;
+    display: flex;
 }
