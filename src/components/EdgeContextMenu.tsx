@@ -13,9 +13,7 @@ interface EdgeContextMenuProps {
     onThick: () => void;
     onDefaultThick: () => void;
     
-    onTextureSolid: () =>void;
-    onTextureDashed: () =>void;
-    onTextureDotted: () =>void;
+    onTextureChange: (texture: string) =>void;
 
 
     onColorChangeEdge: () => void;
@@ -26,7 +24,7 @@ interface EdgeContextMenuProps {
 
 // context menu {{}} onEdit, onColorChange, 
 // onEditLabel, onThickness, onTexture,  onDirectionLeft, onDirectionRight 
-const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, anchorY, onColorChangeEdge, onThick, onDefaultThick, onTextureSolid, onTextureDashed, onEditEdgeLabel, onTextureDotted, onDirectionLeft, onDirectionRight}) => {
+const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, anchorY, onColorChangeEdge, onThick, onDefaultThick, onTextureChange, onEditEdgeLabel, onDirectionLeft, onDirectionRight}) => {
 	return (
         <ControlledMenu
             anchorPoint={{x: anchorX, y: anchorY}}
@@ -47,13 +45,13 @@ const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, a
             <MenuItem value="Change Color" onClick={onColorChangeEdge}>
                 Change Color
             </MenuItem>
-            <MenuItem value="Change to Solid" onClick={onTextureSolid}>
+            <MenuItem value="Change to Solid" onClick={() => {onTextureChange('default')}}>
                 Solid
             </MenuItem>
-            <MenuItem value="Change to Dashed" onClick={onTextureDashed}>
+            <MenuItem value="Change to Dashed" onClick={() => {onTextureChange('dotted')}}>
                 Dashed
             </MenuItem>
-            <MenuItem value="Change Dotted" onClick={onTextureDotted}>
+            <MenuItem value="Change Dotted" onClick={() => {onTextureChange('dashed')}}>
                 Dotted
             </MenuItem>
             <MenuItem value="Change Left Direction" onClick={onDirectionLeft}>

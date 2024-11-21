@@ -719,59 +719,19 @@ export default function App() {
 	};
 
 
-	const onTextureSolid = () => {
+	const onEdgeTextureChange = (textureType: string) => {
 		if (edgeContextMenu.selectedEdgeId) {
 			setEdges((prevEdges) =>
 				prevEdges.map((edge) =>
 					edge.id === edgeContextMenu.selectedEdgeId
 						? {
-							...edge, // Copy existing edge properties
+							...edge,
 							data: {
-								...edge.data, // Preserve other data properties
-								texture: 'solid', // Update texture
+								...edge.data,
+								texture: textureType,
 							},
 						}
-						: edge // Keep other edges unchanged
-				)
-			);
-		}
-
-		setContextMenu((prev) => ({ ...prev, isOpen: false }));
-	};
-
-	const onTextureDashed = () => {
-		if (edgeContextMenu.selectedEdgeId) {
-			setEdges((prevEdges) =>
-				prevEdges.map((edge) =>
-					edge.id === edgeContextMenu.selectedEdgeId
-						? {
-							...edge, // Copy existing edge properties
-							data: {
-								...edge.data, // Preserve other data properties
-								texture: 'dashed', // Update texture
-							},
-						}
-						: edge // Keep other edges unchanged
-				)
-			);
-		}
-
-		setContextMenu((prev) => ({ ...prev, isOpen: false }));
-	};
-
-	const onTextureDotted = () => {
-		if (edgeContextMenu.selectedEdgeId) {
-			setEdges((prevEdges) =>
-				prevEdges.map((edge) =>
-					edge.id === edgeContextMenu.selectedEdgeId
-						? {
-							...edge, // Copy existing edge properties
-							data: {
-								...edge.data, // Preserve other data properties
-								texture: 'dotted', // Update texture
-							},
-						}
-						: edge // Keep other edges unchanged
+						: edge 
 				)
 			);
 		}
@@ -1034,9 +994,7 @@ export default function App() {
 
 							onEditEdgeLabel={onEditEdgeLabel}
 
-							onTextureSolid={onTextureSolid}
-							onTextureDashed={onTextureDashed}
-							onTextureDotted={onTextureDotted}
+							onTextureChange={onEdgeTextureChange}
 
 							onColorChangeEdge={onColorChangeEdge}
 
