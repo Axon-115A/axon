@@ -954,6 +954,10 @@ export default function App() {
 		)
 	}
 
+	function nodeColor(node) {
+		return node.data.backgroundColor ?? "#6c5ce7";
+	}
+
 	return (
 		// why is mantine set to light mode by default?
 		<MantineProvider defaultColorScheme="dark">
@@ -1001,7 +1005,7 @@ export default function App() {
 							connectionRadius={35} //the min distance an edge has to be dragged close to a handle before it snaps to it. default is 20
 						>
 
-							<MiniMap position="bottom-right" style={{ position: 'absolute', bottom: '0px', right: '30px' }} />
+							<MiniMap position="bottom-right" style={{ position: 'absolute', bottom: '0px', right: '30px' }} nodeColor={nodeColor} />
 							<ExtendedCanvasControls
 								clearCanvas={() => setClearModalOpened(true)}
 								position="bottom-right"
