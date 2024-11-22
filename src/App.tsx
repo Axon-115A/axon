@@ -252,7 +252,6 @@ export default function App() {
 	};
 
 
-	// S: [OLD WORK] referenced in https://reactflow.dev/learn/customization/custom-edges
 	const onConnect = useCallback(
 		(params: Connection) => {
 			// Ensure source and target are valid
@@ -274,10 +273,12 @@ export default function App() {
 
 				},
 				markerEnd: {
-					type: MarkerType.ArrowClosed    
+					type: MarkerType.ArrowClosed,
+					orient: 'auto',
 				},
 				markerStart: {
-					type: MarkerType.ArrowClosed,    
+					type: MarkerType.ArrowClosed, 
+					orient: 'auto'
 				},
 
 			};
@@ -675,46 +676,25 @@ export default function App() {
 	};
 
 
-	const onDefaultThick = () => {
+	const onEdgeThicknessChange = (newThickness: string) => {
 		if (edgeContextMenu.selectedEdgeId) {
 			setEdges((prevEdges) =>
 				prevEdges.map((edge) =>
 					edge.id === edgeContextMenu.selectedEdgeId
 						? {
-							...edge, // Copy existing edge properties
+							...edge,
 							data: {
-								...edge.data, // Preserve other data properties
-								thickness: 'default', // Update thickness
+								...edge.data,
+								thickness: newThickness,
 							},
 						}
-						: edge // Keep other edges unchanged
+						: edge
 				)
 			);
 		}
 
 		setContextMenu((prev) => ({ ...prev, isOpen: false }));
 	};
-
-	const onThick = () => {
-		if (edgeContextMenu.selectedEdgeId) {
-			setEdges((prevEdges) =>
-				prevEdges.map((edge) =>
-					edge.id === edgeContextMenu.selectedEdgeId
-						? {
-							...edge, // Copy existing edge properties
-							data: {
-								...edge.data, // Preserve other data properties
-								thickness: 'thick', // Update thickness
-							},
-						}
-						: edge // Keep other edges unchanged
-				)
-			);
-		}
-
-		setContextMenu((prev) => ({ ...prev, isOpen: false }));
-	};
-
 
 	const onEdgeTextureChange = (textureType: string) => {
 		if (edgeContextMenu.selectedEdgeId) {
@@ -997,8 +977,7 @@ export default function App() {
 							anchorX={edgeContextMenu.anchorX}
 							anchorY={edgeContextMenu.anchorY}
 
-							onThick={onThick}
-							onDefaultThick={onDefaultThick}
+							onThicknessChange={onEdgeThicknessChange}
 
 							onEditEdgeLabel={onEditEdgeLabel}
 

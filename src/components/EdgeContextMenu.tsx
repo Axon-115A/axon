@@ -10,8 +10,7 @@ interface EdgeContextMenuProps {
     anchorY: number;
     onEditEdgeLabel: () => void;
     
-    onThick: () => void;
-    onDefaultThick: () => void;
+    onThicknessChange: (thickness: string) => void;
     
     onTextureChange: (texture: string) =>void;
 
@@ -24,7 +23,7 @@ interface EdgeContextMenuProps {
 
 // context menu {{}} onEdit, onColorChange, 
 // onEditLabel, onThickness, onTexture,  onDirectionLeft, onDirectionRight 
-const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, anchorY, onColorChangeEdge, onThick, onDefaultThick, onTextureChange, onEditEdgeLabel, onDirectionLeft, onDirectionRight}) => {
+const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, anchorY, onColorChangeEdge, onThicknessChange, onTextureChange, onEditEdgeLabel, onDirectionLeft, onDirectionRight}) => {
 	return (
         <ControlledMenu
             anchorPoint={{x: anchorX, y: anchorY}}
@@ -36,10 +35,10 @@ const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, a
             <MenuItem value="Rename" onClick={onEditEdgeLabel}>
                 Set Label
             </MenuItem>
-            <MenuItem value="Change to Thick" onClick={onThick}>
+            <MenuItem value="Change to Thick" onClick={() => {onThicknessChange('thick')}}>
                 Thick
             </MenuItem>
-            <MenuItem value="Change to Thin" onClick={onDefaultThick}>
+            <MenuItem value="Change to Thin" onClick={() => {onThicknessChange('default')}}>
                 Thin
             </MenuItem>
             <MenuItem value="Change Color" onClick={onColorChangeEdge}>
