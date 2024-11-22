@@ -5,6 +5,7 @@ import { Modal, Button, TextInput, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import OauthButtons from './social/OauthButtons';
 
+//so that all Login functions are called as "Login.handleFunction()" for readability
 import * as Login from '../../Login';
 
 interface Props {

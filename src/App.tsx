@@ -1073,11 +1073,15 @@ export default function App() {
 						/>
 
 						<SignInModal
-							opened={signInOpened}
+							isOpen={signInOpened}
 							onClose={() => setSignInOpened(false)}
-							onConfirm={handleSignIn}
-							onOauthConfirm={handleOauthSignIn}
-							onSignUp={handleAuthModalSwitch}
+							switchAuthModals={handleAuthModalSwitch}
+
+							setSession={setSession}
+							setNodes={setNodes}
+							setEdges={setEdges}
+							reactFlowInstance={reactFlowInstance}
+							setSignInOpened={setSignInOpened}
 						/>
 
 						<LogOutModal

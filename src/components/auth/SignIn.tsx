@@ -1,20 +1,26 @@
 import React from 'react';
-// import { Panel } from '@xyflow/react';\
 import { Modal, Button, TextInput, Text } from '@mantine/core';
-// import { IconAt, IconLock } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 import OauthButtons from './social/OauthButtons';
 
+//so that all Login functions are called as "Login.handleFunction()" for readability
+import * as Login from '../../Login';
+
 interface Props {
-	opened: boolean,
+	isOpen: boolean,
 	onClose: () => void;
-	onConfirm: (email: string, password: string) => void;
-	onOauthConfirm: (provider: string) => void;
-	onSignUp: () => void;
+	switchAuthModals: () => void;
+
+	//needed by Login.handleSignIn
+	setSession: (value: any) => void,
+    setNodes: (nodeList: any[]) => void,
+    setEdges: (edgeList: any[]) => void,
+    reactFlowInstance: any,
+    setSignInOpened: (value: boolean) => void
 }
 
 
-const SignInModal: React.FC<Props> = ({ opened, onClose, onConfirm, onOauthConfirm, onSignUp}) => {
+const SignInModal: React.FC<Props> = ({ isOpen, onClose, switchAuthModals, setSession, setNodes, setEdges, reactFlowInstance, setSignInOpened}) => {
 	// const emailIcon = <IconAt style={{ width: rem(16), height: rem(16) }} />;
 	// const passIcon = <IconLock style={{ width: rem(16), height: rem(16) }} />;
 
@@ -33,7 +39,7 @@ const SignInModal: React.FC<Props> = ({ opened, onClose, onConfirm, onOauthConfi
 	return (
 		<>
 			<Modal
-				opened={opened}
+				opened={isOpen}
 				onClose={onClose}
 				size="sm"
 				centered
@@ -49,11 +55,13 @@ const SignInModal: React.FC<Props> = ({ opened, onClose, onConfirm, onOauthConfi
 				}}
 			>
 				<form onSubmit={signUpForm.onSubmit((values) => {
-					onConfirm(values.email, values.password);
+					//onConfirm(values.email, values.password);
+
+					Login.handleSignIn(values.email, values.password, setSession, setNodes, setEdges, reactFlowInstance, setSignInOpened)
 					// onClose();
 				})}>
 					<h2 style={{ textAlign: 'center', fontWeight: 'normal'}}>Welcome Back</h2>
-					<OauthButtons onOauthConfirm={onOauthConfirm}/>
+					<OauthButtons onOauthConfirm={(provider: string) => {Login.handleOauthSignIn(provider)}}/>
 					<TextInput
 						// leftSectionPointerEvents="none"
 						// leftSection={emailIcon}
@@ -76,7 +84,7 @@ const SignInModal: React.FC<Props> = ({ opened, onClose, onConfirm, onOauthConfi
 						<Button type="submit" style={{ width: '100%', height: '40px' }}>
 							Sign In
 						</Button>
-						<Text c="dimmed" td="underline" size="sm" onClick={onSignUp}>
+						<Text c="dimmed" td="underline" size="sm" onClick={switchAuthModals}>
 							Don't have an account? Sign Up
 						</Text>
 					</div>
