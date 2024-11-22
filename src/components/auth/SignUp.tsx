@@ -1,7 +1,5 @@
 import React from 'react';
-// import { Panel } from '@xyflow/react';\
 import { Modal, Button, TextInput, Text } from '@mantine/core';
-// import { IconAt, IconLock } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 import OauthButtons from './social/OauthButtons';
 
