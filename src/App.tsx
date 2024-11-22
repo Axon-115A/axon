@@ -1085,9 +1085,13 @@ export default function App() {
 						/>
 
 						<LogOutModal
-							opened={logOutOpened}
+							isOpen={logOutOpened}
 							onClose={() => setLogOutOpened(false)}
-							onConfirm={handleLogOut}
+							
+							setSession={setSession}
+							setNodes={setNodes}
+							setEdges={setEdges}
+							reactFlowInstance={reactFlowInstance}
 						/>
 
 					</div>
