@@ -128,6 +128,7 @@ const NotesWindowBlocknote: React.FC<Props> = ({ onCloseWindow, node }) => {
                         
                     }} 
                     onChange={onChange} 
+                    theme="dark"
                 />
             </div>
         </Panel>
