@@ -1064,11 +1064,9 @@ export default function App() {
 						</div>
 
 						<SignUpModal
-							opened={signUpOpened}
+							isOpen={signUpOpened}
 							onClose={() => setSignUpOpened(false)}
-							onConfirm={() => {}}
-							onOauthConfirm={handleOauthSignIn}
-							onSignIn={handleAuthModalSwitch}
+							switchAuthModals={handleAuthModalSwitch}
 
 							setSession={setSession}
 							setSignUpOpened={setSignUpOpened}

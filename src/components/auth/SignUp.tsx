@@ -8,18 +8,18 @@ import OauthButtons from './social/OauthButtons';
 import * as Login from '../../Login';
 
 interface Props {
-	opened: boolean,
+	isOpen: boolean,
 	onClose: () => void;
-	onConfirm: (email: string, password: string) => void;
-	onOauthConfirm: (provider: string) => void;
-	onSignIn: () => void;
+	switchAuthModals: () => void;
 
+	//state functions passed in from App.tsx
+	//needed by Login.handleSignUp
 	setSession: (value: any) => void;
 	setSignUpOpened: (value: any) => void;
 }
 
 
-const SignUpModal: React.FC<Props> = ({ opened, onClose, onConfirm, onOauthConfirm, onSignIn,    setSession, setSignUpOpened}) => {
+const SignUpModal: React.FC<Props> = ({ isOpen, onClose, switchAuthModals, setSession, setSignUpOpened}) => {
 	//   const emailIcon = <IconAt style={{ width: rem(16), height: rem(16) }} />;
 	//   const passIcon = <IconLock style={{ width: rem(16), height: rem(16) }} />;
 
@@ -38,7 +38,7 @@ const SignUpModal: React.FC<Props> = ({ opened, onClose, onConfirm, onOauthConfi
 	return (
 		<>
 			<Modal
-				opened={opened}
+				opened={isOpen}
 				onClose={onClose}
 				size="sm"
 				centered
@@ -60,7 +60,7 @@ const SignUpModal: React.FC<Props> = ({ opened, onClose, onConfirm, onOauthConfi
 					// onClose();
 				})}>
 					<h2 style={{ textAlign: 'center', fontWeight: 'normal' }}>Create Account</h2>
-					<OauthButtons onOauthConfirm={onOauthConfirm} />
+					<OauthButtons onOauthConfirm={(provider: string) => {Login.handleOauthSignIn(provider)}} />
 					<TextInput
 						//   leftSectionPointerEvents="none"
 						//   leftSection={emailIcon}
@@ -83,7 +83,7 @@ const SignUpModal: React.FC<Props> = ({ opened, onClose, onConfirm, onOauthConfi
 						<Button type="submit" style={{ width: '100%', height: '40px' }}>
 							Sign Up
 						</Button>
-						<Text c="dimmed" td="underline" size="sm" onClick={onSignIn}>
+						<Text c="dimmed" td="underline" size="sm" onClick={switchAuthModals}>
 							Already have an account? Sign In
 						</Text>
 					</div>
