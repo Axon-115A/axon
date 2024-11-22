@@ -45,6 +45,7 @@ import RectNode from './components/RectNode';
 import ContextMenu from './components/ContextMenu';
 import NotesWindow from './components/NotesWindow';
 import NotesWindowMantine from './components/NotesWindowMantine';
+import NotesWindowBlocknote from './components/NotesWindowBlocknote';
 import HelpModal from './components/modals/HelpModal';
 import ClearModal from './components/modals/ClearModal';
 import EditLabelModal from './components/modals/EditLabelModal';
@@ -1083,7 +1084,7 @@ export default function App() {
 
 					</div>
 					{showNotesWindow &&
-						<NotesWindow
+						<NotesWindowBlocknote
 							node={notesWindowNode}
 							onCloseWindow={() => { setNotesWindowVisibility(false) }}
 						/>

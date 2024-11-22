@@ -103,3 +103,7 @@ button:focus-visible {
 	font-size: 12px;
 	font-weight: 700;
   }
+
+.ProseMirror.bn-editor.bn-default-styles {
+	min-height: 350px; /* or any other value */
+}
