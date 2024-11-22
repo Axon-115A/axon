@@ -1,7 +1,7 @@
 import { Handle, Position } from '@xyflow/react';
 import './styles/Handles.css'
 import './styles/NodeShapes.css'
-import { adaptTextColor } from '../App';
+import { adaptTextColor } from '../Utilities';
 
 const RectNode = ({ data }: any) => {
 

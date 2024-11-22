@@ -100,6 +100,8 @@ export default function CustomEdge({ id, sourceX, sourceY, sourcePosition, targe
         targetY,
     }, sourceX < targetX ? 25 : -25)
 
+    console.log(markerStart)
+
     return (
         <>
             <BaseEdge id={id} path={edgePath} markerStart={markerStart} markerEnd={markerEnd} style={edgeStyle} />

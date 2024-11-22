@@ -62,7 +62,7 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 const flowKey = 'axon-flow';
 
-
+import * as Login from './Login';
 
 const initialNodes: any = [];
 // const initialEdges: any = [];
@@ -322,6 +322,9 @@ export default function App() {
 	);
 
 
+
+
+	
 	const handleSignUp = async (email: string, password: string) => {
 		console.log(`Signing up`);
 
@@ -1063,9 +1066,12 @@ export default function App() {
 						<SignUpModal
 							opened={signUpOpened}
 							onClose={() => setSignUpOpened(false)}
-							onConfirm={handleSignUp}
+							onConfirm={() => {}}
 							onOauthConfirm={handleOauthSignIn}
 							onSignIn={handleAuthModalSwitch}
+
+							setSession={setSession}
+							setSignUpOpened={setSignUpOpened}
 						/>
 
 						<SignInModal
@@ -1095,23 +1101,4 @@ export default function App() {
 			</ModalsProvider>
 		</MantineProvider>
 	);
-}
-
-/** 
-* used in NodeList, RectNode, and CircleNode to adapt text color depending on background color.
-* Calculates luminance of background color and returns 'white' or 'black'
-*/
-export function adaptTextColor(hex: string) {
-	//remove # from hex string
-	hex = hex.replace(/^#/, '');
-
-	//convert to normal base 10 integer
-	const r = parseInt(hex.substring(0, 2), 16);
-	const g = parseInt(hex.substring(2, 4), 16);
-	const b = parseInt(hex.substring(4, 6), 16);
-
-	//from https://en.wikipedia.org/w/index.php?title=Relative_luminance#Relative_luminance_and_%22gamma_encoded%22_colorspaces
-	const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-
-	return luminance < 128 ? 'white' : 'black';
 }

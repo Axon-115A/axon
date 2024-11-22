@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useReactFlow } from '@xyflow/react';
 import { Button, Accordion, Checkbox, TextInput } from '@mantine/core';
-import { adaptTextColor } from '../App';
+import { adaptTextColor } from '../Utilities';
 import './styles/NodeList.css';
 
 interface Props {
