@@ -2,6 +2,8 @@ import { Controls, ControlButton } from '@xyflow/react';
 import TrashIcon from './../assets/trash.svg';
 import SaveIcon from './../assets/floppy.svg';
 
+import ChosenColorScheme from '../AxonRollYourOwnColorSchemeConstructionSet';
+
 interface ExtendedCanvasControlsProps {
     clearCanvas: () => void;
     position: any;
@@ -9,8 +11,10 @@ interface ExtendedCanvasControlsProps {
 }
 
 const ExtendedCanvasControls: React.FC<ExtendedCanvasControlsProps> = ({ clearCanvas, position, saveCanvas }) => {
+    document.documentElement.style.setProperty('--xy-controls-button-background-color', ChosenColorScheme.canvasControls);
+
     return (
-        <Controls position={position}>
+        <Controls position={position} >
             <ControlButton onClick={clearCanvas} title='Clear graph'>
                 <div>
                     <img src={TrashIcon} />

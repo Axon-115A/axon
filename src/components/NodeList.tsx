@@ -4,6 +4,8 @@ import { Button, Accordion, Checkbox, TextInput } from '@mantine/core';
 import { adaptTextColor } from '../Utilities';
 import './styles/NodeList.css';
 
+import ChosenColorScheme from '../AxonRollYourOwnColorSchemeConstructionSet';
+
 interface Props {
     nodeList: any
 }
@@ -52,7 +54,7 @@ const NodeList: React.FC<Props> = ({ nodeList }) => {
     )
 
     return (
-        <Accordion className="nodeAccordion">
+        <Accordion className="nodeAccordion" style={{backgroundColor: ChosenColorScheme.nodeList}}>
             <Accordion.Item key={0} value={'0'}>
 
                 <Accordion.Control>

@@ -57,6 +57,7 @@ import NodeList from './components/NodeList';
 import ColorPickerModal from './components/modals/ColorPickerModal';
 
 import * as Login from './Login';
+import ChosenColorScheme from './AxonRollYourOwnColorSchemeConstructionSet';
 
 const initialNodes: any = [];
 // const initialEdges: any = [];
@@ -152,7 +153,7 @@ export default function App() {
 				animated: true,
 				type: 'custom-edge',
 				data: {
-					color: '#808080',
+					color: ChosenColorScheme.defaultEdgeColor, //'#808080',
 					thickness: 'default',
 					texture: 'solid',
 					label: ''
@@ -518,7 +519,7 @@ export default function App() {
 			data: {
 				label: "New Node",
 				notes: "",
-				backgroundColor: "#6c5ce7"
+				backgroundColor: ChosenColorScheme.defaultNodeColor //"#6c5ce7"
 			},
 			type: 'rect',
 		};
@@ -634,13 +635,13 @@ export default function App() {
 							connectionRadius={35} //the min distance an edge has to be dragged close to a handle before it snaps to it. default is 20
 						>
 
-							<MiniMap position="bottom-right" style={{ position: 'absolute', bottom: '0px', right: '30px' }} nodeColor={nodeColor} />
+							<MiniMap position="bottom-right" style={{ position: 'absolute', bottom: '0px', right: '30px' }} nodeColor={nodeColor} maskColor={ChosenColorScheme.minimap} />
 							<ExtendedCanvasControls
 								clearCanvas={() => setClearModalOpened(true)}
 								position="bottom-right"
 								saveCanvas={() => { handleSaveState() }}
 							/>
-							<Background variant={BackgroundVariant.Dots} gap={24} size={2} />
+							<Background style={{backgroundColor: ChosenColorScheme.background}} variant={BackgroundVariant.Dots} gap={24} size={2} />
 						</ReactFlow>
 						<ContextMenu
 							isOpen={contextMenu.isOpen}
@@ -719,16 +720,16 @@ export default function App() {
 						>
 
 							{session ? (
-								<Button onClick={() => setLogOutOpened(true)}>
+								<Button onClick={() => setLogOutOpened(true)} style={{backgroundColor: ChosenColorScheme.signUpInButtons}}>
 									Log Out
 								</Button>
 							) : (
 								<>
-									<Button onClick={() => setSignUpOpened(true)}>
+									<Button onClick={() => setSignUpOpened(true)} style={{backgroundColor: ChosenColorScheme.signUpInButtons}}>
 										Sign Up
 									</Button>
 
-									<Button onClick={() => setSignInOpened(true)}>
+									<Button onClick={() => setSignInOpened(true)} style={{backgroundColor: ChosenColorScheme.signUpInButtons}}>
 										Sign In
 									</Button>
 								</>

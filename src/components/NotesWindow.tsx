@@ -94,7 +94,7 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
                         <RichTextEditor.AlignRight />
                     </RichTextEditor.ControlsGroup>
 
-                    
+
                 </RichTextEditor.Toolbar>
 
                 {/* Scrollable container */}

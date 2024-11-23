@@ -1,7 +1,13 @@
+/* AxonRollYourOwnColorSchemeConstructionSet.tsx: */
+/* modify this value right here to change the color of the note window */
+:root {
+    --note-window-color: #000000;
+}
+
 /* Styling for the window */
 .panel {
     padding: 10px;
-    background: black;
+    background: var(--note-window-color);
     border-radius: 8px;
     border: 1px solid gray;
     color: white;
