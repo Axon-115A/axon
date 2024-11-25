@@ -22,6 +22,12 @@ const FigmaOptionD = {
     signUpInButtons: "#772e25",
 }
 
+//"#1A5F61";  teal accent
+//"#384764";  tertiary background
+//"#1f1f1f";  vs code
+//"#000C0F";  good background
+//"#5b97a2";  default node
+//"#08697D";  something
 
 //Template for you to create your own color schemes. Copy and paste as desired
 const ColorSchemeTemplate = {
@@ -35,7 +41,34 @@ const ColorSchemeTemplate = {
 }
 
 
-const ChosenColorScheme = defaultColors;
+
+
+
+const idk = "#384764";
+const CollectiveColorScheme = {
+    background: "#090f10",
+    minimap: idk,
+    canvasControls: idk,
+    nodeList: idk,
+    defaultNodeColor: "#004f55",
+    defaultEdgeColor: "#949494",
+    signUpInButtons: idk,
+}
+
+
+const cookie = "#4A4643"
+const Beige = {
+    background: "#f5ebe0",
+    minimap: "#edede9",
+    canvasControls: cookie,
+    nodeList: cookie,
+    defaultNodeColor: "#d5bdaf",
+    defaultEdgeColor: "#010204",
+    signUpInButtons: cookie,
+}
+
+
+const ChosenColorScheme = CollectiveColorScheme;
 //           Change this  ^^^^^^^^^^^^^ to the name of your custom color scheme
 
 

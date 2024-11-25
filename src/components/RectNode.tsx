@@ -7,7 +7,7 @@ const RectNode = ({ data }: any) => {
 
     return (
         <div className="rect" style={{ background: data.backgroundColor }}>
-            <div style={{ color: adaptTextColor(data.backgroundColor ?? "#6c5ce7") }}>
+            <div style={{ color: adaptTextColor(data.backgroundColor ?? "#6c5ce7")}}>
                 {data.label}
             </div>
             <Handle type="source" position={Position.Top} id="top" />

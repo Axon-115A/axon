@@ -1,7 +1,7 @@
 /* AxonRollYourOwnColorSchemeConstructionSet.tsx: */
 /* modify this value right here to change the color of the note window */
 :root {
-    --note-window-color: #000000;
+    --note-window-color: #384764;
 }
 
 /* Styling for the window */

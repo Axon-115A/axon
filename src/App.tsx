@@ -635,7 +635,7 @@ export default function App() {
 							connectionRadius={35} //the min distance an edge has to be dragged close to a handle before it snaps to it. default is 20
 						>
 
-							<MiniMap position="bottom-left" style={{ position: 'absolute', bottom: '0px', left: '40px' }} nodeColor={nodeColor} maskColor={ChosenColorScheme.minimap} />
+							{/* <MiniMap position="bottom-right" style={{ position: 'absolute', bottom: '0px', right: '30px' }} nodeColor={nodeColor} maskColor={ChosenColorScheme.minimap} pannable zoomable/> */}
 							<ExtendedCanvasControls
 								clearCanvas={() => setClearModalOpened(true)}
 								position="bottom-left"
