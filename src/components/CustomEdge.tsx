@@ -5,6 +5,8 @@ import {
     EdgeProps,
 } from '@xyflow/react';
 
+import React from 'react';
+
 
 export const getSpecialPath = ({ sourceX, sourceY, targetX, targetY }, offset: number) => {
     const centerX = (sourceX + targetX) / 2;
@@ -32,11 +34,12 @@ interface CustomEdgeProps extends EdgeProps {
         texture: string;
         label: string;
     };
+    // EdgeProps already include selected, so you don't need to add it manually.
     //markerEnd?: EdgeMarker;
     //markerStart?: EdgeMarker;
 }
 
-export default function CustomEdge({ id, sourceX, sourceY, sourcePosition, targetPosition, targetX, targetY, data, markerEnd, markerStart }: CustomEdgeProps): JSX.Element {
+export default function CustomEdge({ id, selected, sourceX, sourceY, sourcePosition, targetPosition, targetX, targetY, data, markerEnd, markerStart }: CustomEdgeProps): JSX.Element {
     let thickness: number;
     switch (data.thickness) {
         case 'default':
@@ -104,7 +107,7 @@ export default function CustomEdge({ id, sourceX, sourceY, sourcePosition, targe
 
     return (
         <>
-            <BaseEdge id={id} path={edgePath} markerStart={markerStart}  style={edgeStyle} />
+            <BaseEdge id={id} path={edgePath} markerStart={markerStart}  style={edgeStyle}  className={`react-flow__custom-edge ${selected ? 'selected' : ''}`}/>
             <EdgeLabelRenderer>
                 <div
                     style={{

@@ -75,6 +75,9 @@ const edgeTypes = {
 export type CustomEdge = Edge & {
 	data: {
 		color: string;
+		thickness?: 'default' | 'thic';
+    	texture?: 'solid' | 'dashed' | 'dotted';
+    	label?: string;
 	};
 }
 
@@ -87,6 +90,7 @@ export default function App() {
 
 	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
 	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
 
 	const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
 	const [showNotesWindow, setNotesWindowVisibility] = useState(false);
@@ -151,6 +155,7 @@ export default function App() {
 				...params,
 				id: uuidv4(),
 				animated: true,
+				selected: false,
 				type: 'custom-edge',
 				data: {
 					color: ChosenColorScheme.defaultEdgeColor, //'#808080',
