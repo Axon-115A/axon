@@ -15,6 +15,7 @@ import {
 	getConnectedEdges,
 	ConnectionMode,
 	useReactFlow,
+	Controls,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -137,7 +138,6 @@ export default function App() {
 		setReactFlowInstance(instance);
 		// console.log(supabase)
 	};
-
 
 	const onConnect = useCallback(
 		(params: Connection) => {
@@ -635,11 +635,12 @@ export default function App() {
 							connectionRadius={35} //the min distance an edge has to be dragged close to a handle before it snaps to it. default is 20
 						>
 
-							<MiniMap position="bottom-right" style={{ position: 'absolute', bottom: '0px', right: '30px' }} nodeColor={nodeColor} maskColor={ChosenColorScheme.minimap} />
+							<MiniMap position="bottom-left" style={{ position: 'absolute', bottom: '0px', left: '40px' }} nodeColor={nodeColor} maskColor={ChosenColorScheme.minimap} />
 							<ExtendedCanvasControls
 								clearCanvas={() => setClearModalOpened(true)}
-								position="bottom-right"
+								position="bottom-left"
 								saveCanvas={() => { handleSaveState() }}
+								helpHandler={ helpHandler }
 							/>
 							<Background style={{backgroundColor: ChosenColorScheme.background}} variant={BackgroundVariant.Dots} gap={24} size={2} />
 						</ReactFlow>
@@ -695,20 +696,6 @@ export default function App() {
 							initialColor={selectedColor}
 							isForNode={colorModalIsNode}
 						/>
-						<Button
-							variant="filled"
-							color="teal"
-							onClick={helpHandler.open}
-							style={{
-								position: 'absolute',
-								bottom: '20px',
-								left: '50%',  // Center the button horizontally
-								transform: 'translateX(-50%)',  // Offset by half of its width to align in center
-								fontSize: '16px',
-							}}
-						>
-							Help
-						</Button>
 						<div
 							style={{
 								position: "absolute",

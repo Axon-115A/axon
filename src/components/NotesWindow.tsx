@@ -44,7 +44,7 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
     }, [node, editor]);
 
     return (
-        <Panel position='bottom-left' className='panel'>
+        <Panel position='bottom-right' className='panel'>
             <h3 className='notesTitle'>{node.data.label}</h3>
             <button onClick={onCloseWindow} className='closeButton'>
                 <img src="src/assets/white_x.svg" className='closeButtonIcon' />
