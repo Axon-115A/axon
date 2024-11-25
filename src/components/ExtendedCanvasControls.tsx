@@ -16,7 +16,7 @@ const ExtendedCanvasControls: React.FC<ExtendedCanvasControlsProps> = ({ clearCa
     document.documentElement.style.setProperty('--xy-controls-button-background-color', ChosenColorScheme.canvasControls);
 
     return (
-        <Controls position={position} showInteractive={ false }>
+        <Controls position={position} showInteractive={ false } style={{ display: 'flex', gap: '2px' }}>
             <ControlButton onClick={helpHandler.open} title='Help'>
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <img src={QuestionIcon} alt="Help" />
