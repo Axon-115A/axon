@@ -167,10 +167,12 @@ export default function App() {
 				markerEnd: {
 					type: MarkerType.ArrowClosed,
 					orient: 'auto',
+					color: ChosenColorScheme.defaultEdgeColor
 				},
 				markerStart: {
 					type: MarkerType.ArrowClosed, 
-					orient: 'auto'
+					orient: 'auto',
+					color: ChosenColorScheme.defaultEdgeColor
 				},
 
 			};
