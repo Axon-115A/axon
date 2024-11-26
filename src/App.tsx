@@ -574,10 +574,6 @@ export default function App() {
 		)
 	}
 
-	function nodeColor(node: any) {
-		return node.data.backgroundColor ?? "#6c5ce7";
-	}
-
 	return (
 		// why is mantine set to light mode by default?
 		<MantineProvider defaultColorScheme="dark">
@@ -624,15 +620,25 @@ export default function App() {
 							onNodesDelete={onNodeDelete}
 							connectionRadius={35} //the min distance an edge has to be dragged close to a handle before it snaps to it. default is 20
 						>
-
-							{/* <MiniMap position="bottom-right" style={{ position: 'absolute', bottom: '0px', right: '30px' }} nodeColor={nodeColor} maskColor={ChosenColorScheme.minimap} pannable zoomable/> */}
+						<div>
+							{/* <MiniMap 
+								position="bottom-left" 
+								style={{ position: 'absolute', bottom: '0px', left: '30px' }} 
+								nodeColor={(node: any) => {return node.data.backgroundColor}} 
+								maskColor={ChosenColorScheme.minimap} 
+								pannable
+								zoomable
+								zoomStep={1}
+							/> */}
 							<ExtendedCanvasControls
 								clearCanvas={() => setClearModalOpened(true)}
 								position="bottom-left"
 								saveCanvas={() => { handleSaveState() }}
 								helpHandler={helpHandler}
 							/>
-							<Background style={{ backgroundColor: ChosenColorScheme.background }} variant={BackgroundVariant.Dots} gap={24} size={2} />
+						</div>
+							
+						<Background style={{ backgroundColor: ChosenColorScheme.background }} variant={BackgroundVariant.Dots} gap={24} size={2} />
 						</ReactFlow>
 						<ContextMenu
 							isOpen={contextMenu.isOpen}
