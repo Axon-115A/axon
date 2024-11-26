@@ -17,13 +17,12 @@ interface EdgeContextMenuProps {
 
     onColorChangeEdge: () => void;
     
-    onDirectionLeft: () => void;
-    onDirectionRight: () => void;
+    onAddArrow: (source: boolean) => void;
 }
 
 // context menu {{}} onEdit, onColorChange, 
 // onEditLabel, onThickness, onTexture,  onDirectionLeft, onDirectionRight 
-const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, anchorY, onColorChangeEdge, onThicknessChange, onTextureChange, onEditEdgeLabel, onDirectionLeft, onDirectionRight}) => {
+const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, anchorY, onColorChangeEdge, onThicknessChange, onTextureChange, onEditEdgeLabel, onAddArrow}) => {
 	return (
         <ControlledMenu
             anchorPoint={{x: anchorX, y: anchorY}}
@@ -53,11 +52,11 @@ const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, a
             <MenuItem value="Change Dotted" onClick={() => {onTextureChange('dashed')}}>
                 Dotted
             </MenuItem>
-            <MenuItem value="Change Left Direction" onClick={onDirectionLeft}>
-                left
+            <MenuItem value="Toggle source arrow" onClick={() => {onAddArrow(true)}}>
+                Toggle source arrow
             </MenuItem>
-            <MenuItem value="Change Right Direction" onClick={onDirectionRight}>
-                right
+            <MenuItem value="Toggle destination arrow" onClick={() => {onAddArrow(false)}}>
+                Toggle destination arrow
             </MenuItem>
         </ControlledMenu>
       );

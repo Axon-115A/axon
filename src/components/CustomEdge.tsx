@@ -11,6 +11,8 @@ interface CustomEdgeProps extends EdgeProps {
 		thickness: string; // 'thick' or 'default'
 		texture: string;
 		label: string;
+		startArrowVisible: boolean;
+		endArrowVisible: boolean;
 	};
 	// EdgeProps already include selected, so you don't need to add it manually.
 	//markerEnd?: EdgeMarker;
@@ -50,7 +52,7 @@ export default function CustomEdge({ id, selected, sourceX, sourceY, sourcePosit
 			break;
 	}
 
-	let edgeStyle = {
+	let edgeStyle: React.CSSProperties = {
 		stroke: (selected) ? '#FFFFFF' : data.color,
 		strokeWidth: thickness,
 		strokeDasharray: texture,
@@ -59,7 +61,13 @@ export default function CustomEdge({ id, selected, sourceX, sourceY, sourcePosit
 
 	return (
 		<>
-			<BaseEdge id={id} path={edgePath} style={edgeStyle} markerStart={markerStart} markerEnd={markerEnd}/>
+			<BaseEdge 
+				id={id} 
+				path={edgePath} 
+				style={edgeStyle} 
+				markerStart={(data.startArrowVisible) ? markerStart : undefined} 
+				markerEnd={(data.endArrowVisible) ? markerEnd : undefined}
+			/>
 			<EdgeLabelRenderer>
 				<div
 					style={{

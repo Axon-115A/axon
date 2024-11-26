@@ -76,8 +76,10 @@ export type CustomEdge = Edge & {
 	data: {
 		color: string;
 		thickness?: 'default' | 'thic';
-    	texture?: 'solid' | 'dashed' | 'dotted';
-    	label?: string;
+		texture?: 'solid' | 'dashed' | 'dotted';
+		label?: string;
+		startArrowVisible?: boolean;
+		endArrowVisible?: boolean;
 	};
 }
 
@@ -161,15 +163,16 @@ export default function App() {
 					color: ChosenColorScheme.defaultEdgeColor, //'#808080',
 					thickness: 'default',
 					texture: 'solid',
-					label: ''
-
+					label: '',
+					startArrowVisible: false,
+					endArrowVisible: false
 				},
 				markerEnd: {
 					type: MarkerType.ArrowClosed,
 					color: ChosenColorScheme.defaultEdgeColor
 				},
 				markerStart: {
-					type: MarkerType.ArrowClosed, 
+					type: MarkerType.ArrowClosed,
 					color: ChosenColorScheme.defaultEdgeColor
 				},
 
@@ -458,40 +461,22 @@ export default function App() {
 		setContextMenu((prev) => ({ ...prev, isOpen: false }));
 	};
 
-	const onDirectionLeft = () => {
+	const onAddArrow = (source: boolean) => {
 		if (edgeContextMenu.selectedEdgeId) {
-			setEdges((prevEdges) =>
-				prevEdges.map((edge) =>
-					edge.id === edgeContextMenu.selectedEdgeId
-						? {
-							...edge, // Copy existing edge properties
-							markerStart: {
-								type: MarkerType.ArrowClosed,
-							},
+			setEdges(edges.map((edge) => {
+				if (edge.id === edgeContextMenu.selectedEdgeId) {
+					return {
+						...edge,
+						data: {
+							...edge.data,
+							startArrowVisible: (source) ? !edge.data.startArrowVisible : edge.data.startArrowVisible,
+							endArrowVisible: (!source) ? !edge.data.endArrowVisible : edge.data.endArrowVisible,
 						}
-						: edge // Keep other edges unchanged
-				)
-			);
-		}
-		setEdges((prevEdges) => [...prevEdges]);
-		setContextMenu((prev) => ({ ...prev, isOpen: false }));
-	};
+					}
+				}
 
-
-	const onDirectionRight = () => {
-		if (edgeContextMenu.selectedEdgeId) {
-			setEdges((prevEdges) =>
-				prevEdges.map((edge) =>
-					edge.id === edgeContextMenu.selectedEdgeId
-						? {
-							...edge, // Copy existing edge properties
-							markerEnd: {
-								type: MarkerType.ArrowClosed,
-							},
-						}
-						: edge // Keep other edges unchanged
-				)
-			);
+				return edge;
+			}))
 		}
 		setEdges((prevEdges) => [...prevEdges]);
 		setContextMenu((prev) => ({ ...prev, isOpen: false }));
@@ -560,8 +545,8 @@ export default function App() {
 				if (edge.id === edgeContextMenu.selectedEdgeId) {
 					return {
 						...edge,
-						data: { 
-							...edge.data, 
+						data: {
+							...edge.data,
 							color: newColor
 						},
 						markerEnd: {
@@ -645,9 +630,9 @@ export default function App() {
 								clearCanvas={() => setClearModalOpened(true)}
 								position="bottom-left"
 								saveCanvas={() => { handleSaveState() }}
-								helpHandler={ helpHandler }
+								helpHandler={helpHandler}
 							/>
-							<Background style={{backgroundColor: ChosenColorScheme.background}} variant={BackgroundVariant.Dots} gap={24} size={2} />
+							<Background style={{ backgroundColor: ChosenColorScheme.background }} variant={BackgroundVariant.Dots} gap={24} size={2} />
 						</ReactFlow>
 						<ContextMenu
 							isOpen={contextMenu.isOpen}
@@ -670,8 +655,10 @@ export default function App() {
 							onTextureChange={onEdgeTextureChange}
 							onColorChangeEdge={onColorChangeEdge}
 
-							onDirectionRight={onDirectionRight}
-							onDirectionLeft={onDirectionLeft}
+							onAddArrow={onAddArrow}
+
+							// onDirectionRight={onDirectionRight}
+							// onDirectionLeft={onDirectionLeft}
 
 						/>
 
@@ -712,16 +699,16 @@ export default function App() {
 						>
 
 							{session ? (
-								<Button onClick={() => setLogOutOpened(true)} style={{backgroundColor: ChosenColorScheme.signUpInButtons}}>
+								<Button onClick={() => setLogOutOpened(true)} style={{ backgroundColor: ChosenColorScheme.signUpInButtons }}>
 									Log Out
 								</Button>
 							) : (
 								<>
-									<Button onClick={() => setSignUpOpened(true)} style={{backgroundColor: ChosenColorScheme.signUpInButtons}}>
+									<Button onClick={() => setSignUpOpened(true)} style={{ backgroundColor: ChosenColorScheme.signUpInButtons }}>
 										Sign Up
 									</Button>
 
-									<Button onClick={() => setSignInOpened(true)} style={{backgroundColor: ChosenColorScheme.signUpInButtons}}>
+									<Button onClick={() => setSignInOpened(true)} style={{ backgroundColor: ChosenColorScheme.signUpInButtons }}>
 										Sign In
 									</Button>
 								</>
@@ -754,7 +741,7 @@ export default function App() {
 						<LogOutModal
 							isOpen={logOutOpened}
 							onClose={() => setLogOutOpened(false)}
-							
+
 							setSession={setSession}
 							setNodes={setNodes}
 							setEdges={setEdges}
