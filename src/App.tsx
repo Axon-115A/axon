@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
 	ReactFlow,
 	useNodesState,
 	addEdge,
 	MiniMap,
 	Background,
-	SimpleBezierEdge,
 	MarkerType,
 	ReactFlowProvider,
 	ReactFlowInstance,
@@ -14,8 +13,6 @@ import {
 	getOutgoers,
 	getConnectedEdges,
 	ConnectionMode,
-	useReactFlow,
-	Controls,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -32,8 +29,7 @@ import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import '@mantine/tiptap/styles.css';
 
-// todo move this elsewhere?
-import { createClient, Provider, Session } from '@supabase/supabase-js'
+import { Session } from '@supabase/supabase-js'
 import debounce from 'lodash.debounce';
 
 // custom components
@@ -43,6 +39,8 @@ import CustomEdge from './components/CustomEdge';
 import EdgeContextMenu from './components/EdgeContextMenu';
 import CircleNode from './components/CircleNode';
 import RectNode from './components/RectNode';
+import CustomNode from './components/CustomNode';
+
 import ContextMenu from './components/ContextMenu';
 import NotesWindow from './components/NotesWindow';
 import NotesWindowMantine from './components/NotesWindowMantine';
@@ -64,7 +62,7 @@ const initialNodes: any = [];
 // const initialEdges: any = [];
 
 
-const nodeTypes = { 'circle': CircleNode, 'rect': RectNode };
+const nodeTypes = { 'circle': CircleNode, 'rect': RectNode, 'custom': CustomNode };
 const proOptions = { hideAttribution: true };
 
 
@@ -333,7 +331,10 @@ export default function App() {
 				if (node.id === contextMenu.selectedNodeId) {
 					return {
 						...node,
-						type: node.type === 'circle' ? 'rect' : 'circle'
+						data: {
+							...node.data,
+							shape: (node.data.shape == 'rect') ? 'circle' : 'rect' 
+						}
 					};
 				}
 				return node;
@@ -509,9 +510,10 @@ export default function App() {
 			data: {
 				label: "New Node",
 				notes: "",
-				backgroundColor: ChosenColorScheme.defaultNodeColor //"#6c5ce7"
+				backgroundColor: ChosenColorScheme.defaultNodeColor, //"#6c5ce7"
+				shape: "rect"
 			},
-			type: 'rect',
+			type: 'custom',
 		};
 
 		setNodes((nds) => nds.concat(newNode));
@@ -600,19 +602,14 @@ export default function App() {
 
 							onClick={onClick}
 							onNodeClick={onNodeClick}
-
-							//S: adding edge customization functionality
-							// S: referenced https://reactflow.dev/learn/customization/custom-edges
-							edgeTypes={edgeTypes}
-
-
-
+							
 							fitView
 							onInit={onInit}
 							colorMode='dark'
 							deleteKeyCode='Delete'
 							proOptions={proOptions}
 							nodeTypes={nodeTypes}
+							edgeTypes={edgeTypes}
 
 							connectionMode={ConnectionMode.Loose}
 							onNodeMouseEnter={() => { setMouseOverNode(true) }}   //this way, if the mouse is over a node, isMouseOverNode = true

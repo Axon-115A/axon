@@ -8,18 +8,19 @@ import { useCreateBlockNote } from "@blocknote/react";
 import { PartialBlock } from '@blocknote/core';
 import { createClient } from '@supabase/supabase-js';
 import { v4 as uuidv4 } from 'uuid';
+import * as Login from '../Login';
 
 
 
 // Uploads a file to tmpfiles.org and returns the URL to the uploaded file.
 async function uploadFiles(file: File) {
 
-    const SUPABASE_URL = "https://tugoremjbojyqanvwglz.supabase.co"
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1Z29yZW1qYm9qeXFhbnZ3Z2x6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg0MTk2ODgsImV4cCI6MjA0Mzk5NTY4OH0.RvmWr4VrQ0ioRR34vpGYeBEz8qFOPh68ZURNf41yhts"
-    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
+    // const SUPABASE_URL = "https://tugoremjbojyqanvwglz.supabase.co"
+    // const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1Z29yZW1qYm9qeXFhbnZ3Z2x6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg0MTk2ODgsImV4cCI6MjA0Mzk5NTY4OH0.RvmWr4VrQ0ioRR34vpGYeBEz8qFOPh68ZURNf41yhts"
+    // const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
     async function checkUserSignedIn() {
-        const { data: { user }, error } = await supabase.auth.getUser();
+        const { data: { user }, error } = await Login.supabase.auth.getUser();
 
         if (error) {
             console.error('Error fetching user:', error.message);
@@ -40,7 +41,7 @@ async function uploadFiles(file: File) {
 
     const file_uid = uuidv4();
 
-    const { data, error } = await supabase
+    const { data, error } = await Login.supabase
         .storage
         .from('user_storage')
         .upload(`public/${file_uid}.png`, file, {
@@ -76,7 +77,7 @@ const NotesWindowBlocknote: React.FC<Props> = ({ onCloseWindow, node }) => {
 
     //forces notesData to update whenever setNotes is called
     useEffect(() => {
-        console.log("setting notes", node, node.data.notes)
+        //console.log("setting notes", node, node.data.notes)
         if (node) setNotes(node.data.notes ? JSON.parse(node.data.notes) as PartialBlock[] : undefined);
     }, [node]);
 

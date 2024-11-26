@@ -1,6 +1,5 @@
 /* styles for the look of all custom shapes */
 
-/* Node  appearance */
 .rect {
     width: auto; 
     height: auto; 
@@ -10,8 +9,11 @@
     justify-content: center;
     align-items: center;
     background-color: #6c5ce7;
-    border-radius: 2px;
     word-wrap: break-word; 
+    font-size: 12px;
+	border: 2px solid #555;
+	border-radius: 5px;
+	text-align: center;
 }
 
 .circle {
@@ -28,6 +30,8 @@
     text-align: center;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    font-size: 12px;
+	border: 2px solid #555;
 }
 
 

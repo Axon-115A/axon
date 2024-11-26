@@ -73,30 +73,11 @@ button:focus-visible {
 	}
 }
 
-.react-flow__node-rect {
-	font-size: 12px;
-	background: #eee;
-	border: 2px solid #555;
-	border-radius: 5px;
-	text-align: center;
-}
-  
-
-.react-flow__node-rect.selected {
-	border: 2px solid #81ecec !important;
-}
-
-.react-flow__node-circle.selected {
-	border: 2px solid #81ecec !important;
-}
-
-.react-flow__node-circle {
-	font-size: 12px;
-	/* background: #eee; */
-	border: 2px solid #555;
-	border-radius: 50000px;
-	text-align: center;
-}
+/* do not put any node shape css in here. put it in NodeShapes.css */
+/* do not put any node shape css in here. put it in NodeShapes.css */
+/* do not put any node shape css in here. put it in NodeShapes.css */
+/* do not put any node shape css in here. put it in NodeShapes.css */
+/* do not put any node shape css in here. put it in NodeShapes.css */
 
 .react-flow__custom-edge.selected {
 	stroke: #81ecec !important; /* Highlight color */
