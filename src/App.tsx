@@ -55,7 +55,7 @@ import LogOutModal from './components/auth/LogOut';
 import NodeList from './components/NodeList';
 import ColorPickerModal from './components/modals/ColorPickerModal';
 
-import * as Login from './Login';
+import { Login } from './Login';
 import ChosenColorScheme from './AxonRollYourOwnColorSchemeConstructionSet';
 
 const initialNodes: any = [];
@@ -333,7 +333,7 @@ export default function App() {
 						...node,
 						data: {
 							...node.data,
-							shape: (node.data.shape == 'rect') ? 'circle' : 'rect' 
+							shape: (node.data.shape == 'rect') ? 'circle' : 'rect'
 						}
 					};
 				}
@@ -602,7 +602,7 @@ export default function App() {
 
 							onClick={onClick}
 							onNodeClick={onNodeClick}
-							
+
 							fitView
 							onInit={onInit}
 							colorMode='dark'
@@ -617,8 +617,8 @@ export default function App() {
 							onNodesDelete={onNodeDelete}
 							connectionRadius={35} //the min distance an edge has to be dragged close to a handle before it snaps to it. default is 20
 						>
-						<div>
-							{/* <MiniMap 
+							<div>
+								{/* <MiniMap 
 								position="bottom-left" 
 								style={{ position: 'absolute', bottom: '0px', left: '30px' }} 
 								nodeColor={(node: any) => {return node.data.backgroundColor}} 
@@ -627,15 +627,15 @@ export default function App() {
 								zoomable
 								zoomStep={1}
 							/> */}
-							<ExtendedCanvasControls
-								clearCanvas={() => setClearModalOpened(true)}
-								position="bottom-left"
-								saveCanvas={() => { handleSaveState() }}
-								helpHandler={helpHandler}
-							/>
-						</div>
-							
-						<Background style={{ backgroundColor: ChosenColorScheme.background }} variant={BackgroundVariant.Dots} gap={24} size={2} />
+								<ExtendedCanvasControls
+									clearCanvas={() => setClearModalOpened(true)}
+									position="bottom-left"
+									saveCanvas={() => { handleSaveState() }}
+									helpHandler={helpHandler}
+								/>
+							</div>
+
+							<Background style={{ backgroundColor: ChosenColorScheme.background }} variant={BackgroundVariant.Dots} gap={24} size={2} />
 						</ReactFlow>
 						<ContextMenu
 							isOpen={contextMenu.isOpen}
@@ -660,8 +660,8 @@ export default function App() {
 
 							onAddArrow={onAddArrow}
 
-							// onDirectionRight={onDirectionRight}
-							// onDirectionLeft={onDirectionLeft}
+						// onDirectionRight={onDirectionRight}
+						// onDirectionLeft={onDirectionLeft}
 
 						/>
 

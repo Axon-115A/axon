@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button } from '@mantine/core';
-import * as Login from '../../Login';
+import { Login } from '../../Login';
 
 interface Props {
     isOpen: boolean,

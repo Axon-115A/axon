@@ -8,7 +8,7 @@ import { useCreateBlockNote } from "@blocknote/react";
 import { PartialBlock } from '@blocknote/core';
 import { createClient } from '@supabase/supabase-js';
 import { v4 as uuidv4 } from 'uuid';
-import * as Login from '../Login';
+import { Login } from '../Login';
 
 
 
