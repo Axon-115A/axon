@@ -59,17 +59,15 @@ import { Login } from './Login';
 import ChosenColorScheme from './AxonRollYourOwnColorSchemeConstructionSet';
 
 const initialNodes: any = [];
-// const initialEdges: any = [];
+const initialEdges = [] as CustomEdge[];
 
+const nodeTypes = { /*'circle': CircleNode, 'rect': RectNode,*/ 'custom': CustomNode };
+const edgeTypes = {	'custom-edge': CustomEdge };
 
-const nodeTypes = { 'circle': CircleNode, 'rect': RectNode, 'custom': CustomNode };
 const proOptions = { hideAttribution: true };
 
 
 // S: imports needed for edge customizations
-const edgeTypes = {
-	'custom-edge': CustomEdge,
-};
 export type CustomEdge = Edge & {
 	data: {
 		color: string;
@@ -81,7 +79,6 @@ export type CustomEdge = Edge & {
 	};
 }
 
-const initialEdges = [] as CustomEdge[];
 
 
 export default function App() {
@@ -173,7 +170,6 @@ export default function App() {
 					type: MarkerType.ArrowClosed,
 					color: ChosenColorScheme.defaultEdgeColor
 				},
-
 			};
 
 			setEdges((eds) => addEdge(edge, eds) as CustomEdge[]);
@@ -273,15 +269,9 @@ export default function App() {
 	}, [nodes, edges, debouncedHandleSaveState]);
 
 
-
-	const handleConfirm = () => {
+	const handleClose = () => {
 		// make sure it won't show up in future
 		localStorage.setItem('showHelp', "false")
-	};
-
-
-	const handleClose = () => {
-		handleConfirm();
 		helpHandler.close();
 	};
 
@@ -552,11 +542,11 @@ export default function App() {
 							color: newColor
 						},
 						markerEnd: {
-							...edge.markerEnd,
+							type: MarkerType.ArrowClosed,
 							color: newColor
 						},
 						markerStart: {
-							...edge.markerStart,
+							type: MarkerType.ArrowClosed,
 							color: newColor
 						},
 					};
