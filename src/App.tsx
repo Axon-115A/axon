@@ -37,13 +37,9 @@ import { Connection, Edge } from 'reactflow';
 import { useEdgesState } from '@xyflow/react';
 import CustomEdge from './components/CustomEdge';
 import EdgeContextMenu from './components/EdgeContextMenu';
-import CircleNode from './components/CircleNode';
-import RectNode from './components/RectNode';
 import CustomNode from './components/CustomNode';
 
 import ContextMenu from './components/ContextMenu';
-import NotesWindow from './components/NotesWindow';
-import NotesWindowMantine from './components/NotesWindowMantine';
 import NotesWindowBlocknote from './components/NotesWindowBlocknote';
 import HelpModal from './components/modals/HelpModal';
 import ClearModal from './components/modals/ClearModal';
@@ -61,7 +57,7 @@ import ChosenColorScheme from './AxonRollYourOwnColorSchemeConstructionSet';
 const initialNodes: any = [];
 const initialEdges = [] as CustomEdge[];
 
-const nodeTypes = { /*'circle': CircleNode, 'rect': RectNode,*/ 'custom': CustomNode };
+const nodeTypes = { 'custom': CustomNode };
 const edgeTypes = {	'custom-edge': CustomEdge };
 
 const proOptions = { hideAttribution: true };
@@ -71,7 +67,7 @@ const proOptions = { hideAttribution: true };
 export type CustomEdge = Edge & {
 	data: {
 		color: string;
-		thickness?: 'default' | 'thic';
+		thickness?: 'default' | 'thick';
 		texture?: 'solid' | 'dashed' | 'dotted';
 		label?: string;
 		startArrowVisible?: boolean;
@@ -176,39 +172,6 @@ export default function App() {
 		},
 		[setEdges]
 	);
-
-
-
-	const onNodesDelete = useCallback(
-		(deleted: any) => {
-			setEdges(
-				deleted.reduce((acc: any, node: any) => {
-					const incomers = getIncomers(node, nodes, edges);
-					const outgoers = getOutgoers(node, nodes, edges);
-					const connectedEdges = getConnectedEdges([node], edges);
-
-
-					const remainingEdges = acc.filter(
-						(edge: any) => !connectedEdges.includes(edge),
-					);
-
-
-					const createdEdges = incomers.flatMap(({ id: source }) =>
-						outgoers.map(({ id: target }) => ({
-							id: `${source}->${target}`,
-							source,
-							target,
-						})),
-					);
-
-
-					return [...remainingEdges, ...createdEdges];
-				}, edges),
-			);
-		},
-		[nodes, edges],
-	);
-
 
 	const handlePasswordReset = () => {
 	}
@@ -577,16 +540,10 @@ export default function App() {
 							nodes={nodes}
 							edges={edges}
 							onNodesChange={onNodesChange}
-							// todo pls fix	
-							// after adding more handles and making them all connectable to each other, this does not properly update connections to the right handle
-							// once that is fixed, uncomment this - prasiddh
-							// onNodesDelete={onNodesDelete}
 							onEdgesChange={onEdgesChange}
 							onConnect={onConnect}
 							zoomOnDoubleClick={false}
 							onDoubleClick={onDoubleClick}
-							// this still triggers regular doube click for some reason
-							// onNodeDoubleClick={handleDoubleClickEdit}
 							onNodeContextMenu={onNodeContextMenu}
 							onEdgeContextMenu={onEdgeContextMenu}
 
