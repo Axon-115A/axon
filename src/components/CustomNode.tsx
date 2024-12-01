@@ -6,11 +6,12 @@ import { adaptTextColor } from '../Utilities';
 // Custom node component to render as a rectangle
 const CustomNode = ({ data, selected }: any) => {
 	const outlineColor = "#81ECEC";
-	let selectionStyle = {
+	let selectionStyle : React.CSSProperties = {
 		outline: `2px solid ${outlineColor}`,
 		outlineOffset: '-2px',
 		borderRadius: (data.shape == 'rect') ? '5px' : '50%'
 	}
+	if (selected) selectionStyle['filter'] = 'drop-shadow(0 0 3px white)';
 
 	return (
 		<div className={data.shape} style={{

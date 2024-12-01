@@ -53,7 +53,7 @@ export default function CustomEdge({ id, selected, sourceX, sourceY, sourcePosit
 	}
 
 	let edgeStyle: React.CSSProperties = {
-		stroke: (selected) ? '#FFFFFF' : data.color,
+		stroke: (selected) ? '#81ecec' : data.color,
 		strokeWidth: thickness,
 		strokeDasharray: texture,
 	}
