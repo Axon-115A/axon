@@ -46,10 +46,10 @@ const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, a
             <MenuItem value="Change to Solid" onClick={() => {onTextureChange('default')}}>
                 Solid
             </MenuItem>
-            <MenuItem value="Change to Dashed" onClick={() => {onTextureChange('dotted')}}>
+            <MenuItem value="Change to Dashed" onClick={() => {onTextureChange('dashed')}}>
                 Dashed
             </MenuItem>
-            <MenuItem value="Change Dotted" onClick={() => {onTextureChange('dashed')}}>
+            <MenuItem value="Change Dotted" onClick={() => {onTextureChange('dotted')}}>
                 Dotted
             </MenuItem>
             <MenuItem value="Toggle source arrow" onClick={() => {onAddArrow(true)}}>

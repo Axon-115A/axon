@@ -42,10 +42,10 @@ export default function CustomEdge({ id, selected, sourceX, sourceY, sourcePosit
 	let texture: string;
 	switch (data.texture) {
 		case 'dashed':
-			texture = '10 10';
+			texture = (data.thickness === 'thick') ? '7 3.5' : '5 5';
 			break;
 		case 'dotted':
-			texture = (data.thickness === 'thick') ? '5 5' : '1 5';
+			texture = (data.thickness === 'thick') ? '2 3' : '1 4';
 			break;
 		default: //solid
 			texture = '0';
@@ -56,7 +56,7 @@ export default function CustomEdge({ id, selected, sourceX, sourceY, sourcePosit
 		stroke: (selected) ? '#81ecec' : data.color,
 		strokeWidth: thickness,
 		strokeDasharray: texture,
-	}
+	}		
 	if (selected) edgeStyle['filter'] = 'drop-shadow(0 0 3px white)';
 
 	return (
