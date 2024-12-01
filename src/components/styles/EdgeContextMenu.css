@@ -1,0 +1,17 @@
+.custom-menu .menu-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-menu .menu-row img {
+    width: 24px;
+    height: 24px;
+}
+
+.custom-menu .menu-row .szh-menu__item {
+    padding: 4px 8px;
+    font-size: 8px;
+    min-height: auto;
+    min-width: auto;
+}
