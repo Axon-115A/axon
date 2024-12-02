@@ -1,7 +1,7 @@
 import { Handle, Position } from '@xyflow/react';
 import './styles/Handles.css';
 import './styles/NodeShapes.css';
-import { ThemeManager } from '../ThemeManager';
+import { ThemeManager } from '../namespaces/ThemeManager';
 
 // Custom node component to render as a rectangle
 const CustomNode = ({ data, selected }: any) => {

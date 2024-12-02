@@ -6,7 +6,7 @@ import { BlockNoteView } from "@blocknote/mantine";
 import { useCreateBlockNote } from "@blocknote/react";
 import { PartialBlock } from '@blocknote/core';
 import { v4 as uuidv4 } from 'uuid';
-import { Login } from '../Login';
+import { Login } from '../namespaces/Login';
 import './styles/NotesWindow.css';
 
 

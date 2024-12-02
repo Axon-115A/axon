@@ -48,8 +48,8 @@ import ColorPickerModal from './components/modals/ColorPickerModal';
 import DeleteNodeModal from './components/modals/DeleteNodeModal';
 
 //namespaces
-import { Login } from './Login';
-import { ThemeManager } from './ThemeManager';
+import { Login } from './namespaces/Login';
+import { ThemeManager } from './namespaces/ThemeManager';
 
 const initialNodes: any = [];
 const initialEdges = [] as CustomEdge[];

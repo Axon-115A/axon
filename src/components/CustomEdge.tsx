@@ -4,7 +4,7 @@ import {
 	getBezierPath,
 	EdgeProps,
 } from '@xyflow/react';
-import { ThemeManager } from '../ThemeManager';
+import { ThemeManager } from '../namespaces/ThemeManager';
 
 interface CustomEdgeProps extends EdgeProps {
 	data: {

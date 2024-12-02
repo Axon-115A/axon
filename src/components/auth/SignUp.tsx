@@ -4,7 +4,7 @@ import { useForm } from '@mantine/form';
 import OauthButtons from './social/OauthButtons';
 
 //so that all Login functions are called as "Login.handleFunction()" for readability
-import { Login } from '../../Login';
+import { Login } from '../../namespaces/Login';
 
 interface Props {
 	isOpen: boolean,
