@@ -11,38 +11,3 @@
     background: transparent;
     pointer-events: auto
 }
-
-
-
-/* :root {
-    --handle-width: calc(105% + 2px);
-}
-
-.wideHandleTop {
-    width: var(--handle-width);
-    height: 15px;
-    border-radius: 10px 10px 0px 0px;
-    opacity: 0.4;
-    
-}
-
-.wideHandleBottom {
-    width: var(--handle-width);
-    height: 15px;
-    border-radius: 0px 0px 10px 10px;
-    opacity: 0.4;
-}
-
-.wideHandleLeft {
-    width: 15px;
-    height: var(--handle-width);
-    border-radius: 10px 0px 0px 10px;
-    opacity: 0.4;
-}
-
-.wideHandleRight {
-    height: var(--handle-width);
-    width: 15px;
-    border-radius: 0px 10px 10px 0px;
-    opacity: 0.4;
-} */

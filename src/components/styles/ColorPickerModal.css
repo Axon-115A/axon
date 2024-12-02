@@ -1,0 +1,32 @@
+.colorPickerModal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.primaryDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%
+}
+
+.colorPicker {
+    justify-content: center;
+    align-items: center;
+}
+
+.colorPickerButtonDiv {
+    display: flex;
+    justify-content: center;
+    margin-top: 6px;
+}
+
+.colorPickerButton {
+    width: 100px;
+}
+
+.colorPickerCancelButton {
+    margin-right: 0.5rem;
+}

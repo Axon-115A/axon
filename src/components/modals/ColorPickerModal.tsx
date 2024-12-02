@@ -1,6 +1,7 @@
 // components/EditLabelModal.tsx
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, ColorPicker, ColorInput } from '@mantine/core';
+import '../styles/ColorPickerModal.css';
 
 interface ColorPickerModalProps {
     opened: boolean;
@@ -41,54 +42,46 @@ const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ opened, onClose, on
                 backgroundOpacity: 0.55,
                 blur: 3,
             }}
-            style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                textAlign: 'center',
-            }}
+            className='colorPickerModal'
         >
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-            <ColorPicker
-                format="hex"
-                value={selectedColor}
-                onChange={(newColor) => setSelectedColor(newColor)}
-                onKeyDown={handleKeyPress}
-                swatches={[
-                    '#fa5252', '#fab005', '#40c057', '#228be6', '#2e2e2e'
-                ]}
-                swatchesPerRow={8}
-                styles={{
-                  swatch: {
-                    width: '15px',
-                    height: '10px',
-                    margin: '4px',
-                    left: '5px' 
-                  },
-                }}
-                style={{
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}
-            />
-            <ColorInput
-                value={selectedColor}
-                withPicker={false} 
-                placeholder="Enter value"
-                withEyeDropper={false}
-                onChange={(newColor) => setSelectedColor(newColor)}
-                onKeyDown={handleKeyPress}
+            <div className='primaryDiv'>
+                <ColorPicker
+                    format="hex"
+                    value={selectedColor}
+                    onChange={(newColor) => setSelectedColor(newColor)}
+                    onKeyDown={handleKeyPress}
+                    swatches={[
+                        '#fa5252', '#fab005', '#40c057', '#228be6', '#2e2e2e'
+                    ]}
+                    swatchesPerRow={8}
+                    styles={{
+                        swatch: {
+                            width: '15px',
+                            height: '10px',
+                            margin: '4px',
+                            left: '5px'
+                        },
+                    }}
+                    className="colorPicker"
+                />
+                <ColorInput
+                    value={selectedColor}
+                    withPicker={false}
+                    placeholder="Enter value"
+                    withEyeDropper={false}
+                    onChange={(newColor) => setSelectedColor(newColor)}
+                    onKeyDown={handleKeyPress}
                 // fixOnBlur={false}
-            />
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
-                <Button color="gray" onClick={onClose} style={{ marginRight: '0.5rem', width: '100px' }}>
-                    Cancel
-                </Button>
-                <Button onClick={handleSubmit} style={{ width: '100px' }}>
-                    Submit
-                </Button>
+                />
+                <div className='colorPickerButtonDiv'>
+                    <Button color="gray" onClick={onClose} className='colorPickerButton colorPickerCancelButton'>
+                        Cancel
+                    </Button>
+                    <Button onClick={handleSubmit} className='colorPickerButton'>
+                        Submit
+                    </Button>
+                </div>
             </div>
-        </div>
         </Modal>
     );
 };

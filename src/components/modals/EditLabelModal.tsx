@@ -1,6 +1,7 @@
 // components/EditLabelModal.tsx
 import React, { useEffect } from 'react';
 import { Modal, TextInput, Button } from '@mantine/core';
+import '../styles/EditLabelModel.css';
 
 interface EditLabelModalProps {
     opened: boolean;
@@ -10,9 +11,7 @@ interface EditLabelModalProps {
     isForNode: boolean;
 }
 
-
-
-const EditLabelModal: React.FC<EditLabelModalProps> = ({ opened, label, onClose, onConfirm, isForNode}) => {
+const EditLabelModal: React.FC<EditLabelModalProps> = ({ opened, label, onClose, onConfirm, isForNode }) => {
     const [newLabel, setNewLabel] = React.useState(label);
 
     useEffect(() => {
@@ -21,7 +20,7 @@ const EditLabelModal: React.FC<EditLabelModalProps> = ({ opened, label, onClose,
         }
     }, [opened, label]);
 
-    const truncateLabel = (label: string): string => 
+    const truncateLabel = (label: string): string =>
         label.length > 30 ? label.substring(0, 30) : label;
 
     const handleSubmit = () => {
@@ -36,38 +35,33 @@ const EditLabelModal: React.FC<EditLabelModalProps> = ({ opened, label, onClose,
     };
 
     return (
-        <Modal 
-            opened={opened} 
-            onClose={onClose} 
+        <Modal
+            opened={opened}
+            onClose={onClose}
             size="sm"
             centered
             withCloseButton={false}
             overlayProps={{
-            backgroundOpacity: 0.55,
-            blur: 3,
+                backgroundOpacity: 0.55,
+                blur: 3,
             }}
-            style = {{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                textAlign: 'center'
-            }}
+            className='editModal'
         >
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div className='textInputDiv'>
                 <TextInput
                     label="Enter new node label below."
                     value={newLabel}
                     onChange={(event) => setNewLabel(event.currentTarget.value)}
                     onKeyDown={handleKeyPress}
-                    style={{ textAlign: 'center', width: '200px', alignItems: 'center', justifyContent: 'center' }}
+                    className='textInput'
                     maxLength={30}
                 />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: "0.5rem"}}>
-                <Button color="gray" onClick={onClose} style={{ marginRight: '0.5rem', width: '100px', height: '40px' }}>
+            <div className="buttonDiv">
+                <Button color="gray" onClick={onClose} className='modalButton cancelButton'>
                     Cancel
                 </Button>
-                <Button onClick={handleSubmit} style={{ width: '100px', height: '40px' }}>
+                <Button onClick={handleSubmit} className='modalButton'>
                     Submit
                 </Button>
             </div>

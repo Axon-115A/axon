@@ -1,0 +1,20 @@
+.clearModal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.clearButtonDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.clearModalButton {
+    width: 100px;
+    height: 40px;
+}
+
+.clearModalCancelButton {
+    margin-right: 0.5rem;
+}
