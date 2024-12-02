@@ -50,6 +50,7 @@ import SignUpModal from './components/auth/SignUp';
 import LogOutModal from './components/auth/LogOut';
 import NodeList from './components/NodeList';
 import ColorPickerModal from './components/modals/ColorPickerModal';
+import DeleteNodeModal from './components/modals/DeleteNodeModal';
 
 import { Login } from './Login';
 import ChosenColorScheme from './AxonRollYourOwnColorSchemeConstructionSet';
@@ -98,6 +99,7 @@ export default function App() {
 	const [logOutOpened, setLogOutOpened] = useState(false);
 	const [selectedColor, setSelectedColor] = useState('#ffffff');
 	const [colorModalOpened, setColorModalOpened] = useState(false);
+	const [deleteModalOpened, setDeleteModalOpened] = useState(false);
 
 	//S: assigns a boolean on whether something is a Node or Edge, useful for color picker 
 	const [colorModalIsNode, setColorModalIsNode] = useState(true);
@@ -338,6 +340,28 @@ export default function App() {
 		}
 	};
 
+	const onDeleteClicked = () => {
+		if (contextMenu.selectedNodeId) {
+			const selectedNode = nodes.find(node => node.id === contextMenu.selectedNodeId);
+			if (selectedNode) {
+				const isEdited = selectedNode.data.label !== "New Node" || selectedNode.data.notes !== "";
+				console.log(isEdited)
+				console.log(selectedNode.data.label)
+				console.log(selectedNode.data.notes)
+				if(selectedNode.data.label !== "New Node" || selectedNode.data.notes !== "")
+				{
+					setDeleteModalOpened(true);
+				}
+				else
+				{
+					handleDeleteNode();
+					setNotesWindowVisibility(false)
+				}
+			}
+		}
+		setContextMenu(prev => ({ ...prev, isOpen: false }));
+	};
+
 
 	const onDelete = () => {
 		if (contextMenu.selectedNodeId) {
@@ -488,7 +512,12 @@ export default function App() {
 		  setEditModalOpened(true);
 		}
 	  };
-	  
+	
+	const handleDeleteNode = () => {
+		onDelete();
+		setNotesWindowVisibility(false);
+		setTimeout(handleSaveState, 0);
+	};
 
 	// clearing the canvas and closing notes window
 	const handleClearCanvas = () => {
@@ -612,7 +641,7 @@ export default function App() {
 							anchorY={contextMenu.anchorY}
 							onShapeChange={onShapeChange}
 							onEdit={onEdit}
-							onDelete={onDelete}
+							onDelete={onDeleteClicked}
 							onColorChange={onColorChange}
 						/>
 						<EdgeContextMenu
@@ -651,6 +680,11 @@ export default function App() {
 							opened={clearModalOpened}
 							onClose={() => setClearModalOpened(false)}
 							onConfirm={handleClearCanvas}
+						/>
+						<DeleteNodeModal
+							opened={deleteModalOpened}
+							onClose={() => setDeleteModalOpened(false)}
+							onConfirm={handleDeleteNode}
 						/>
 						<ColorPickerModal
 							opened={colorModalOpened}
