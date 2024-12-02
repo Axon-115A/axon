@@ -3,8 +3,6 @@ import TrashIcon from './../assets/trash.svg';
 import SaveIcon from './../assets/floppy.svg';
 import QuestionIcon from './../assets/question-circle.svg';
 
-import ChosenColorScheme from '../AxonRollYourOwnColorSchemeConstructionSet';
-
 interface ExtendedCanvasControlsProps {
     clearCanvas: () => void;
     position: any;
@@ -13,11 +11,9 @@ interface ExtendedCanvasControlsProps {
 }
 
 const ExtendedCanvasControls: React.FC<ExtendedCanvasControlsProps> = ({ clearCanvas, position, saveCanvas, helpHandler }) => {
-    //todo: find a better way to force color scheme
+    //todo: find a better way to force color scheme on the canvas controls
     document.documentElement.style.setProperty('--xy-controls-button-background-color', 'var(--canvas-controls)');
-    const a = getComputedStyle(document.documentElement).getPropertyValue('--canvas-controls').trim();
 
-    //console.log(a);
     return (
         <Controls position={position} showInteractive={ false } style={{ display: 'flex', gap: '2px' }}>
             <ControlButton onClick={helpHandler.open} title='Help'>

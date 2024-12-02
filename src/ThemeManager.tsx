@@ -10,9 +10,9 @@ export namespace ThemeManager {
 		return document.documentElement.getAttribute("data-theme");
 	}
 
-	//if your system theme is set to light, getComputedStyle will ALWAYS return light, even if the site theme is set to dark. other than that, there is no way to
+	//if your system theme is set to light, getComputedStyle will ALWAYS return light for var(--default-node-color), even if the site theme is set to dark. other than that, there is no way to
 	//read the individual light/dark mode color schemes (unless you straight up parse every css rule). hence, this somewhat convoluted method.
-	//also, because of the light/dark mode css, the background of a node color by default will be the string literal "var(--default-node-color)" for some reason. this
+	//also, because of the light/dark mode css, the background of a node color by default will be the string literal "var(--default-node-color)". this
 	//screws over adaptTextColor (since again, that will always evaluate to the light mode color even if data-theme is dark). 
 	const nodeLightTheme: string = "#d5bdaf";
 	const edgeLightTheme: string = "#010204";

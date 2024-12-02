@@ -4,8 +4,6 @@ import { Button, Accordion, Checkbox, TextInput } from '@mantine/core';
 import { ThemeManager } from '../ThemeManager';
 import './styles/NodeList.css';
 
-import ChosenColorScheme from '../AxonRollYourOwnColorSchemeConstructionSet';
-
 interface Props {
     nodeList: any
 }
