@@ -37,7 +37,7 @@ const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, a
             className="custom-menu"
         >
             <div className='menu-row'>
-                <div className="hex-row">
+                <div>
                     <MenuItem value="EditEdgeLabel" onClick={onEditEdgeLabel}>
                         <div className="menu-item editLabel">
                             <img src={EditLabel} />
@@ -46,7 +46,7 @@ const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, a
                 </div>
 
 
-                <div className="hex-row">
+                <div>
                     <MenuItem value="Change to Thick" onClick={() => { onThicknessChange('thick') }}>
                         <div className="menu-item thick">
                             <img src={Thick} />
@@ -60,7 +60,7 @@ const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, a
                 </div>
 
 
-                <div className="hex-row">
+                <div>
 
                     <MenuItem value="Change to Solid" onClick={() => { onTextureChange('default') }}>
                         <div className='menu-item solid'>
@@ -81,7 +81,7 @@ const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, a
                 </div>
 
 
-                <div className="hex-row">
+                <div>
 
                     <MenuItem value="Toggle source arrow" onClick={() => { onAddArrow(true) }}>
                         <div className="menu-item rightArrow">
@@ -97,7 +97,7 @@ const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, a
                 </div>
 
 
-                <div className="hex-row">
+                <div>
 
                     <MenuItem value="Change Color" onClick={onColorChangeEdge}>
                         <div className="menu-item colorPicker" >
