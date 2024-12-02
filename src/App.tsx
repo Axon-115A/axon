@@ -176,9 +176,6 @@ export default function App() {
 		[setEdges]
 	);
 
-	const handlePasswordReset = () => {
-	}
-
 	const handleAuthModalSwitch = () => {
 		if (signUpOpened) {
 			setSignUpOpened(false)

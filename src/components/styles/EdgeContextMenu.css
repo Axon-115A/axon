@@ -1,60 +1,15 @@
-/* General Menu Styling */
-.hex-menu {
-	display: -ms-inline-flexbox;
-	/* grid-template-columns: repeat(3, 1fr); */
-	gap: 0px;
-	/* grid-template-rows: repeat(5, auto); */
-	justify-content: center;
-	align-items: center;
-	background: none;
-	padding: none;
-	border-radius: none;
-	position: absolute;
-	width: 1px;
+.custom-menu .menu-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-
-/* Rows with Hexagonal Alignment */
-.hex-row {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: none;
+.custom-menu .menu-row img {
+    width: 24px;
+    height: 24px;
 }
-
-/* Menu Items (Hexagonal Styling) */
-.menu-item {
-	width: 40px;
-	height: 40px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background: #384764;
-	clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-	transition: background 0.3s ease;
-	cursor: pointer;
-}
-
-/* SVG Icon Styling */
-.menu-item img {
-	width: 24px;
-	height: 24px;
-	pointer-events: none;
-	/* Prevent icon from interfering with click events */
-}
-
-/* Hover Effect */
-.menu-item:hover {
-	background: #666;
-}
-
-/* Highlight Selected Item */
-.menu-item.selected {
-	background: #888;
-}
-
-/* Center the Hex Rows (Optional) */
-.hex-row:nth-child(2),
-.hex-row:nth-child(4) {
-	margin-left: 0px;
-	/* Indent second and fourth rows for hexagonal shape */
+.custom-menu .menu-row .szh-menu__item {
+    padding: 4px 8px;
+    font-size: 8px;
+    min-height: auto;
+    min-width: auto;
 }

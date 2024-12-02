@@ -36,11 +36,11 @@ const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, a
             theming='dark'
             className="custom-menu"
         >
-            <div className='hex-menu'>
+            <div className='menu-row'>
                 <div className="hex-row">
-                    <MenuItem value="Change to Solid" onClick={() => { onTextureChange('default') }}>
-                        <div className='menu-item solid'>
-                            <img src={Solid} />
+                    <MenuItem value="EditEdgeLabel" onClick={onEditEdgeLabel}>
+                        <div className="menu-item editLabel">
+                            <img src={EditLabel} />
                         </div>
                     </MenuItem>
                 </div>
@@ -52,39 +52,43 @@ const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, a
                             <img src={Thick} />
                         </div>
                     </MenuItem>
-                    <MenuItem value="Toggle source arrow" onClick={() => { onAddArrow(true) }}>
-                        <div className="menu-item rightArrow">
-                            <img src={Right} />
-                        </div>
-                    </MenuItem>
-                </div>
-
-
-                <div className="hex-row">
-                    <MenuItem value="EditEdgeLabel" onClick={onEditEdgeLabel}>
-                        <div className="menu-item editLabel">
-                            <img src={EditLabel} />
-                        </div>
-                    </MenuItem>
-                    <MenuItem value="Change to Dashed" onClick={() => { onTextureChange('dashed') }}>
-                        <div className="menu-item dashed">
-                            <img src={Dashed} />
-                        </div>
-                    </MenuItem>
-                    <MenuItem value="Change Color" onClick={onColorChangeEdge}>
-                        <div className="menu-item colorPicker" >
-                            <img src={ColorWheel} />
-                        </div>
-                    </MenuItem>
-                </div>
-
-
-                <div className="hex-row">
                     <MenuItem value="Change to Thin" onClick={() => { onThicknessChange('default') }}>
                         <div className="menu-item thin">
                             <img src={Thin} />
                         </div>
                     </MenuItem>
+                </div>
+
+
+                <div className="hex-row">
+
+                    <MenuItem value="Change to Solid" onClick={() => { onTextureChange('default') }}>
+                        <div className='menu-item solid'>
+                            <img src={Solid} />
+                        </div>
+                    </MenuItem>
+
+                    <MenuItem value="Change to Dashed" onClick={() => { onTextureChange('dashed') }}>
+                        <div className="menu-item dashed">
+                            <img src={Dashed} />
+                        </div>
+                    </MenuItem>
+                    <MenuItem value="Change Dotted" onClick={() => { onTextureChange('dotted') }}>
+                        <div className="menu-item dotted">
+                            <img src={Dotted} />
+                        </div>
+                    </MenuItem>
+                </div>
+
+
+                <div className="hex-row">
+
+                    <MenuItem value="Toggle source arrow" onClick={() => { onAddArrow(true) }}>
+                        <div className="menu-item rightArrow">
+                            <img src={Right} />
+                        </div>
+                    </MenuItem>
+
                     <MenuItem value="Toggle destination arrow" onClick={() => { onAddArrow(false) }}>
                         <div className="menu-item leftArrow"  >
                             <img src={Left} />
@@ -95,9 +99,9 @@ const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, a
 
                 <div className="hex-row">
 
-                    <MenuItem value="Change Dotted" onClick={() => { onTextureChange('dotted') }}>
-                        <div className="menu-item dotted">
-                            <img src={Dotted} />
+                    <MenuItem value="Change Color" onClick={onColorChangeEdge}>
+                        <div className="menu-item colorPicker" >
+                            <img src={ColorWheel} />
                         </div>
                     </MenuItem>
 
