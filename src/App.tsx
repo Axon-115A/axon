@@ -3,21 +3,14 @@ import {
 	ReactFlow,
 	useNodesState,
 	addEdge,
-	MiniMap,
 	Background,
 	MarkerType,
 	ReactFlowProvider,
 	ReactFlowInstance,
 	BackgroundVariant,
-	getIncomers,
-	getOutgoers,
-	getConnectedEdges,
 	ConnectionMode,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-
-// react flow recommends against using their built-in state management, uses zustand to replace it?
-// import { useShallow } from 'zustand/react/shallow';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -32,28 +25,30 @@ import '@mantine/tiptap/styles.css';
 import { Session } from '@supabase/supabase-js'
 import debounce from 'lodash.debounce';
 
-// custom components
 import { Connection, Edge } from 'reactflow';
 import { useEdgesState } from '@xyflow/react';
+
+// custom components
 import CustomEdge from './components/CustomEdge';
 import EdgeContextMenu from './components/EdgeContextMenu';
 import CustomNode from './components/CustomNode';
-
 import ContextMenu from './components/ContextMenu';
 import NotesWindowBlocknote from './components/NotesWindowBlocknote';
-import HelpModal from './components/modals/HelpModal';
-import ClearModal from './components/modals/ClearModal';
-import EditLabelModal from './components/modals/EditLabelModal';
 import ExtendedCanvasControls from './components/ExtendedCanvasControls';
 import SignInModal from "./components/auth/SignIn"
 import SignUpModal from './components/auth/SignUp';
 import LogOutModal from './components/auth/LogOut';
 import NodeList from './components/NodeList';
+
+//modals
+import ClearModal from './components/modals/ClearModal';
+import HelpModal from './components/modals/HelpModal';
+import EditLabelModal from './components/modals/EditLabelModal';
 import ColorPickerModal from './components/modals/ColorPickerModal';
 import DeleteNodeModal from './components/modals/DeleteNodeModal';
 
+//namespaces
 import { Login } from './Login';
-import ChosenColorScheme from './AxonRollYourOwnColorSchemeConstructionSet';
 import { ThemeManager } from './ThemeManager';
 
 const initialNodes: any = [];
@@ -277,12 +272,6 @@ export default function App() {
 		setNotesWindowNode(node);
 		setNotesWindowVisibility(true);
 	}
-
-	// const onNodeDoubleClick = (_event)
-
-
-
-
 
 	const onShapeChange = () => {
 		if (contextMenu.selectedNodeId) {
@@ -612,15 +601,6 @@ export default function App() {
 							connectionRadius={35} //the min distance an edge has to be dragged close to a handle before it snaps to it. default is 20
 						>
 							<div>
-								{/* <MiniMap 
-								position="bottom-left" 
-								style={{ position: 'absolute', bottom: '0px', left: '30px' }} 
-								nodeColor={(node: any) => {return node.data.backgroundColor}} 
-								maskColor={'var(--minimap-color)'} 
-								pannable
-								zoomable
-								zoomStep={1}
-							/> */}
 								<ExtendedCanvasControls
 									clearCanvas={() => setClearModalOpened(true)}
 									position="bottom-left"
@@ -653,10 +633,6 @@ export default function App() {
 							onColorChangeEdge={onColorChangeEdge}
 
 							onAddArrow={onAddArrow}
-
-						// onDirectionRight={onDirectionRight}
-						// onDirectionLeft={onDirectionLeft}
-
 						/>
 
 						<EditLabelModal

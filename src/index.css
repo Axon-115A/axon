@@ -9,20 +9,15 @@
 	-moz-osx-font-smoothing: grayscale;
 
 	color-scheme: light dark;
-	/* color: rgba(255, 255, 255, 0.87);
-	background-color: #242424; */
 
 	/* light theme */
 	--cookie: #4A4643;
 
 	--background-color:  #f5ebe0;
-	--minimiap-color:    #edede9;
 	--canvas-controls:    var(--cookie);
 	--node-list:          var(--cookie);
 	--sign-up-in-buttons: var(--cookie);
 	--note-window-color:  var(--cookie);
-	/* --default-node-color: #d5bdaf;
-	--default-edge-color: #010204; */
 }
 
 /* dark theme */
@@ -30,13 +25,10 @@
 	--interface: #384764;
 
 	--background-color:  #090f10;
-	--minimiap-color:     var(--interface);
 	--canvas-controls:    var(--interface);
 	--node-list:          var(--interface);
 	--sign-up-in-buttons: var(--interface);
 	--note-window-color:  var(--interface);
-	/* --default-node-color: #004f55;
-	--default-edge-color: #949494; */
 }
 
 a {
