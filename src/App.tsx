@@ -297,6 +297,7 @@ export default function App() {
 			if (selectedNode) {
 				setCurrentLabel(selectedNode.data.label as string);
 				setEditModalOpened(true);
+				setEditModalIsNode(true);
 			}
 		}
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
@@ -641,10 +642,7 @@ export default function App() {
 							onClose={() => setEditModalOpened(false)}
 							onConfirm={handleLabelChange}
 							isForNode={editModalIsNode}
-
 						/>
-
-						{/* help dialog and button */}
 						<HelpModal
 							opened={helpOpened}
 							onClose={handleClose}
