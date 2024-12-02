@@ -11,7 +11,7 @@ const CustomNode = ({ data, selected }: any) => {
 		outlineOffset: '-2px',
 		borderRadius: (data.shape == 'rect') ? '5px' : '50%'
 	}
-	if (selected) selectionStyle['filter'] = 'drop-shadow(0 0 3px white)';
+	if (selected) selectionStyle['boxShadow'] = '0 0 5px 0px white';
 
 	return (
 		<div className={data.shape} style={{
