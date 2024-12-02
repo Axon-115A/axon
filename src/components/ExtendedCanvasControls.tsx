@@ -13,8 +13,11 @@ interface ExtendedCanvasControlsProps {
 }
 
 const ExtendedCanvasControls: React.FC<ExtendedCanvasControlsProps> = ({ clearCanvas, position, saveCanvas, helpHandler }) => {
-    document.documentElement.style.setProperty('--xy-controls-button-background-color', ChosenColorScheme.canvasControls);
+    //todo: find a better way to force color scheme
+    document.documentElement.style.setProperty('--xy-controls-button-background-color', 'var(--canvas-controls)');
+    const a = getComputedStyle(document.documentElement).getPropertyValue('--canvas-controls').trim();
 
+    //console.log(a);
     return (
         <Controls position={position} showInteractive={ false } style={{ display: 'flex', gap: '2px' }}>
             <ControlButton onClick={helpHandler.open} title='Help'>

@@ -1,17 +1,20 @@
 import { Handle, Position } from '@xyflow/react';
 import './styles/Handles.css';
 import './styles/NodeShapes.css';
-import { adaptTextColor } from '../Utilities';
+import { ThemeManager } from '../ThemeManager';
 
 // Custom node component to render as a rectangle
 const CustomNode = ({ data, selected }: any) => {
-	const outlineColor = "#81ECEC";
 	let selectionStyle : React.CSSProperties = {
-		outline: `2px solid ${outlineColor}`,
+		outline: `2px solid #81ECEC`,
 		outlineOffset: '-2px',
 		borderRadius: (data.shape == 'rect') ? '5px' : '50%'
 	}
-	if (selected) selectionStyle['boxShadow'] = '0 0 5px 0px white';
+
+	if (selected) {
+		const shadowColor = ThemeManager.getCurrentTheme() == 'light' ? 'black' : 'white';
+		selectionStyle['boxShadow'] = `0 0 5px 0px ${shadowColor}`;
+	}
 
 	return (
 		<div className={data.shape} style={{
@@ -21,7 +24,7 @@ const CustomNode = ({ data, selected }: any) => {
 			<div style={{
 				textAlign: 'center',
 				width: '100%',
-				color: adaptTextColor(data.backgroundColor)
+				color: ThemeManager.adaptTextColor(data.backgroundColor)
 			}}>
 				{data.label}
 			</div>

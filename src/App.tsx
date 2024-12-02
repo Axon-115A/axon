@@ -53,6 +53,7 @@ import ColorPickerModal from './components/modals/ColorPickerModal';
 
 import { Login } from './Login';
 import ChosenColorScheme from './AxonRollYourOwnColorSchemeConstructionSet';
+import { ThemeManager } from './ThemeManager';
 
 const initialNodes: any = [];
 const initialEdges = [] as CustomEdge[];
@@ -151,7 +152,7 @@ export default function App() {
 				selected: false,
 				type: 'custom-edge',
 				data: {
-					color: ChosenColorScheme.defaultEdgeColor, //'#808080',
+					color: ThemeManager.defaultEdgeColor.value,  //ChosenColorScheme.defaultEdgeColor, //'#808080',
 					thickness: 'default',
 					texture: 'solid',
 					label: '',
@@ -160,11 +161,11 @@ export default function App() {
 				},
 				markerEnd: {
 					type: MarkerType.ArrowClosed,
-					color: ChosenColorScheme.defaultEdgeColor
+					color: ThemeManager.defaultEdgeColor.value,//ChosenColorScheme.defaultEdgeColor
 				},
 				markerStart: {
 					type: MarkerType.ArrowClosed,
-					color: ChosenColorScheme.defaultEdgeColor
+					color: ThemeManager.defaultEdgeColor.value,//ChosenColorScheme.defaultEdgeColor
 				},
 			};
 
@@ -463,13 +464,19 @@ export default function App() {
 			y: event.clientY - 30,
 		});
 
+		// const defaultNodeColor = getComputedStyle(document.documentElement).getPropertyValue('var(--default-node-color)').trim();
+		// console.log(defaultNodeColor);
+		// console.log("theme:", document.body.getAttribute('data-theme'));
+		console.log(ThemeManager.defaultNodeColor.value)
+
+
 		const newNode = {
 			id: uuidv4(),
 			position: { x: position?.x ?? 0, y: position?.y ?? 0 },
 			data: {
 				label: "New Node",
 				notes: "",
-				backgroundColor: ChosenColorScheme.defaultNodeColor, //"#6c5ce7"
+				backgroundColor: ThemeManager.defaultNodeColor.value, //ChosenColorScheme.defaultNodeColor, //"#6c5ce7"
 				shape: "rect"
 			},
 			type: 'custom',
@@ -546,6 +553,8 @@ export default function App() {
 		)
 	}
 
+	document.body.setAttribute('data-theme', 'dark');
+
 	return (
 		// why is mantine set to light mode by default?
 		<MantineProvider defaultColorScheme="dark">
@@ -587,7 +596,7 @@ export default function App() {
 								position="bottom-left" 
 								style={{ position: 'absolute', bottom: '0px', left: '30px' }} 
 								nodeColor={(node: any) => {return node.data.backgroundColor}} 
-								maskColor={ChosenColorScheme.minimap} 
+								maskColor={'var(--minimap-color)'} 
 								pannable
 								zoomable
 								zoomStep={1}
@@ -600,7 +609,7 @@ export default function App() {
 								/>
 							</div>
 
-							<Background style={{ backgroundColor: ChosenColorScheme.background }} variant={BackgroundVariant.Dots} gap={24} size={2} />
+							<Background style={{ backgroundColor: 'var(--background-color)' }} variant={BackgroundVariant.Dots} gap={24} size={2} />
 						</ReactFlow>
 						<ContextMenu
 							isOpen={contextMenu.isOpen}
@@ -667,16 +676,16 @@ export default function App() {
 						>
 
 							{session ? (
-								<Button onClick={() => setLogOutOpened(true)} style={{ backgroundColor: ChosenColorScheme.signUpInButtons }}>
+								<Button onClick={() => setLogOutOpened(true)} style={{ backgroundColor: 'var(--sign-up-in-buttons)' }}>
 									Log Out
 								</Button>
 							) : (
 								<>
-									<Button onClick={() => setSignUpOpened(true)} style={{ backgroundColor: ChosenColorScheme.signUpInButtons }}>
+									<Button onClick={() => setSignUpOpened(true)} style={{ backgroundColor: 'var(--sign-up-in-buttons)' }}>
 										Sign Up
 									</Button>
 
-									<Button onClick={() => setSignInOpened(true)} style={{ backgroundColor: ChosenColorScheme.signUpInButtons }}>
+									<Button onClick={() => setSignInOpened(true)} style={{ backgroundColor: 'var(--sign-up-in-buttons)' }}>
 										Sign In
 									</Button>
 								</>

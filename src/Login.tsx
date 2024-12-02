@@ -1,6 +1,5 @@
 import { createClient, Provider, Session } from '@supabase/supabase-js'
 import { notifications } from '@mantine/notifications';
-import { defaultViewport } from './Utilities';
 
 export namespace Login {
 
@@ -9,6 +8,11 @@ export namespace Login {
     export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
     export const flowKey = 'axon-flow';
 
+    export const defaultViewport = {
+        "x": 0,
+        "y": 0,
+        "zoom": 1
+    }
 
     export const handleSignUp = async (
         email: string,

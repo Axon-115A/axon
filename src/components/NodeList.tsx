@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useReactFlow } from '@xyflow/react';
 import { Button, Accordion, Checkbox, TextInput } from '@mantine/core';
-import { adaptTextColor } from '../Utilities';
+import { ThemeManager } from '../ThemeManager';
 import './styles/NodeList.css';
 
 import ChosenColorScheme from '../AxonRollYourOwnColorSchemeConstructionSet';
@@ -38,9 +38,9 @@ const NodeList: React.FC<Props> = ({ nodeList }) => {
                     <Button
                         onClick={() => { zoomToNode(node) }}
                         className='nodeListButton' color={node.data.backgroundColor}
-                        style={{ color: adaptTextColor(node.data.backgroundColor ?? "6c5ce7") }}
+                        style={{ color: ThemeManager.adaptTextColor(node.data.backgroundColor ?? "6c5ce7") }}
                     >
-                        <div style={{fontSize: '0.85em'}}>
+                        <div style={{ fontSize: '0.85em' }}>
                             {node.data.label}
                         </div>
                     </Button>
@@ -54,7 +54,7 @@ const NodeList: React.FC<Props> = ({ nodeList }) => {
     )
 
     return (
-        <Accordion className="nodeAccordion" style={{backgroundColor: ChosenColorScheme.nodeList}}>
+        <Accordion className="nodeAccordion" style={{ backgroundColor: 'var(--node-list)' }}>
             <Accordion.Item key={0} value={'0'}>
 
                 <Accordion.Control>

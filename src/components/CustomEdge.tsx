@@ -4,6 +4,7 @@ import {
 	getBezierPath,
 	EdgeProps,
 } from '@xyflow/react';
+import { ThemeManager } from '../ThemeManager';
 
 interface CustomEdgeProps extends EdgeProps {
 	data: {
@@ -54,7 +55,10 @@ export default function CustomEdge({ id, selected, sourceX, sourceY, sourcePosit
 		strokeWidth: thickness,
 		strokeDasharray: texture,
 	}		
-	if (selected) edgeStyle['filter'] = 'drop-shadow(0 0 3px white)';
+	if (selected) {
+		const shadowColor = ThemeManager.getCurrentTheme() == 'light' ? 'black' : 'white';
+		edgeStyle['filter'] = `drop-shadow(0 0 3px ${shadowColor})`;
+	}
 
 	return (
 		<>

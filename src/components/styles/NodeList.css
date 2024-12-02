@@ -9,6 +9,10 @@
     border-radius: 10px;
 }
 
+.idk:hover {
+    background-color: black;
+}
+
 /* Accordion Panel scroll settings */
 .nodeAccordion .mantine-Accordion-panel {
     min-height: 100%;

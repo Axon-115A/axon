@@ -68,7 +68,7 @@ const Beige = {
 }
 
 
-const ChosenColorScheme = CollectiveColorScheme;
+const ChosenColorScheme = Beige;
 //           Change this  ^^^^^^^^^^^^^ to the name of your custom color scheme
 
 
