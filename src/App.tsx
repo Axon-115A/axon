@@ -259,6 +259,7 @@ export default function App() {
 
 	const onEdgeContextMenu = (event: React.MouseEvent, edge: any) => {
 		event.preventDefault();
+
 		setEdgeContextMenu({
 			isOpen: true,
 			anchorX: event.clientX,
@@ -276,6 +277,11 @@ export default function App() {
 		setNotesWindowNode(node);
 		setNotesWindowVisibility(true);
 	}
+
+	// const onNodeDoubleClick = (_event)
+
+
+
 
 
 	const onShapeChange = () => {
@@ -472,6 +478,17 @@ export default function App() {
 		setNodes((nds) => nds.concat(newNode));
 	};
 
+
+	const handleNodeDoubleClick = (nodeId: string) => {
+		const selectedNode = nodes.find(node => node.id === nodeId);
+		if (selectedNode) {
+		  setCurrentLabel(selectedNode.data.label as string);
+		  setContextMenu(prev => ({ ...prev, selectedNodeId: nodeId }));
+		  setEditModalOpened(true);
+		}
+	  };
+	  
+
 	// clearing the canvas and closing notes window
 	const handleClearCanvas = () => {
 		setNodes([]);
@@ -550,6 +567,7 @@ export default function App() {
 							onClick={onClick}
 							onNodeClick={onNodeClick}
 
+							onNodeDoubleClick={(_, node) => handleNodeDoubleClick(node.id)} 
 							fitView
 							onInit={onInit}
 							colorMode='dark'

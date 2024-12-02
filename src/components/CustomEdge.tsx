@@ -14,9 +14,6 @@ interface CustomEdgeProps extends EdgeProps {
 		startArrowVisible: boolean;
 		endArrowVisible: boolean;
 	};
-	// EdgeProps already include selected, so you don't need to add it manually.
-	//markerEnd?: EdgeMarker;
-	//markerStart?: EdgeMarker;
 }
 
 export default function CustomEdge({ id, selected, sourceX, sourceY, sourcePosition, targetPosition, targetX, targetY, data, markerEnd, markerStart }: CustomEdgeProps): JSX.Element {
