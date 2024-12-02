@@ -1,7 +1,13 @@
 export namespace ThemeManager {
 
+	export function setCurrentTheme(theme: string) {
+		if (theme != 'light' && theme != 'dark') throw new Error(`Invald theme "${theme}"`);
+
+		document.documentElement.setAttribute('data-theme', theme);
+	}
+
 	export function getCurrentTheme() {
-		return document.body.getAttribute("data-theme");
+		return document.documentElement.getAttribute("data-theme");
 	}
 
 	//if your system theme is set to light, getComputedStyle will ALWAYS return light, even if the site theme is set to dark. other than that, there is no way to

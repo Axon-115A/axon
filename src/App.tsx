@@ -152,7 +152,7 @@ export default function App() {
 				selected: false,
 				type: 'custom-edge',
 				data: {
-					color: ThemeManager.defaultEdgeColor.value,  //ChosenColorScheme.defaultEdgeColor, //'#808080',
+					color: ThemeManager.defaultEdgeColor.value,
 					thickness: 'default',
 					texture: 'solid',
 					label: '',
@@ -161,11 +161,11 @@ export default function App() {
 				},
 				markerEnd: {
 					type: MarkerType.ArrowClosed,
-					color: ThemeManager.defaultEdgeColor.value,//ChosenColorScheme.defaultEdgeColor
+					color: ThemeManager.defaultEdgeColor.value,
 				},
 				markerStart: {
 					type: MarkerType.ArrowClosed,
-					color: ThemeManager.defaultEdgeColor.value,//ChosenColorScheme.defaultEdgeColor
+					color: ThemeManager.defaultEdgeColor.value,
 				},
 			};
 
@@ -464,19 +464,13 @@ export default function App() {
 			y: event.clientY - 30,
 		});
 
-		// const defaultNodeColor = getComputedStyle(document.documentElement).getPropertyValue('var(--default-node-color)').trim();
-		// console.log(defaultNodeColor);
-		// console.log("theme:", document.body.getAttribute('data-theme'));
-		console.log(ThemeManager.defaultNodeColor.value)
-
-
 		const newNode = {
 			id: uuidv4(),
 			position: { x: position?.x ?? 0, y: position?.y ?? 0 },
 			data: {
 				label: "New Node",
 				notes: "",
-				backgroundColor: ThemeManager.defaultNodeColor.value, //ChosenColorScheme.defaultNodeColor, //"#6c5ce7"
+				backgroundColor: ThemeManager.defaultNodeColor.value,
 				shape: "rect"
 			},
 			type: 'custom',
@@ -553,7 +547,7 @@ export default function App() {
 		)
 	}
 
-	document.body.setAttribute('data-theme', 'dark');
+	ThemeManager.setCurrentTheme("dark");
 
 	return (
 		// why is mantine set to light mode by default?
