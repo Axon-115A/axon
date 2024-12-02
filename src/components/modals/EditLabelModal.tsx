@@ -1,7 +1,7 @@
 // components/EditLabelModal.tsx
 import React, { useEffect } from 'react';
 import { Modal, TextInput, Button } from '@mantine/core';
-import '../styles/EditLabelModel.css';
+import '../styles/EditLabelModal.css';
 
 interface EditLabelModalProps {
     opened: boolean;
