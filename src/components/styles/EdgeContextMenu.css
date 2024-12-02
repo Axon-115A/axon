@@ -1,11 +1,11 @@
 /* General Menu Styling */
 .hex-menu {
-    /* display: -ms-inline-flexbox; */
+    display: -ms-inline-flexbox; 
     /* grid-template-columns: repeat(3, 1fr); */
     gap: 0px;
     /* grid-template-rows: repeat(5, auto); */
-    /* justify-content: center; */
-    /* align-items: center; */
+    justify-content: center;
+    align-items: center; 
     background: none;
     padding: none;
     border-radius: none;
