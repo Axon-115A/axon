@@ -1,5 +1,5 @@
 # stage 1 - build the application with vite
-FROM node:22-alpine as build
+FROM node:22-alpine AS build
 
 COPY . /axon
 WORKDIR /axon
