@@ -21,7 +21,7 @@ const NodeList: React.FC<Props> = ({ nodeList }) => {
 
 
     const getButtonsFromNodes = (nodeList: any) => {
-        const searchQuery = new RegExp(searchBarValue, "i")
+        const searchQuery = new RegExp(searchBarValue, "i") //i flag makes the regex matching case insensitive
 
         return Array.from(nodeList)
             .filter((node: any) => {
