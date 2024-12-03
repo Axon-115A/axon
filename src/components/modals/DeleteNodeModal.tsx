@@ -8,6 +8,8 @@ interface Props {
     onConfirm: () => void;
 }
 
+// made by Nikolas, here I create a Mantine modal that pops up when an edited node is about to be deleted.
+
 const DeleteNodeModal: React.FC<Props> = ({opened, onClose, onConfirm}) => (
     <>
       <Modal

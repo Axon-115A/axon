@@ -8,6 +8,8 @@ interface Props {
     onConfirm: () => void;
 }
 
+// modal created by Nikolas, this modal acts as a confirmation screen that pops up when the clear button is pressed.
+
 const ClearModal: React.FC<Props> = ({ opened, onClose, onConfirm }) => (
     <>
         <Modal

@@ -7,6 +7,8 @@ interface Props {
     onClose: () => void;
 }
 
+// Mantine modal created by Nikolas, this modal appears when the help button is pressed, and displays the controls to the user.
+
 const HelpModal: React.FC<Props> = ({ opened, onClose }) => (
     <>
         <Modal

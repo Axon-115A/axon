@@ -11,6 +11,8 @@ interface EditLabelModalProps {
     isForNode: boolean;
 }
 
+// Mantine modal created by Nikolas, this modal appears when the edit label button is pressed, and allows for the user to input a new node label.
+
 const EditLabelModal: React.FC<EditLabelModalProps> = ({ opened, label, onClose, onConfirm, isForNode }) => {
     const [newLabel, setNewLabel] = React.useState(label);
 

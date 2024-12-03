@@ -11,6 +11,8 @@ interface ColorPickerModalProps {
     isForNode: boolean; // this is for differentiating between edge and node for colorpicker
 }
 
+// Mantine modal created by Nikolas, this modal appears when the user clicks either the node or edge color change button. This allows the user to change the color of the node or edge. It contains a color picker and color input.
+
 const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ opened, onClose, onConfirm, initialColor, isForNode }) => {
     const [selectedColor, setSelectedColor] = useState(initialColor);
 
