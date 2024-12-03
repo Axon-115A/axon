@@ -10,6 +10,13 @@ export namespace ThemeManager {
 		return document.documentElement.getAttribute("data-theme");
 	}
 
+	export function toggleTheme() {
+		const currentTheme = getCurrentTheme();
+		console.log(currentTheme);
+		setCurrentTheme(currentTheme == 'light' ? 'dark' : 'light');
+		console.log(getCurrentTheme())
+	}
+
 	//if your system theme is set to light, getComputedStyle will ALWAYS return light for var(--default-node-color), even if the site theme is set to dark. other than that, there is no way to
 	//read the individual light/dark mode color schemes (unless you straight up parse every css rule). hence, this somewhat convoluted method.
 	//also, because of the light/dark mode css, the background of a node color by default will be the string literal "var(--default-node-color)". this
@@ -39,6 +46,8 @@ export namespace ThemeManager {
 	* Calculates luminance of background color and returns 'white' or 'black'
 	*/
 	export function adaptTextColor(hex: string) {
+		if (!hex) hex = defaultNodeColor.value;
+
 		//remove # from hex string
 		hex = hex.replace(/^#/, '');
 

@@ -131,7 +131,7 @@ export default function App() {
 
 	const onInit = (instance: ReactFlowInstance) => {
 		setReactFlowInstance(instance);
-		// console.log(supabase)
+		ThemeManager.setCurrentTheme("dark");
 	};
 
 	const onConnect = useCallback(
@@ -149,7 +149,7 @@ export default function App() {
 				selected: false,
 				type: 'custom-edge',
 				data: {
-					color: ThemeManager.defaultEdgeColor.value,
+					color: null,
 					thickness: 'default',
 					texture: 'solid',
 					label: '',
@@ -371,7 +371,7 @@ export default function App() {
 		if (contextMenu.selectedNodeId) {
 			const selectedNode = nodes.find(node => node.id === contextMenu.selectedNodeId);
 			if (selectedNode) {
-				setSelectedColor(selectedNode.data.backgroundColor as string);
+				setSelectedColor((selectedNode.data.backgroundColor ?? ThemeManager.defaultNodeColor.value) as string);
 				setColorModalOpened(true);
 				setColorModalIsNode(true);
 			}
@@ -384,7 +384,7 @@ export default function App() {
 		if (edgeContextMenu.selectedEdgeId) {
 			const selectedEdge = edges.find(edge => edge.id === edgeContextMenu.selectedEdgeId);
 			if (selectedEdge) {
-				setSelectedColor(selectedEdge.data.color); //  as string
+				setSelectedColor(selectedEdge.data.color ?? ThemeManager.defaultEdgeColor.value);
 				setColorModalOpened(true);
 				setColorModalIsNode(false);
 			}
@@ -481,7 +481,7 @@ export default function App() {
 			data: {
 				label: "New Node",
 				notes: "",
-				backgroundColor: ThemeManager.defaultNodeColor.value,
+				backgroundColor: null,
 				shape: "rect"
 			},
 			type: 'custom',
@@ -563,8 +563,6 @@ export default function App() {
 		)
 	}
 
-	ThemeManager.setCurrentTheme("dark");
-
 	return (
 		// why is mantine set to light mode by default?
 		<MantineProvider defaultColorScheme="dark">
@@ -605,7 +603,6 @@ export default function App() {
 								<ExtendedCanvasControls
 									clearCanvas={() => setClearModalOpened(true)}
 									position="bottom-left"
-									saveCanvas={() => { handleSaveState() }}
 									helpHandler={helpHandler}
 								/>
 							</div>

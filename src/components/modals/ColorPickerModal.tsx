@@ -1,6 +1,7 @@
 // components/EditLabelModal.tsx
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, ColorPicker, ColorInput } from '@mantine/core';
+import { ThemeManager } from '../../namespaces/ThemeManager';
 import '../styles/ColorPickerModal.css';
 
 interface ColorPickerModalProps {
@@ -12,7 +13,7 @@ interface ColorPickerModalProps {
 }
 
 const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ opened, onClose, onConfirm, initialColor, isForNode }) => {
-    const [selectedColor, setSelectedColor] = useState(initialColor);
+    const [selectedColor, setSelectedColor] = useState(initialColor ?? ThemeManager.defaultNodeColor.value);
 
     useEffect(() => {
         if (opened) {
