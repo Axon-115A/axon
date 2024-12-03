@@ -252,10 +252,9 @@ export default function App() {
 		});
 	};
 
-
-	// handles poping up the edge toolbar - Sakshi 
 	const onEdgeContextMenu = (event: React.MouseEvent, edge: any) => {
 		event.preventDefault();
+
 		setEdgeContextMenu({
 			isOpen: true,
 			anchorX: event.clientX,
@@ -292,8 +291,6 @@ export default function App() {
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
 
-	// function made by Nikolas, which allows for the node's label to be updated
-
 	const onEdit = () => {
 		if (contextMenu.selectedNodeId) {
 			const selectedNode = nodes.find(node => node.id === contextMenu.selectedNodeId);
@@ -306,7 +303,6 @@ export default function App() {
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
 
-	// Sakshi added the label change specific to edges 
 	const handleLabelChange = (newLabel: string, isForNode: boolean) => {
 		if (isForNode) {
 			setNodes(nodes.map(node => {
@@ -319,7 +315,6 @@ export default function App() {
 				return node;
 			}));
 		} else {
-			// if an edge is selected, return the modified label data associated with it. 
 			setEdges(edges.map(edge => {
 				if (edge.id === edgeContextMenu.selectedEdgeId) {
 					return {
@@ -332,11 +327,14 @@ export default function App() {
 		}
 	};
 
-	// function created by Nikolas, handles what happens when the node delete button is clicked; for edited nodes, the modal appears, for non-edited ones, it doesn't appear.
 	const onDeleteClicked = () => {
 		if (contextMenu.selectedNodeId) {
 			const selectedNode = nodes.find(node => node.id === contextMenu.selectedNodeId);
 			if (selectedNode) {
+				const isEdited = selectedNode.data.label !== "New Node" || selectedNode.data.notes !== "";
+				console.log(isEdited)
+				console.log(selectedNode.data.label)
+				console.log(selectedNode.data.notes)
 				if(selectedNode.data.label !== "New Node" || selectedNode.data.notes !== "")
 				{
 					setDeleteModalOpened(true);
@@ -351,7 +349,7 @@ export default function App() {
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
 
-	// function that deletes the selected node by filtering it out of the nodes array, done by Nikolas
+
 	const onDelete = () => {
 		if (contextMenu.selectedNodeId) {
 			setNodes(nodes.filter(node => node.id !== contextMenu.selectedNodeId));
@@ -368,8 +366,7 @@ export default function App() {
 		setMouseOverNode(false);
 		setNotesWindowVisibility(false);
 	}
-	
-	// function that opens the color modal if the color change button is pressed for a node, done by Nikolas
+
 	const onColorChange = () => {
 		if (contextMenu.selectedNodeId) {
 			const selectedNode = nodes.find(node => node.id === contextMenu.selectedNodeId);
@@ -382,10 +379,7 @@ export default function App() {
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
 
-
-	// EDGE CUSTOMIZATION FUNCTIONS
-
-	// Sakshi worked on using the colorModal interface to edit edge color, Umair modified it to change depending on the user's theme. 
+	//ALL FUNCTIONS FOR EDGE CUSTOMIZATION 
 	const onColorChangeEdge = () => {
 		if (edgeContextMenu.selectedEdgeId) {
 			const selectedEdge = edges.find(edge => edge.id === edgeContextMenu.selectedEdgeId);
@@ -398,8 +392,7 @@ export default function App() {
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
 
-	// Sakshi - When an edge is clicked and the edge context menu is pulled up, the thickness can be altered to thick/thin, modified by 
-	// Umair to combine two previous functions. 
+
 	const onEdgeThicknessChange = (newThickness: string) => {
 		if (edgeContextMenu.selectedEdgeId) {
 			setEdges((prevEdges) =>
@@ -420,8 +413,6 @@ export default function App() {
 		setContextMenu((prev) => ({ ...prev, isOpen: false }));
 	};
 
-	// Sakshi - When an edge is clicked and the edge context menu is pulled up, the texture can be altered to solid/dotted/dashed, modified by 
-	// Umair to combine three previous functions.
 	const onEdgeTextureChange = (textureType: string) => {
 		if (edgeContextMenu.selectedEdgeId) {
 			setEdges((prevEdges) =>
@@ -441,7 +432,6 @@ export default function App() {
 
 		setContextMenu((prev) => ({ ...prev, isOpen: false }));
 	};
-
 
 	const onAddArrow = (source: boolean) => {
 		if (edgeContextMenu.selectedEdgeId) {
@@ -464,9 +454,6 @@ export default function App() {
 		setContextMenu((prev) => ({ ...prev, isOpen: false }));
 	};
 
-
-	// interacts with the editModal interface to allow the user to add
-	// labels to their edges. Done by Sakshi 
 	const onEditEdgeLabel = () => {
 		if (edgeContextMenu.selectedEdgeId) {
 			const selectedEdge = edges.find(edges => edges.id === edgeContextMenu.selectedEdgeId);
@@ -504,7 +491,6 @@ export default function App() {
 	};
 
 
-	// double clicking a node allows the user to edit its label. Done by Sakshi
 	const handleNodeDoubleClick = (nodeId: string) => {
 		const selectedNode = nodes.find(node => node.id === nodeId);
 		if (selectedNode) {
@@ -514,25 +500,23 @@ export default function App() {
 		}
 	  };
 	
-	// handling the deletion of a node, done by Nikolas
 	const handleDeleteNode = () => {
-		onDelete(); // calls onDelete to delete the node
-		setNotesWindowVisibility(false); // closes notes window
-		setTimeout(handleSaveState, 0); // Run handleSaveState after ensuring nodes and edges are updated
+		onDelete();
+		setNotesWindowVisibility(false);
+		setTimeout(handleSaveState, 0);
 	};
 
-	// clearing the canvas and closing notes window, done by Nikolas
+	// clearing the canvas and closing notes window
 	const handleClearCanvas = () => {
-		setNodes([]); // clears the nodes
-		setEdges([]); // clears the edges
-		setNotesWindowVisibility(false); // closes the notes window
+		setNodes([]);
+		setEdges([]);
+		setNotesWindowVisibility(false);
 
 		// Run handleSaveState after ensuring nodes and edges are updated
 		setTimeout(handleSaveState, 0);
 
 	};
 
-	// this function, done by Nikolas and Sakshi, allows for the colors to be changed for a node or an edge. Nikolas worked on the node color change, Sakshi on the edge color.
 	const handleColorChange = (newColor: string, isNode: boolean) => {
 		if (isNode) {
 			setNodes(nodes.map(node => {
@@ -648,7 +632,7 @@ export default function App() {
 
 							onAddArrow={onAddArrow}
 						/>
-						{/* // Nikolas added the following 5 modals here. */}
+
 						<EditLabelModal
 							opened={editModalOpened}
 							label={currentLabel}
