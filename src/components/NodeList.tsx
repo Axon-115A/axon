@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { useReactFlow } from '@xyflow/react';
 import { Button, Accordion, Checkbox, TextInput } from '@mantine/core';
 import { ThemeManager } from '../namespaces/ThemeManager';
+import MagnifyingGlass from '../assets/magnifying-glass.svg'
 import './styles/NodeList.css';
 
 interface Props {
@@ -49,7 +50,7 @@ const NodeList: React.FC<Props> = ({ nodeList }) => {
 
 
     const magnifyingGlassSVG = (
-        <img src="src/assets/magnifying-glass.svg" style={{ width: '70%', height: '70%' }}></img>
+        <img src={MagnifyingGlass} style={{ width: '70%', height: '70%' }}></img>
     )
 
     return (
