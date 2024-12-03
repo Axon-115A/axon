@@ -20,6 +20,8 @@ interface ContextMenuProps {
     onColorChange: () => void;
 }
 
+// Nikolas worked on adding buttons to the controlled menu, such as color, shape, rename, and trash.
+
 // context menu
 const ContextMenu: FC<ContextMenuProps> = ({ isOpen, setOpen, anchorX, anchorY, onShapeChange, onEdit, onDelete, onColorChange }) => {
     return (
