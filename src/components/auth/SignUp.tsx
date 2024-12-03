@@ -19,9 +19,8 @@ interface Props {
 
 
 const SignUpModal: React.FC<Props> = ({ isOpen, onClose, switchAuthModals, setSession, setSignUpOpened}) => {
-	//   const emailIcon = <IconAt style={{ width: rem(16), height: rem(16) }} />;
-	//   const passIcon = <IconLock style={{ width: rem(16), height: rem(16) }} />;
 
+	// use mantine form for input validation
 	const signUpForm = useForm({
 		initialValues: {
 			email: '',
@@ -53,16 +52,11 @@ const SignUpModal: React.FC<Props> = ({ isOpen, onClose, switchAuthModals, setSe
 				}}
 			>
 				<form onSubmit={signUpForm.onSubmit((values) => {
-					//onConfirm(values.email, values.password);
-
 					Login.handleSignUp(values.email, values.password, setSession, setSignUpOpened);
-					// onClose();
 				})}>
 					<h2 style={{ textAlign: 'center', fontWeight: 'normal' }}>Create Account</h2>
 					<OauthButtons onOauthConfirm={(provider: string) => {Login.handleOauthSignIn(provider)}} />
 					<TextInput
-						//   leftSectionPointerEvents="none"
-						//   leftSection={emailIcon}
 						label="Email"
 						placeholder="user@example.com"
 						key={signUpForm.key('email')}
@@ -71,8 +65,6 @@ const SignUpModal: React.FC<Props> = ({ isOpen, onClose, switchAuthModals, setSe
 					<TextInput
 						type="password"
 						mt="md"
-						//   leftSectionPointerEvents="none"
-						//   leftSection={passIcon}
 						label="Password"
 						placeholder="At least 8 characters long"
 						key={signUpForm.key('password')}
