@@ -146,6 +146,11 @@ const NotesWindowBlocknote: React.FC<Props> = ({ onCloseWindow, node }) => {
             <button onClick={onCloseWindow} className="closeButton">
                 <img src={CloseIcon} className="closeButtonIcon" />
             </button>
+
+
+            {/* this style block is apparently the only way to dynammically change the blocknote window's max height  */}
+            {/* inline styles don't work - this is ugly but it does, don't change it  */}
+            
             <style>
                 {`
                     
