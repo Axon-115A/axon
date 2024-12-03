@@ -2,6 +2,7 @@ import { ControlledMenu, MenuItem } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/theme-dark.css';
 import { FC } from 'react';
+
 import './styles/EdgeContextMenu.css'
 import EditLabel from './../assets/edge_icons/edit label.svg';
 import Thin from './../assets/edge_icons/thin line.svg'
@@ -12,6 +13,11 @@ import Dotted from './../assets/edge_icons/dotted1.svg'
 import Right from './../assets/edge_icons/right.svg'
 import Left from './../assets/edge_icons/left.svg'
 import ColorWheel from './../assets/colorWheel.svg';
+
+// file created by Sakshi 
+
+// creating the interface for EdgeContextMenuProps to include
+// parameters for openness, location, edit label, thickness, texture, color, and arrows. 
 interface EdgeContextMenuProps {
     isOpen: boolean;
     setOpen: (open: boolean) => void;
@@ -24,7 +30,10 @@ interface EdgeContextMenuProps {
     onAddArrow: (source: boolean) => void;
 }
 
-
+// renders a custom context menu for managing edges in a graphical interface. 
+// provides options to edit an edge's label, change its thickness, texture, 
+// color, and toggle directional arrows, 
+// each action is tied to specific callback functions for handling updates.
 
 const EdgeContextMenu: FC<EdgeContextMenuProps> = ({ isOpen, setOpen, anchorX, anchorY, onColorChangeEdge, onThicknessChange, onTextureChange, onEditEdgeLabel, onAddArrow }) => {
     return (

@@ -1,7 +1,6 @@
 import { Controls, ControlButton } from '@xyflow/react';
 import { ThemeManager } from '../namespaces/ThemeManager';
 import TrashIcon from './../assets/trash.svg';
-import SaveIcon from './../assets/floppy.svg';
 import QuestionIcon from './../assets/question-circle.svg';
 import ThemeIcon from './../assets/toggleTheme.svg';
 

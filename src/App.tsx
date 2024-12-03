@@ -252,9 +252,10 @@ export default function App() {
 		});
 	};
 
+
+	// handles poping up the edge toolbar - Sakshi 
 	const onEdgeContextMenu = (event: React.MouseEvent, edge: any) => {
 		event.preventDefault();
-
 		setEdgeContextMenu({
 			isOpen: true,
 			anchorX: event.clientX,
@@ -305,6 +306,7 @@ export default function App() {
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
 
+	// Sakshi added the label change specific to edges 
 	const handleLabelChange = (newLabel: string, isForNode: boolean) => {
 		if (isForNode) {
 			setNodes(nodes.map(node => {
@@ -317,6 +319,7 @@ export default function App() {
 				return node;
 			}));
 		} else {
+			// if an edge is selected, return the modified label data associated with it. 
 			setEdges(edges.map(edge => {
 				if (edge.id === edgeContextMenu.selectedEdgeId) {
 					return {
@@ -379,7 +382,10 @@ export default function App() {
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
 
-	//ALL FUNCTIONS FOR EDGE CUSTOMIZATION 
+
+	// EDGE CUSTOMIZATION FUNCTIONS
+
+	// Sakshi worked on using the colorModal interface to edit edge color, Umair modified it to change depending on the user's theme. 
 	const onColorChangeEdge = () => {
 		if (edgeContextMenu.selectedEdgeId) {
 			const selectedEdge = edges.find(edge => edge.id === edgeContextMenu.selectedEdgeId);
@@ -392,7 +398,8 @@ export default function App() {
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
 
-
+	// Sakshi - When an edge is clicked and the edge context menu is pulled up, the thickness can be altered to thick/thin, modified by 
+	// Umair to combine two previous functions: ThinChange and ThickChange. 
 	const onEdgeThicknessChange = (newThickness: string) => {
 		if (edgeContextMenu.selectedEdgeId) {
 			setEdges((prevEdges) =>
@@ -413,6 +420,8 @@ export default function App() {
 		setContextMenu((prev) => ({ ...prev, isOpen: false }));
 	};
 
+	// Sakshi - When an edge is clicked and the edge context menu is pulled up, the texture can be altered to solid/dotted/dashed, modified by 
+	// Umair to combine two previous functions: SolidChange, DottedChange and DashedChange.
 	const onEdgeTextureChange = (textureType: string) => {
 		if (edgeContextMenu.selectedEdgeId) {
 			setEdges((prevEdges) =>
@@ -432,6 +441,7 @@ export default function App() {
 
 		setContextMenu((prev) => ({ ...prev, isOpen: false }));
 	};
+
 
 	const onAddArrow = (source: boolean) => {
 		if (edgeContextMenu.selectedEdgeId) {
@@ -454,6 +464,9 @@ export default function App() {
 		setContextMenu((prev) => ({ ...prev, isOpen: false }));
 	};
 
+
+	// interacts with the editModal interface to allow the user to add
+	// labels to their edges. Done by Sakshi 
 	const onEditEdgeLabel = () => {
 		if (edgeContextMenu.selectedEdgeId) {
 			const selectedEdge = edges.find(edges => edges.id === edgeContextMenu.selectedEdgeId);
@@ -491,6 +504,7 @@ export default function App() {
 	};
 
 
+	// double clicking a node allows the user to edit its label. Done by Sakshi
 	const handleNodeDoubleClick = (nodeId: string) => {
 		const selectedNode = nodes.find(node => node.id === nodeId);
 		if (selectedNode) {
@@ -634,7 +648,7 @@ export default function App() {
 
 							onAddArrow={onAddArrow}
 						/>
-						// Nikolas added the following 5 modals here.
+						{/* // Nikolas added the following 5 modals here. */}
 						<EditLabelModal
 							opened={editModalOpened}
 							label={currentLabel}
