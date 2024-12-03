@@ -84,6 +84,43 @@ const NotesWindowBlocknote: React.FC<Props> = ({ onCloseWindow, node }) => {
     //     setIsEditing(!isEditing);
     // };
 
+    /*Resizing Feature */
+    useEffect(() => {
+        const panel = document.querySelector('.panel') as HTMLDivElement | null;
+        const resizeHandle = document.querySelector('.resize-handle-top') as HTMLDivElement | null;
+        let isResizing = false;
+        let startY = 0;
+        let startHeight = 0;
+    
+        const onMouseDown = (event: MouseEvent) => {
+            if (!panel) return; // Ensure the panel exists
+            isResizing = true;
+            startY = event.clientY;
+            startHeight = panel.offsetHeight; // Safe access due to typecast
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        };
+    
+        const onMouseMove = (event: MouseEvent) => {
+            if (!isResizing || !panel) return; // Ensure resizing and panel exist
+            const dy = startY - event.clientY; // Calculate movement difference
+            const newHeight = Math.max(200, Math.min(800, startHeight + dy)); // Constrain height
+            panel.style.height = `${newHeight}px`; // Safe access due to typecast
+        };
+    
+        const onMouseUp = () => {
+            isResizing = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        };
+    
+        resizeHandle?.addEventListener('mousedown', onMouseDown);
+    
+        return () => {
+            resizeHandle?.removeEventListener('mousedown', onMouseDown);
+        };
+    }, []);
+
     const editor = useCreateBlockNote({
         initialContent: notesData || undefined,
         uploadFile: uploadFiles,
@@ -95,24 +132,18 @@ const NotesWindowBlocknote: React.FC<Props> = ({ onCloseWindow, node }) => {
     };
 
     return (
-        <Panel position='bottom-right' className='panel'>
-            <h3 className='notesTitle'>{node.data.label}</h3>
-            <button onClick={onCloseWindow} className='closeButton'>
-                <img src={CloseIcon} className='closeButtonIcon' />
+        <Panel position="bottom-right" className="panel">
+            <div className="resize-handle-top"></div>
+            <h3 className="notesTitle">{node.data.label}</h3>
+            <button onClick={onCloseWindow} className="closeButton">
+                <img src="src/assets/white_x.svg" className="closeButtonIcon" />
             </button>
-            <div style={{ height: '350px' }}>
-                <BlockNoteView
-                    editor={editor}
-                    style={{
-                        // flex: 1 '350px', /* Ensures it stretches inside the panel */
-                        overflowY: 'scroll',
-                        height: '350px'
-
-                    }}
-                    onChange={onChange}
-                    theme="dark"
-                />
-            </div>
+            <BlockNoteView
+                editor={editor}
+                className="textBox" // Use the absolute positioning styles
+                onChange={onChange}
+                theme="dark"
+            />
         </Panel>
     );
 };
