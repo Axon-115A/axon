@@ -84,9 +84,12 @@ const NotesWindowBlocknote: React.FC<Props> = ({ onCloseWindow, node }) => {
     //     setIsEditing(!isEditing);
     // };
 
+    const [panelHeight, setPanelHeight] = useState<number>(400); // Default height
+
     /*Resizing Feature */
     useEffect(() => {
         const panel = document.querySelector('.panel') as HTMLDivElement | null;
+        
         const resizeHandle = document.querySelector('.resize-handle-top') as HTMLDivElement | null;
         let isResizing = false;
         let startY = 0;
@@ -105,6 +108,7 @@ const NotesWindowBlocknote: React.FC<Props> = ({ onCloseWindow, node }) => {
             if (!isResizing || !panel) return; // Ensure resizing and panel exist
             const dy = startY - event.clientY; // Calculate movement difference
             const newHeight = Math.max(200, Math.min(800, startHeight + dy)); // Constrain height
+            setPanelHeight(newHeight); // Update state with the new height
             panel.style.height = `${newHeight}px`; // Safe access due to typecast
         };
     
@@ -121,6 +125,10 @@ const NotesWindowBlocknote: React.FC<Props> = ({ onCloseWindow, node }) => {
         };
     }, []);
 
+    useEffect(() => {
+        console.log('Panel height changed:', panelHeight);
+    }, [panelHeight]);    
+
     const editor = useCreateBlockNote({
         initialContent: notesData || undefined,
         uploadFile: uploadFiles,
@@ -133,18 +141,33 @@ const NotesWindowBlocknote: React.FC<Props> = ({ onCloseWindow, node }) => {
 
     return (
         <Panel position="bottom-right" className="panel">
-            <div className="resize-handle-top"></div>
+            <div className="resize-handle-top" />
             <h3 className="notesTitle">{node.data.label}</h3>
             <button onClick={onCloseWindow} className="closeButton">
-                <img src="src/assets/white_x.svg" className="closeButtonIcon" />
+                <img src={CloseIcon} className="closeButtonIcon" />
             </button>
+
+
+            {/* this style block is apparently the only way to dynammically change the blocknote window's max height  */}
+            {/* inline styles don't work - this is ugly but it does, don't change it  */}
+            
+            <style>
+                {`
+                    
+                    .ProseMirror.bn-editor.bn-default-styles {
+                        min-height: ${panelHeight - 50}px;
+                    }
+                `}
+            </style>
             <BlockNoteView
                 editor={editor}
+                // style={{ minHeight: `${panelHeight - 50}px` }}
                 className="textBox" // Use the absolute positioning styles
                 onChange={onChange}
                 theme="dark"
             />
         </Panel>
+            
     );
 };
 
