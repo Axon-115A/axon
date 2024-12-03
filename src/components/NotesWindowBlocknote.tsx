@@ -13,6 +13,7 @@ import './styles/NotesWindow.css';
 // Uploads a file to tmpfiles.org and returns the URL to the uploaded file.
 async function uploadFiles(file: File) {
 
+    // Check if user is signed in, throw error if not
     async function checkUserSignedIn() {
         const { data: { user }, error } = await Login.supabase.auth.getUser();
         if (error) {
@@ -29,13 +30,13 @@ async function uploadFiles(file: File) {
     }
 
 
-    const body = new FormData();
+    const body = new FormData(); // create a form to store the file
     body.append("file", file);
-    const file_uid = uuidv4();
-    const { data, error } = await Login.supabase
+    const file_uid = uuidv4(); // generate a uuid to avoid filename collisions
+    const { data, error } = await Login.supabase // upload file to user's own folder in storage bucket
         .storage
         .from('user_storage')
-        .upload(`public/${file_uid}.png`, file, {
+        .upload(`${user.id}/${file_uid}.png`, file, {
             cacheControl: '3600',
             upsert: false
         })
@@ -43,7 +44,7 @@ async function uploadFiles(file: File) {
     if (error) throw error;
     console.log(data)
 
-    return `https://tugoremjbojyqanvwglz.supabase.co/storage/v1/object/public/user_storage/public/${file_uid}.png`
+    return `https://tugoremjbojyqanvwglz.supabase.co/storage/v1/object/public/user_storage//${user.id}/${file_uid}.png` // return url of the uploaded file
 }
 
 interface Props {
