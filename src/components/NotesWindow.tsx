@@ -52,7 +52,7 @@ interface Props {
     node: any
 }
 
-const NotesWindowBlocknote: React.FC<Props> = ({ onCloseWindow, node }) => {
+const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
 
     const [notesData, setNotes] = useState(node.data.notes ? JSON.parse(node.data.notes) as PartialBlock[] : undefined);
     // const [isEditing, setIsEditing] = useState(false); //Used to be: const [spellCheckEnabled, setSpellCheck] = useState(false);
@@ -154,7 +154,6 @@ const NotesWindowBlocknote: React.FC<Props> = ({ onCloseWindow, node }) => {
             
             <style>
                 {`
-                    
                     .ProseMirror.bn-editor.bn-default-styles {
                         min-height: ${panelHeight - 50}px;
                     }
@@ -172,4 +171,4 @@ const NotesWindowBlocknote: React.FC<Props> = ({ onCloseWindow, node }) => {
     );
 };
 
-export default NotesWindowBlocknote;
+export default NotesWindow;

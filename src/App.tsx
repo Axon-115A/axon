@@ -33,7 +33,7 @@ import CustomEdge from './components/CustomEdge';
 import EdgeContextMenu from './components/EdgeContextMenu';
 import CustomNode from './components/CustomNode';
 import ContextMenu from './components/ContextMenu';
-import NotesWindowBlocknote from './components/NotesWindowBlocknote';
+import NotesWindow from './components/NotesWindow';
 import ExtendedCanvasControls from './components/ExtendedCanvasControls';
 import SignInModal from "./components/auth/SignIn"
 import SignUpModal from './components/auth/SignUp';
@@ -723,7 +723,7 @@ export default function App() {
 
 					</div>
 					{showNotesWindow &&
-						<NotesWindowBlocknote
+						<NotesWindow
 							node={notesWindowNode}
 							onCloseWindow={() => { setNotesWindowVisibility(false) }}
 						/>
