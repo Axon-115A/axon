@@ -113,7 +113,7 @@ export default function App() {
 	});
 
 
-	// adding a state to track context menu
+	//S: added a state to track context menu 
 	const [edgeContextMenu, setEdgeContextMenu] = useState({
 		isOpen: false,
 		anchorX: 0,
