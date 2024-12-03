@@ -10,7 +10,6 @@ RUN pnpm install
 
 # build-lite doesn't do lint check before building
 RUN pnpm run build-lite
-CMD [ "pnpm", "run", "preview", "--host"]
 
 # stage 2 - serve the application using caddy
 FROM caddy:alpine 
