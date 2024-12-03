@@ -7,8 +7,8 @@ import { useCreateBlockNote } from "@blocknote/react";
 import { PartialBlock } from '@blocknote/core';
 import { v4 as uuidv4 } from 'uuid';
 import { Login } from '../namespaces/Login';
+import CloseIcon from '../assets/white_x.svg';
 import './styles/NotesWindow.css';
-
 
 // Uploads a file to tmpfiles.org and returns the URL to the uploaded file.
 async function uploadFiles(file: File) {
@@ -98,7 +98,7 @@ const NotesWindowBlocknote: React.FC<Props> = ({ onCloseWindow, node }) => {
         <Panel position='bottom-right' className='panel'>
             <h3 className='notesTitle'>{node.data.label}</h3>
             <button onClick={onCloseWindow} className='closeButton'>
-                <img src="src/assets/white_x.svg" className='closeButtonIcon' />
+                <img src={CloseIcon} className='closeButtonIcon' />
             </button>
             <div style={{ height: '350px' }}>
                 <BlockNoteView
