@@ -5,7 +5,7 @@ import { ThemeManager } from '../namespaces/ThemeManager';
 
 // Custom node component to render as a rectangle
 const CustomNode = ({ data, selected }: any) => {
-	let selectionStyle : React.CSSProperties = {
+	const selectionStyle : React.CSSProperties = {
 		outline: `2px solid #81ECEC`,
 		outlineOffset: '-2px',
 		borderRadius: (data.shape == 'rect') ? '5px' : '50%'
