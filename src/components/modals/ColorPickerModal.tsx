@@ -1,6 +1,7 @@
 // components/EditLabelModal.tsx
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, ColorPicker, ColorInput } from '@mantine/core';
+import { ThemeManager } from '../../namespaces/ThemeManager';
 import '../styles/ColorPickerModal.css';
 
 interface ColorPickerModalProps {
@@ -14,7 +15,7 @@ interface ColorPickerModalProps {
 // Mantine modal created by Nikolas, this modal appears when the user clicks either the node or edge color change button. This allows the user to change the color of the node or edge. It contains a color picker and color input.
 
 const ColorPickerModal: React.FC<ColorPickerModalProps> = ({ opened, onClose, onConfirm, initialColor, isForNode }) => {
-    const [selectedColor, setSelectedColor] = useState(initialColor);
+    const [selectedColor, setSelectedColor] = useState(initialColor ?? ThemeManager.defaultNodeColor.value);
 
     useEffect(() => {
         if (opened) {

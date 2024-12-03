@@ -18,7 +18,7 @@ const CustomNode = ({ data, selected }: any) => {
 
 	return (
 		<div className={data.shape} style={{
-			backgroundColor: data.backgroundColor,
+			backgroundColor: data.backgroundColor ?? ThemeManager.defaultNodeColor.value,
 			...(selected ? selectionStyle : {})
 		}}>
 			<div style={{
