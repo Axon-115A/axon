@@ -1,5 +1,6 @@
 import { createClient, Provider, Session } from '@supabase/supabase-js'
 import { notifications } from '@mantine/notifications';
+import { Edge, ReactFlowInstance } from 'reactflow';
 
 export namespace Login {
 
@@ -48,9 +49,9 @@ export namespace Login {
         email: string,
         password: string,
         setSession: (value: any) => void,
-        setNodes: (nodeList: any[]) => void,
-        setEdges: (edgeList: any[]) => void,
-        reactFlowInstance: any,
+        setNodes: (nodeList: Node[]) => void,
+        setEdges: (edgeList: Edge[]) => void,
+        reactFlowInstance: ReactFlowInstance,
         setSignInOpened: (value: boolean) => void
     ) => {
         console.log(`Signing in`);
@@ -102,6 +103,8 @@ export namespace Login {
 
     export const handleOauthSignIn = async (provider: string) => {
         let gotrue_provider: Provider | null = null;
+
+        // create auth provider based on oauth type
         switch (provider) {
             case "google":
                 gotrue_provider = 'google';
@@ -112,7 +115,10 @@ export namespace Login {
             default:
                 console.error("Invalid provider: ", provider)
         }
+
+
         if (gotrue_provider) {
+            // log in with oauth
             const { data, error } = await supabase.auth.signInWithOAuth({
                 provider: gotrue_provider
             })
@@ -143,6 +149,9 @@ export namespace Login {
             });
         } else {
             setSession(null);
+
+            // if the user has saved data in localstorage, load it to the canvas
+            // if not, clear the canvas
             const flowJson = localStorage.getItem(flowKey);
             if (flowJson != null) {
                 console.log("user logged out, clearing canvas and replacing from local storage", flowJson);
