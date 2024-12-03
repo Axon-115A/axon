@@ -399,7 +399,7 @@ export default function App() {
 	};
 
 	// Sakshi - When an edge is clicked and the edge context menu is pulled up, the thickness can be altered to thick/thin, modified by 
-	// Umair to combine two previous functions: ThinChange and ThickChange. 
+	// Umair to combine two previous functions. 
 	const onEdgeThicknessChange = (newThickness: string) => {
 		if (edgeContextMenu.selectedEdgeId) {
 			setEdges((prevEdges) =>
@@ -421,7 +421,7 @@ export default function App() {
 	};
 
 	// Sakshi - When an edge is clicked and the edge context menu is pulled up, the texture can be altered to solid/dotted/dashed, modified by 
-	// Umair to combine two previous functions: SolidChange, DottedChange and DashedChange.
+	// Umair to combine three previous functions.
 	const onEdgeTextureChange = (textureType: string) => {
 		if (edgeContextMenu.selectedEdgeId) {
 			setEdges((prevEdges) =>

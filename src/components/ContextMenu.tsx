@@ -35,22 +35,22 @@ const ContextMenu: FC<ContextMenuProps> = ({ isOpen, setOpen, anchorX, anchorY, 
             align='center'
         >
             <div className="menu-row">
-                <MenuItem value="Change Color" onClick={onColorChange}>
+                <MenuItem value="Change Color" onClick={onColorChange} title='Color Picker'>
                     <div>
                         <img src={ColorWheel} />
                     </div>
                 </MenuItem>
-                <MenuItem value="Change Shape" onClick={onShapeChange}>
+                <MenuItem value="Change Shape" onClick={onShapeChange} title='Change Shape'>
                     <div>
                         <img src={Shapes} />
                     </div>
                 </MenuItem>
-                <MenuItem value="Rename" onClick={onEdit}>
+                <MenuItem value="Rename" onClick={onEdit} title='Edit label'>
                     <div>
                         <img src={Rename} />
                     </div>
                 </MenuItem>
-                <MenuItem value="Delete" onClick={onDelete}>
+                <MenuItem value="Delete" onClick={onDelete} title='Delete'>
                     <div>
                         <img src={TrashIcon} />
                     </div>
