@@ -1,3 +1,4 @@
+//Abstraction functions to handle theme switching, node text color, and default node/edge colors
 export namespace ThemeManager {
 
 	export function setCurrentTheme(theme: string) {
@@ -11,8 +12,7 @@ export namespace ThemeManager {
 	}
 
 	export function toggleTheme() {
-		const currentTheme = getCurrentTheme();
-		setCurrentTheme(currentTheme == 'light' ? 'dark' : 'light');
+		setCurrentTheme(getCurrentTheme() == 'light' ? 'dark' : 'light');
 	}
 
 	//if your system theme is set to light, getComputedStyle will ALWAYS return light for var(--default-node-color), even if the site theme is set to dark. other than that, there is no way to
@@ -22,7 +22,7 @@ export namespace ThemeManager {
 	const nodeLightTheme: string = "#d5bdaf";
 	const edgeLightTheme: string = "#010204";
 
-	const nodeDarkTheme: string = "#00363b"; //canva #645538  default 004f55  red DB6824 other red A14C1A 
+	const nodeDarkTheme: string = "#00363b";
 	const edgeDarkTheme: string = "#949494";
 
 	export const defaultNodeColor = {
