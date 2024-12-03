@@ -12,9 +12,7 @@ export namespace ThemeManager {
 
 	export function toggleTheme() {
 		const currentTheme = getCurrentTheme();
-		console.log(currentTheme);
 		setCurrentTheme(currentTheme == 'light' ? 'dark' : 'light');
-		console.log(getCurrentTheme())
 	}
 
 	//if your system theme is set to light, getComputedStyle will ALWAYS return light for var(--default-node-color), even if the site theme is set to dark. other than that, there is no way to
