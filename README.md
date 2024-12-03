@@ -1,7 +1,4 @@
-# useful commands: 
-pnpm install (for latest packages)
-
-pnpm run dev
+# Axon
 
 # Local run guide (dev):
 - `pnpm install`
