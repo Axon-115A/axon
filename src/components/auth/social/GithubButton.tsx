@@ -7,7 +7,6 @@ export function GithubButton(props: ButtonProps & React.ComponentPropsWithoutRef
         {...props}
         leftSection={<GithubIcon style={{ width: '1rem', height: '1rem' }} />}
         variant="default"
-        // className={classes.githubButton}
       />
     );
   }

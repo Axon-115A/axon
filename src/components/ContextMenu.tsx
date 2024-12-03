@@ -2,7 +2,6 @@ import { ControlledMenu, MenuItem } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/theme-dark.css';
 import { FC } from 'react';
-// import Palette from './../assets/node_icons/palette.svg';
 import ColorWheel from './../assets/colorWheel.svg';
 import Shapes from './../assets/node_icons/shapes.svg';
 import Rename from './../assets/node_icons/pencil-square.svg';

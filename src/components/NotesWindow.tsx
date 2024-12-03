@@ -55,7 +55,6 @@ interface Props {
 const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
 
     const [notesData, setNotes] = useState(node.data.notes ? JSON.parse(node.data.notes) as PartialBlock[] : undefined);
-    // const [isEditing, setIsEditing] = useState(false); //Used to be: const [spellCheckEnabled, setSpellCheck] = useState(false);
 
     //forces notesData to update whenever setNotes is called
     useEffect(() => {
@@ -76,14 +75,6 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
             ]);
         }
     }, [node, node.data.notes]);
-    // const onNotesInput = (e: any) => {
-    //     setNotes(e.target.value); //updates the display textbox
-    //     node.data.notes = e.target.value; //updates the node data itself
-    // };
-
-    // const toggleEdit = () => {
-    //     setIsEditing(!isEditing);
-    // };
 
     const [panelHeight, setPanelHeight] = useState<number>(400); // Default height
 
@@ -151,7 +142,6 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
 
             {/* this style block is apparently the only way to dynammically change the blocknote window's max height  */}
             {/* inline styles don't work - this is ugly but it does, don't change it  */}
-            
             <style>
                 {`
                     .ProseMirror.bn-editor.bn-default-styles {
@@ -159,9 +149,9 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
                     }
                 `}
             </style>
+
             <BlockNoteView
                 editor={editor}
-                // style={{ minHeight: `${panelHeight - 50}px` }}
                 className="textBox" // Use the absolute positioning styles
                 onChange={onChange}
                 theme="dark"

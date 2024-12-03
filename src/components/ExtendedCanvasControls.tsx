@@ -13,7 +13,6 @@ interface ExtendedCanvasControlsProps {
 // Nikolas added the clear and help buttons here.
 
 const ExtendedCanvasControls: React.FC<ExtendedCanvasControlsProps> = ({ clearCanvas, position, helpHandler }) => {
-    //todo: find a better way to force color scheme on the canvas controls
     document.documentElement.style.setProperty('--xy-controls-button-background-color', 'var(--canvas-controls)');
 
     return (
