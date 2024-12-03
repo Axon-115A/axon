@@ -44,7 +44,7 @@ async function uploadFiles(file: File) {
     if (error) throw error;
     console.log(data)
 
-    return `https://tugoremjbojyqanvwglz.supabase.co/storage/v1/object/public/user_storage//${user.id}/${file_uid}.png` // return url of the uploaded file
+    return `https://tugoremjbojyqanvwglz.supabase.co/storage/v1/object/public/user_storage/${user.id}/${file_uid}.png` // return url of the uploaded file
 }
 
 interface Props {
