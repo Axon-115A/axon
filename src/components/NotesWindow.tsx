@@ -60,7 +60,6 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
 
     //forces notesData to update whenever setNotes is called
     useEffect(() => {
-        //console.log("setting notes", node, node.data.notes)
         if (node) setNotes(node.data.notes ? JSON.parse(node.data.notes) as PartialBlock[] : undefined);
     }, [node]);
 
