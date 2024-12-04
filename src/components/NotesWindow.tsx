@@ -13,6 +13,7 @@ import './styles/NotesWindow.css';
 // Uploads a file to tmpfiles.org and returns the URL to the uploaded file.
 async function uploadFiles(file: File) {
 
+    // Check if user is signed in, throw error if not
     async function checkUserSignedIn() {
         const { data: { user }, error } = await Login.supabase.auth.getUser();
         if (error) {
@@ -29,13 +30,13 @@ async function uploadFiles(file: File) {
     }
 
 
-    const body = new FormData();
+    const body = new FormData(); // create a form to store the file
     body.append("file", file);
-    const file_uid = uuidv4();
-    const { data, error } = await Login.supabase
+    const file_uid = uuidv4(); // generate a uuid to avoid filename collisions
+    const { data, error } = await Login.supabase // upload file to user's own folder in storage bucket
         .storage
         .from('user_storage')
-        .upload(`public/${file_uid}.png`, file, {
+        .upload(`${user.id}/${file_uid}.png`, file, {
             cacheControl: '3600',
             upsert: false
         })
@@ -43,25 +44,26 @@ async function uploadFiles(file: File) {
     if (error) throw error;
     console.log(data)
 
-    return `https://tugoremjbojyqanvwglz.supabase.co/storage/v1/object/public/user_storage/public/${file_uid}.png`
+    return `https://tugoremjbojyqanvwglz.supabase.co/storage/v1/object/public/user_storage/${user.id}/${file_uid}.png` // return url of the uploaded file
 }
+
 
 interface Props {
-    onCloseWindow: () => void;
-    node: any
+    onCloseWindow: () => void; //close window if exist button is clicked
+    node: any // prompts the note window to open if node is clicked
 }
 
-const NotesWindowBlocknote: React.FC<Props> = ({ onCloseWindow, node }) => {
+//Notes Window actions and appearance.
+const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
 
     const [notesData, setNotes] = useState(node.data.notes ? JSON.parse(node.data.notes) as PartialBlock[] : undefined);
-    // const [isEditing, setIsEditing] = useState(false); //Used to be: const [spellCheckEnabled, setSpellCheck] = useState(false);
 
     //forces notesData to update whenever setNotes is called
     useEffect(() => {
-        //console.log("setting notes", node, node.data.notes)
         if (node) setNotes(node.data.notes ? JSON.parse(node.data.notes) as PartialBlock[] : undefined);
     }, [node]);
 
+    //Synchronizes the editor's content with the node.data.notes whenever the node or its notes data changes.
     useEffect(() => {
         if (node && node.data.notes) {
             const parsedNotes = JSON.parse(node.data.notes) as PartialBlock[];
@@ -75,23 +77,19 @@ const NotesWindowBlocknote: React.FC<Props> = ({ onCloseWindow, node }) => {
             ]);
         }
     }, [node, node.data.notes]);
-    // const onNotesInput = (e: any) => {
-    //     setNotes(e.target.value); //updates the display textbox
-    //     node.data.notes = e.target.value; //updates the node data itself
-    // };
 
-    // const toggleEdit = () => {
-    //     setIsEditing(!isEditing);
-    // };
+    const [panelHeight, setPanelHeight] = useState<number>(400); // Default height
 
     /*Resizing Feature */
     useEffect(() => {
         const panel = document.querySelector('.panel') as HTMLDivElement | null;
+        
         const resizeHandle = document.querySelector('.resize-handle-top') as HTMLDivElement | null;
         let isResizing = false;
         let startY = 0;
         let startHeight = 0;
     
+        //When top area of notes bar is pulled down -> vertically reduce size of note panel
         const onMouseDown = (event: MouseEvent) => {
             if (!panel) return; // Ensure the panel exists
             isResizing = true;
@@ -101,19 +99,23 @@ const NotesWindowBlocknote: React.FC<Props> = ({ onCloseWindow, node }) => {
             document.addEventListener('mouseup', onMouseUp);
         };
     
+        //Dynamically calculates and updates the panel's height while the user drags the resize handle.
         const onMouseMove = (event: MouseEvent) => {
             if (!isResizing || !panel) return; // Ensure resizing and panel exist
             const dy = startY - event.clientY; // Calculate movement difference
             const newHeight = Math.max(200, Math.min(800, startHeight + dy)); // Constrain height
+            setPanelHeight(newHeight); // Update state with the new height
             panel.style.height = `${newHeight}px`; // Safe access due to typecast
         };
     
+        //When top area of notes bar is pulled up -> vertically increase size of note panel
         const onMouseUp = () => {
             isResizing = false;
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
         };
     
+        //enables user interaction when the user clicks on the handle to start resizing
         resizeHandle?.addEventListener('mousedown', onMouseDown);
     
         return () => {
@@ -121,6 +123,12 @@ const NotesWindowBlocknote: React.FC<Props> = ({ onCloseWindow, node }) => {
         };
     }, []);
 
+    //test code
+    useEffect(() => {
+        console.log('Panel height changed:', panelHeight);
+    }, [panelHeight]);    
+
+    //Initializes the BlockNote editor with the specified content and file upload logic
     const editor = useCreateBlockNote({
         initialContent: notesData || undefined,
         uploadFile: uploadFiles,
@@ -133,11 +141,22 @@ const NotesWindowBlocknote: React.FC<Props> = ({ onCloseWindow, node }) => {
 
     return (
         <Panel position="bottom-right" className="panel">
-            <div className="resize-handle-top"></div>
+            <div className="resize-handle-top" />
             <h3 className="notesTitle">{node.data.label}</h3>
             <button onClick={onCloseWindow} className="closeButton">
-                <img src="src/assets/white_x.svg" className="closeButtonIcon" />
+                <img src={CloseIcon} className="closeButtonIcon" />
             </button>
+
+            {/* this style block is apparently the only way to dynammically change the blocknote window's max height  */}
+            {/* inline styles don't work */}
+            <style> 
+                {`
+                    .ProseMirror.bn-editor.bn-default-styles {
+                        min-height: ${panelHeight - 50}px;
+                    }
+                `}
+            </style>
+
             <BlockNoteView
                 editor={editor}
                 className="textBox" // Use the absolute positioning styles
@@ -145,7 +164,8 @@ const NotesWindowBlocknote: React.FC<Props> = ({ onCloseWindow, node }) => {
                 theme="dark"
             />
         </Panel>
+            
     );
 };
 
-export default NotesWindowBlocknote;
+export default NotesWindow;

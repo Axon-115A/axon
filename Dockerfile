@@ -1,5 +1,5 @@
 # stage 1 - build the application with vite
-FROM node:22-alpine as build
+FROM node:22-alpine AS build
 
 COPY . /axon
 WORKDIR /axon
@@ -10,7 +10,6 @@ RUN pnpm install
 
 # build-lite doesn't do lint check before building
 RUN pnpm run build-lite
-CMD [ "pnpm", "run", "preview", "--host"]
 
 # stage 2 - serve the application using caddy
 FROM caddy:alpine 
