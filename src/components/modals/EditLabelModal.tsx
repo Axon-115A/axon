@@ -51,7 +51,7 @@ const EditLabelModal: React.FC<EditLabelModalProps> = ({ opened, label, onClose,
         >
             <div className='textInputDiv'>
                 <TextInput
-                    label="Enter new node label below."
+                    label="Enter new label below."
                     value={newLabel}
                     onChange={(event) => setNewLabel(event.currentTarget.value)}
                     onKeyDown={handleKeyPress}
