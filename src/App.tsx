@@ -291,6 +291,7 @@ export default function App() {
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
 
+	// function made by Nikolas, which allows for the node's label to be updated
 	const onEdit = () => {
 		if (contextMenu.selectedNodeId) {
 			const selectedNode = nodes.find(node => node.id === contextMenu.selectedNodeId);
@@ -327,14 +328,13 @@ export default function App() {
 		}
 	};
 
+
+	// function created by Nikolas, handles what happens when the node delete button is clicked; 
+	// for edited nodes, the modal appears, for non-edited ones, it doesn't appear.
 	const onDeleteClicked = () => {
 		if (contextMenu.selectedNodeId) {
 			const selectedNode = nodes.find(node => node.id === contextMenu.selectedNodeId);
 			if (selectedNode) {
-				const isEdited = selectedNode.data.label !== "New Node" || selectedNode.data.notes !== "";
-				console.log(isEdited)
-				console.log(selectedNode.data.label)
-				console.log(selectedNode.data.notes)
 				if(selectedNode.data.label !== "New Node" || selectedNode.data.notes !== "")
 				{
 					setDeleteModalOpened(true);
@@ -349,7 +349,7 @@ export default function App() {
 		setContextMenu(prev => ({ ...prev, isOpen: false }));
 	};
 
-
+	// function that deletes the selected node by filtering it out of the nodes array, done by Nikolas
 	const onDelete = () => {
 		if (contextMenu.selectedNodeId) {
 			setNodes(nodes.filter(node => node.id !== contextMenu.selectedNodeId));
@@ -367,6 +367,7 @@ export default function App() {
 		setNotesWindowVisibility(false);
 	}
 
+	// function that opens the color modal if the color change button is pressed for a node, done by Nikolas
 	const onColorChange = () => {
 		if (contextMenu.selectedNodeId) {
 			const selectedNode = nodes.find(node => node.id === contextMenu.selectedNodeId);
@@ -500,23 +501,26 @@ export default function App() {
 		}
 	  };
 	
+	// handling the deletion of a node, done by Nikolas
 	const handleDeleteNode = () => {
 		onDelete();
 		setNotesWindowVisibility(false);
 		setTimeout(handleSaveState, 0);
 	};
 
-	// clearing the canvas and closing notes window
+	// clearing the canvas and closing notes window, done by Nikolas
 	const handleClearCanvas = () => {
-		setNodes([]);
-		setEdges([]);
-		setNotesWindowVisibility(false);
+		setNodes([]); // clears the nodes
+		setEdges([]); // clears the edges
+		setNotesWindowVisibility(false); // closes the notes window
 
 		// Run handleSaveState after ensuring nodes and edges are updated
 		setTimeout(handleSaveState, 0);
 
 	};
 
+	// this function, done by Nikolas and Sakshi, allows for the colors to be changed for a node or an edge. 
+	// Nikolas worked on the node color change, Sakshi on the edge color.
 	const handleColorChange = (newColor: string, isNode: boolean) => {
 		if (isNode) {
 			setNodes(nodes.map(node => {
@@ -632,7 +636,7 @@ export default function App() {
 
 							onAddArrow={onAddArrow}
 						/>
-
+						{/* // Nikolas added the following 5 modals here. */}
 						<EditLabelModal
 							opened={editModalOpened}
 							label={currentLabel}
