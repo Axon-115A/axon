@@ -47,11 +47,13 @@ async function uploadFiles(file: File) {
     return `https://tugoremjbojyqanvwglz.supabase.co/storage/v1/object/public/user_storage/${user.id}/${file_uid}.png` // return url of the uploaded file
 }
 
+
 interface Props {
-    onCloseWindow: () => void;
-    node: any
+    onCloseWindow: () => void; //close window if exist button is clicked
+    node: any // prompts the note window to open if node is clicked
 }
 
+//Notes Window actions and appearance.
 const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
 
     const [notesData, setNotes] = useState(node.data.notes ? JSON.parse(node.data.notes) as PartialBlock[] : undefined);
@@ -62,6 +64,7 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
         if (node) setNotes(node.data.notes ? JSON.parse(node.data.notes) as PartialBlock[] : undefined);
     }, [node]);
 
+    //Synchronizes the editor's content with the node.data.notes whenever the node or its notes data changes.
     useEffect(() => {
         if (node && node.data.notes) {
             const parsedNotes = JSON.parse(node.data.notes) as PartialBlock[];
@@ -87,6 +90,7 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
         let startY = 0;
         let startHeight = 0;
     
+        //When top area of notes bar is pulled down -> vertically reduce size of note panel
         const onMouseDown = (event: MouseEvent) => {
             if (!panel) return; // Ensure the panel exists
             isResizing = true;
@@ -96,6 +100,7 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
             document.addEventListener('mouseup', onMouseUp);
         };
     
+        //Dynamically calculates and updates the panel's height while the user drags the resize handle.
         const onMouseMove = (event: MouseEvent) => {
             if (!isResizing || !panel) return; // Ensure resizing and panel exist
             const dy = startY - event.clientY; // Calculate movement difference
@@ -104,12 +109,14 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
             panel.style.height = `${newHeight}px`; // Safe access due to typecast
         };
     
+        //When top area of notes bar is pulled up -> vertically increase size of note panel
         const onMouseUp = () => {
             isResizing = false;
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
         };
     
+        //enables user interaction when the user clicks on the handle to start resizing
         resizeHandle?.addEventListener('mousedown', onMouseDown);
     
         return () => {
@@ -117,10 +124,12 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
         };
     }, []);
 
+    //test code
     useEffect(() => {
         console.log('Panel height changed:', panelHeight);
     }, [panelHeight]);    
 
+    //Initializes the BlockNote editor with the specified content and file upload logic
     const editor = useCreateBlockNote({
         initialContent: notesData || undefined,
         uploadFile: uploadFiles,
@@ -139,10 +148,9 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
                 <img src={CloseIcon} className="closeButtonIcon" />
             </button>
 
-
             {/* this style block is apparently the only way to dynammically change the blocknote window's max height  */}
-            {/* inline styles don't work - this is ugly but it does, don't change it  */}
-            <style>
+            {/* inline styles don't work */}
+            <style> 
                 {`
                     .ProseMirror.bn-editor.bn-default-styles {
                         min-height: ${panelHeight - 50}px;
