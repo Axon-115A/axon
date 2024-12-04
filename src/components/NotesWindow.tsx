@@ -123,11 +123,6 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
         };
     }, []);
 
-    //test code
-    useEffect(() => {
-        console.log('Panel height changed:', panelHeight);
-    }, [panelHeight]);    
-
     //Initializes the BlockNote editor with the specified content and file upload logic
     const editor = useCreateBlockNote({
         initialContent: notesData || undefined,
@@ -153,6 +148,9 @@ const NotesWindow: React.FC<Props> = ({ onCloseWindow, node }) => {
                 {`
                     .ProseMirror.bn-editor.bn-default-styles {
                         min-height: ${panelHeight - 50}px;
+                        max-height: ${panelHeight - 50}px;
+                        overflow-y: auto;
+                        overflow-x: auto;
                     }
                 `}
             </style>
