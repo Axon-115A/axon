@@ -73,6 +73,7 @@ export default function CustomEdge({ id, selected, sourceX, sourceY, sourcePosit
 				<div
 					style={{
 						transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
+						color: ThemeManager.getCurrentTheme() == 'dark' ? '#c9c9c9': '#5C5C5C'
 					}}
 					className="edge-label-renderer__custom-edge nodrag nopan"
 				>
