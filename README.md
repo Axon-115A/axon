@@ -3,6 +3,9 @@
 ## Live Demo:
 https://axon.thinkfluence.rs
 
+## Demo Video:
+https://youtu.be/JdRwhOcxzvc
+
 ## Local run guide (dev):
 - `pnpm install`
 - `pnpm run dev`
